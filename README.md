@@ -1,18 +1,6 @@
-# The Black Archive
+# The Black Library
 
 A gothic repository of flippable manuscripts. Scribes claim a codename, bind tomes or write parchments, and share them with the world via a permanent link.
-
----
-
-## First Book — Pre-seeded
-
-On first boot, if the database is empty, the server automatically seeds **Draugomyr's Journal** as the inaugural tome of the Archive. This includes all 12 entries from Second Seed to Midyear.
-
-A scribe account is created automatically:
-- **Codename:** `Draugomyr`
-- **Passphrase:** `MolagBal`
-
-Log in with these credentials after first boot to edit or manage the journal. Change the passphrase from the account settings or by re-running with a fresh database.
 
 ---
 
