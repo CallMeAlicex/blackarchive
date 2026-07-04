@@ -632,8 +632,10 @@ async function init() {
   var wid = params.get('work');
   if (wid) {
     await openWorkById(wid);
-  } else {
+  } else if (SESSION.codename) {
     goLibrary();
+  } else {
+    goAuth();
   }
 }
 
