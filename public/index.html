@@ -915,7 +915,7 @@ function launchReader(work) {
 
   pfInstance.loadFromHTML(mount.querySelectorAll(isBook?'.fp':'.pp'));
   pfInstance.on('flip', function(e){ updateRdUI(e.data); });
-  pfInstance.on('init', function(e){ updateRdUI(e.data); });
+  pfInstance.on('init', function(e){ updateRdUI(e.data.page); });
 
   document.getElementById('rd-prev').onclick = function(){ pfInstance.flipPrev('top'); };
   document.getElementById('rd-next').onclick = function(){ pfInstance.flipNext('bottom'); };
