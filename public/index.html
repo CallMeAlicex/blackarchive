@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Black Archive — House Mournstar</title>
+<title>The Black Library — House Mournstar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
@@ -466,10 +466,10 @@ a{color:inherit;text-decoration:none}
 
 <!-- ══ TOPBAR ══ -->
 <div id="topbar" style="display:none">
-  <div class="topbar-brand" onclick="goLibrary()">The Black Archive</div>
+  <div class="topbar-brand" onclick="goLibrary()">The Black Library</div>
   <div class="topbar-right">
     <span class="topbar-scribe" id="topbar-scribe"></span>
-    <button class="tb-btn" id="tb-auth-btn" onclick="goAuth()" style="display:none">Enter the Archive</button>
+    <button class="tb-btn" id="tb-auth-btn" onclick="goAuth()" style="display:none">Enter the Library</button>
     <button class="tb-btn" id="tb-logout-btn" style="display:none" onclick="doLogout()">Depart</button>
   </div>
 </div>
@@ -482,7 +482,7 @@ a{color:inherit;text-decoration:none}
     <span class="auth-corner bl">✦</span>
     <span class="auth-corner br">✦</span>
     <div class="auth-sigil">⸸</div>
-    <div class="auth-title">The Black Archive</div>
+    <div class="auth-title">The Black Library</div>
     <div class="auth-house">House Mournstar</div>
     <div class="auth-sub">Identify yourself, Scribe</div>
     <div class="auth-tabs">
@@ -492,7 +492,7 @@ a{color:inherit;text-decoration:none}
     <div id="auth-login-form">
       <input class="fi" id="login-name" type="text" placeholder="Your codename…" autocomplete="username">
       <input class="fi" id="login-pass" type="password" placeholder="Your passphrase…" autocomplete="current-password">
-      <button class="btn-forge" onclick="doLogin()">✦ Enter the Archive ✦</button>
+      <button class="btn-forge" onclick="doLogin()">✦ Enter the Library ✦</button>
     </div>
     <div id="auth-register-form" style="display:none">
       <input class="fi" id="reg-name" type="text" placeholder="Claim a codename…" autocomplete="username">
@@ -502,7 +502,7 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="auth-err" id="auth-err"></div>
     <div class="auth-visitor">
-      Or <span onclick="goLibrary()">browse the Archive as a visitor</span>
+      Or <span onclick="goLibrary()">browse the Library as a visitor</span>
     </div>
   </div>
 </section>
@@ -515,7 +515,7 @@ a{color:inherit;text-decoration:none}
       <div class="lib-sigil">⸸</div>
       <div class="lib-sigil-line r"></div>
     </div>
-    <div class="lib-title">The Black Archive</div>
+    <div class="lib-title">The Black Library</div>
     <div class="lib-house">House Mournstar</div>
     <div class="lib-subtitle">A Repository of Forbidden Manuscripts &amp; Private Correspondences</div>
   </div>
@@ -572,7 +572,7 @@ a{color:inherit;text-decoration:none}
 <!-- ══ SCREEN: READER ══ -->
 <section id="screen-reader" class="screen">
   <div class="reader-topbar">
-    <button class="tb-btn" onclick="goLibrary()">← Archive</button>
+    <button class="tb-btn" onclick="goLibrary()">← Library</button>
     <div class="rd-title" id="rd-title"></div>
     <div style="display:flex;align-items:center;gap:.7rem">
       <span class="rd-scribe" id="rd-scribe"></span>
@@ -591,7 +591,7 @@ a{color:inherit;text-decoration:none}
 <div id="modal-overlay">
   <div class="modal-box">
     <div class="modal-title">Destroy this work?</div>
-    <div class="modal-body">This manuscript will be removed from the Archive permanently. Are you certain?</div>
+    <div class="modal-body">This manuscript will be removed from the Library permanently. Are you certain?</div>
     <div class="modal-btns">
       <button class="modal-btn" onclick="closeModal()">Keep it</button>
       <button class="modal-btn danger" id="modal-confirm-btn">Burn it</button>
@@ -730,7 +730,7 @@ async function loadLibrary() {
     var data = await api('GET', '/api/library');
     renderShelf('shelf-books',      data.books,      'book');
     renderShelf('shelf-parchments', data.parchments, 'parchment');
-  } catch(e) { toast('Could not reach the Archive.'); }
+  } catch(e) { toast('Could not reach the Library.'); }
 }
 
 function renderShelf(elId, items, type) {
@@ -771,7 +771,7 @@ function confirmDelete(id) {
 }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 async function doDelete(id) {
-  try { await api('DELETE', '/api/works/'+id); toast('Manuscript removed from the Archive.'); loadLibrary(); }
+  try { await api('DELETE', '/api/works/'+id); toast('Manuscript removed from the Library.'); loadLibrary(); }
   catch(e) { toast(e.message); }
 }
 
@@ -943,7 +943,7 @@ function buildBookPages(work) {
     +'<div class="fp-cv-title">'+esc(work.title)+'</div><div class="fp-cv-div"></div>'
     +'<div class="fp-cv-sub">'+esc(work.subtitle||'')+'</div>'
     +'<div class="fp-cv-author">'+esc(work.author||work.scribe_name||'')+'</div>'
-    +'<div class="fp-cv-bottom">House Mournstar &middot; The Black Archive</div></div>';
+    +'<div class="fp-cv-bottom">House Mournstar &middot; The Black Library</div></div>';
   pages.push(cover);
   // TOC
   var tocRows=(work.entries||[]).map(function(e,i){ return '<div class="fp-toc-row"><span class="fp-toc-n">'+(ROMANS[i]||i+1)+'.</span><span class="fp-toc-t">'+esc(e.title||'Untitled')+'</span><span class="fp-toc-d">'+esc(e.date_line||'')+'</span></div>'; }).join('');
@@ -985,7 +985,7 @@ function buildParchPages(work) {
     +'<div class="pp-cv-title">'+esc(work.title)+'</div><div class="pp-cv-div"></div>'
     +'<div class="pp-cv-sub">'+(meta.date?esc(meta.date)+'<br>':'')+(meta.to?'To: '+esc(meta.to)+'<br>':'')+'</div>'
     +'<div class="pp-cv-author">'+(work.author||work.scribe_name?'&mdash; '+esc(work.author||work.scribe_name)+' &mdash;':'')+'</div>'
-    +'<div class="pp-cv-bottom">The Black Archive</div></div>';
+    +'<div class="pp-cv-bottom">The Black Library</div></div>';
   pages.push(cover);
   var pA=mk('div','pp pp-parch pp-right');
   pA.innerHTML='<div class="pp-sa pp-stain"></div><div class="pp-sb pp-stain"></div><div class="pp-content">'
@@ -1001,7 +1001,7 @@ function buildParchPages(work) {
   pages.push(pB);
   var back=mk('div','pp pp-back','hard');
   back.innerHTML='<div class="pp-back-inner"><div class="pp-back-seal">&#10023; &middot; &#10023;</div>'
-    +'<div class="pp-back-motto">Sealed by the Black Archive.<br>Let none read without sanction.</div></div>';
+    +'<div class="pp-back-motto">Sealed by the Black Library.<br>Let none read without sanction.</div></div>';
   pages.push(back);
   return pages;
 }
