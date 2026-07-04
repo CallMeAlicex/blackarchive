@@ -344,7 +344,7 @@ a{color:inherit;text-decoration:none}
 }
 .rd-title{font-family:var(--ff-title);font-size:1.2rem;color:var(--silver);filter:drop-shadow(0 0 12px var(--silver-ghost));flex:1;text-align:center}
 #reader-stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:1.2rem}
-#flip-mount{position:relative}
+#flip-mount{position:relative;overflow:hidden}
 .reader-controls{
   display:flex;align-items:center;justify-content:center;gap:1.2rem;padding:.5rem 1.5rem;
   background:rgba(3,3,8,.97);border-top:1px solid var(--silver-border);flex-shrink:0;
@@ -906,37 +906,57 @@ function launchReader(work) {
   document.getElementById('rd-title').textContent  = work.title;
   document.getElementById('rd-scribe').textContent = 'by '+(work.scribe_name||work.author||'');
 
-  var mount = document.getElementById('flip-mount');
-  mount.innerHTML = '';
+  // StPageFlip mutates its container, so rebuild a fresh mount each time (robust re-open).
   if (pfInstance) { try{pfInstance.destroy();}catch(e){} pfInstance=null; }
-
   var stage = document.getElementById('reader-stage');
-  var sw = stage.offsetWidth-48, sh = stage.offsetHeight-16;
-  var isMobile = sw < 600;
-  var pH = Math.floor(Math.min(sh*.92, 640));
-  var pW = Math.floor(isMobile ? Math.min(sw*.9,380) : Math.min(sw/2, pH*.68, 420));
-
+  stage.innerHTML = '<div id="flip-mount"></div>';
+  var mount = document.getElementById('flip-mount');
   var isBook = (work.type==='book');
-  var pages  = isBook ? buildBookPages(work, pW, pH) : buildParchPages(work, pW, pH);
-  pages.forEach(function(p){ mount.appendChild(p); });
 
-  pfInstance = new St.PageFlip(mount, {
-    width:pW, height:pH,
-    size:'fixed', showCover:true, drawShadow:true, flippingTime:800,
-    usePortrait:false, autoSize:true, maxShadowOpacity:.5,
-    mobileScrollSupport:false, swipeDistance:20, clickEventForward:false, useMouseEvents:true,
-  });
+  function build(){
+    // Fall back to window size if the stage hasn't been laid out yet (e.g. opened via a direct link).
+    var sw = stage.offsetWidth-48, sh = stage.offsetHeight-16;
+    if (sw < 240) sw = Math.max((window.innerWidth||360)-48, 320);
+    if (sh < 240) sh = Math.max((window.innerHeight||640)-150, 420);
+    var isMobile = sw < 600;
+    var pH = Math.floor(Math.min(sh*.92, 640));
+    var pW = Math.floor(isMobile ? Math.min(sw*.9,380) : Math.min(sw/2, pH*.68, 420));
+    // Hard floors so a tiny/unready viewport can never degenerate pagination to one word per page.
+    pW = Math.max(pW, 240); pH = Math.max(pH, 320);
 
-  pfInstance.loadFromHTML(mount.querySelectorAll(isBook?'.fp':'.pp'));
-  pfInstance.on('flip', function(e){ updateRdUI(e.data); });
-  pfInstance.on('init', function(e){ updateRdUI(e.data.page); });
+    mount.innerHTML = '';
+    var pages = isBook ? buildBookPages(work, pW, pH) : buildParchPages(work, pW, pH);
+    pages.forEach(function(p){ mount.appendChild(p); });
 
-  document.getElementById('rd-prev').onclick = function(){ pfInstance.flipPrev('top'); };
-  document.getElementById('rd-next').onclick = function(){ pfInstance.flipNext('bottom'); };
+    try {
+      pfInstance = new St.PageFlip(mount, {
+        width:pW, height:pH,
+        size:'fixed', showCover:true, drawShadow:true, flippingTime:800,
+        usePortrait:false, autoSize:true, maxShadowOpacity:.5,
+        mobileScrollSupport:false, swipeDistance:20, clickEventForward:false, useMouseEvents:true,
+      });
+      pfInstance.loadFromHTML(mount.querySelectorAll(isBook?'.fp':'.pp'));
+      pfInstance.on('flip', function(e){ updateRdUI(e.data); });
+      pfInstance.on('init', function(e){ updateRdUI(e.data.page); });
+    } catch(err){ pfInstance=null; }
+  }
+
+  // Wait for webfonts + a settled layout before building; otherwise the hard cover pages
+  // are positioned against the wrong metrics and scatter (notably on direct-link / refresh).
+  // setTimeout (not rAF) so it fires even on a backgrounded/throttled tab; hard fallback guarantees render.
+  var built=false;
+  function once(){ if(built) return; built=true; build(); }
+  if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+    document.fonts.ready.then(function(){ setTimeout(once, 40); });
+  }
+  setTimeout(once, 500);
+
+  document.getElementById('rd-prev').onclick = function(){ if(pfInstance) pfInstance.flipPrev('top'); };
+  document.getElementById('rd-next').onclick = function(){ if(pfInstance) pfInstance.flipNext('bottom'); };
   document.onkeydown = function(e){
     if (!document.getElementById('screen-reader').classList.contains('active')) return;
-    if (e.key==='ArrowRight') pfInstance.flipNext('bottom');
-    if (e.key==='ArrowLeft')  pfInstance.flipPrev('top');
+    if (e.key==='ArrowRight' && pfInstance) pfInstance.flipNext('bottom');
+    if (e.key==='ArrowLeft'  && pfInstance) pfInstance.flipPrev('top');
   };
 }
 
