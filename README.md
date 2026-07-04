@@ -7,9 +7,43 @@ A gothic repository of flippable manuscripts. Scribes claim a codename, bind tom
 ## Stack
 
 - **Node.js + Express** — backend API
-- **better-sqlite3** — single-file database (zero config)
-- **StPageFlip** — realistic page-flip reader
+- **sql.js** — single-file SQLite database, persisted to disk (no native build needed)
+- **StPageFlip** — realistic page-flip reader with true text pagination
 - **Railway** — recommended hosting (free tier works)
+
+---
+
+## ⚠️ Persistence (IMPORTANT)
+
+The database is a single file at `DATA_DIR/archive.db` (default `./data`). In production this
+directory **must be a mounted persistent volume**, or all data (scribes, tomes, reports) is wiped
+on every redeploy.
+
+On Railway, the `railway.toml` `[[volumes]]` block does **not** auto-create a volume. Attach one
+explicitly (once):
+
+```bash
+railway volume add --mount-path /app/data
+```
+
+Confirm with `railway volume list` — it should show `Status: Ready` attached to the service.
+
+---
+
+## Seeding the Library
+
+There is no auto-seed on boot. Curated lore is seeded via a reusable script, owned by a "curator"
+scribe so the official tomes have an in-world keeper:
+
+```bash
+BASE_URL=https://your-app.up.railway.app \
+CURATOR_NAME='House Mournstar' \
+CURATOR_PASS='your-secret' \
+node scripts/seed.mjs
+```
+
+The script is idempotent (skips any work whose title already exists). Content lives in
+`scripts/seed.mjs`; the Draugomyr journal is kept in `scripts/seed-data.json`.
 
 ---
 
