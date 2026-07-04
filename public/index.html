@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Black Archive — House Mournstar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Palette — black, silver, deep forbidden crimson */
+  --void:       #04040a;
+  --abyss:      #07070f;
+  --deep:       #0a0a14;
+  --surface:    #0f0f1c;
+  --raised:     #141428;
+  --void-mid:   #1a1a2e;
+
+  --silver:        #c8c8d8;
+  --silver-dim:    rgba(190,190,210,.5);
+  --silver-ghost:  rgba(190,190,210,.12);
+  --silver-glow:   rgba(200,200,220,.18);
+  --silver-border: rgba(180,180,200,.2);
+  --silver-border-hi: rgba(210,210,230,.45);
+
+  --crimson:       #8b1020;
+  --crimson-dim:   rgba(139,16,32,.45);
+  --crimson-glow:  rgba(139,16,32,.2);
+  --crimson-hi:    #b01828;
+
+  --gold:       #a07820;  /* muted antique gold — accent only */
+  --gold-dim:   rgba(160,120,32,.5);
+
+  --text:       #c8c8d4;
+  --text-dim:   rgba(190,190,210,.5);
+  --text-ghost: rgba(190,190,210,.2);
+
+  --parch:      #e2cfa0;
+  --ink:        #1e0c03;
+  --ink-mid:    #3a1a06;
+
+  --ff-title: 'UnifrakturMaguntia', cursive;
+  --ff-serif: 'IM Fell English', Georgia, serif;
+  --ff-caps:  'Cinzel', serif;
+  --ff-deco:  'Cinzel Decorative', serif;
+  --ease: .25s cubic-bezier(.4,0,.2,1);
+}
+
+html,body{width:100%;min-height:100%;background:var(--void);color:var(--text);font-family:var(--ff-serif);overflow-x:hidden}
+button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+input,textarea,select{font-family:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+
+/* Screens */
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+#screen-auth.active{display:flex;align-items:center;justify-content:center}
+#screen-reader.active{display:flex;flex-direction:column}
+
+/* Rules */
+.gr{border:none;height:1px;background:linear-gradient(to right,transparent,var(--silver-dim),transparent);margin:1.5rem 0}
+.cr{border:none;height:1px;background:linear-gradient(to right,transparent,var(--crimson-dim),transparent);margin:1.5rem 0}
+
+/* ══ TOPBAR ══ */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.5rem 1.5rem;
+  background:rgba(4,4,10,.97);
+  border-bottom:1px solid var(--silver-border);
+  gap:1rem;
+}
+.topbar-brand{
+  font-family:var(--ff-deco);font-size:1rem;
+  background:linear-gradient(135deg,var(--silver) 0%,#e8e8f8 40%,var(--silver-dim) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:.12em;cursor:pointer;
+  filter:drop-shadow(0 0 8px var(--silver-glow));
+}
+.topbar-scribe{font-family:var(--ff-caps);font-size:.55rem;letter-spacing:.22em;color:var(--silver-dim);text-transform:uppercase}
+.topbar-right{display:flex;align-items:center;gap:.7rem}
+.tb-btn{
+  font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.3rem .8rem;border:1px solid var(--silver-border);color:var(--silver-dim);transition:var(--ease);
+}
+.tb-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.tb-btn.primary{color:var(--silver);border-color:var(--silver-border-hi);background:var(--silver-ghost)}
+
+.with-topbar{padding-top:50px}
+
+/* ══ SEAL (House Mournstar watermark on auth) ══ */
+.mournstar-seal{
+  width:110px;height:110px;
+  background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="72" x="50" text-anchor="middle" font-size="72" fill="%23ffffff22">⸸</text></svg>') center/contain no-repeat;
+  margin:0 auto 1rem;
+  font-size:3.5rem;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(190,190,210,.12);
+  filter:drop-shadow(0 0 12px rgba(139,16,32,.3));
+}
+
+/* ══ SCREEN: AUTH ══ */
+#screen-auth{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(139,16,32,.15) 0%,transparent 60%),
+    radial-gradient(ellipse at 50% 100%,rgba(10,10,20,.8) 0%,transparent 60%),
+    var(--void);
+  min-height:100vh;
+}
+.auth-box{
+  width:92%;max-width:400px;
+  border:1px solid var(--silver-border);
+  background:linear-gradient(160deg,var(--deep) 0%,var(--surface) 100%);
+  padding:2.5rem 2rem 2rem;
+  text-align:center;
+  position:relative;
+  box-shadow:0 0 60px rgba(139,16,32,.1), 0 20px 60px rgba(0,0,0,.6);
+}
+.auth-box::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(190,190,210,.03) 0%,transparent 50%);
+  pointer-events:none;
+}
+.auth-corner{position:absolute;font-size:.55rem;color:var(--silver-border);font-family:var(--ff-caps);letter-spacing:.1em}
+.auth-corner.tl{top:.6rem;left:.8rem}
+.auth-corner.tr{top:.6rem;right:.8rem}
+.auth-corner.bl{bottom:.6rem;left:.8rem}
+.auth-corner.br{bottom:.6rem;right:.8rem}
+
+.auth-sigil{
+  font-size:2.2rem;
+  color:var(--crimson);
+  letter-spacing:.3em;
+  margin-bottom:.6rem;
+  filter:drop-shadow(0 0 10px var(--crimson-glow));
+  display:block;
+}
+.auth-title{
+  font-family:var(--ff-deco);font-size:1.5rem;
+  background:linear-gradient(135deg,var(--silver) 0%,#e0e0f0 50%,var(--silver-dim) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:.2rem;letter-spacing:.1em;
+  filter:drop-shadow(0 0 15px var(--silver-glow));
+}
+.auth-house{
+  font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.35em;
+  color:var(--crimson);text-transform:uppercase;margin-bottom:.25rem;
+  opacity:.8;
+}
+.auth-sub{
+  font-family:var(--ff-serif);font-size:.68rem;color:var(--text-ghost);
+  font-style:italic;letter-spacing:.1em;margin-bottom:1.5rem;
+}
+.auth-tabs{display:flex;gap:0;border-bottom:1px solid var(--silver-border);margin-bottom:1.4rem}
+.auth-tab{
+  flex:1;padding:.5rem;font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-ghost);border-bottom:2px solid transparent;transition:var(--ease);margin-bottom:-1px;
+}
+.auth-tab.active{color:var(--silver);border-bottom-color:var(--silver)}
+.auth-tab:hover:not(.active){color:var(--text-dim)}
+
+.fi{
+  width:100%;
+  background:rgba(4,4,10,.8);
+  border:1px solid var(--silver-border);
+  color:var(--text);
+  font-family:var(--ff-serif);font-size:.82rem;
+  padding:.55rem .8rem;
+  outline:none;transition:var(--ease);
+  margin-bottom:.7rem;
+  display:block;
+}
+.fi:focus{border-color:var(--silver-border-hi);background:var(--abyss)}
+.fi::placeholder{color:var(--text-ghost);font-style:italic}
+
+.btn-forge{
+  width:100%;padding:.7rem;
+  background:linear-gradient(135deg,rgba(139,16,32,.3) 0%,rgba(100,10,20,.2) 100%);
+  border:1px solid var(--crimson-dim);
+  font-family:var(--ff-caps);font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--silver);transition:var(--ease);
+  margin-top:.2rem;
+}
+.btn-forge:hover{background:linear-gradient(135deg,rgba(139,16,32,.45) 0%,rgba(120,12,24,.35) 100%);border-color:rgba(180,20,40,.6)}
+
+.auth-err{font-size:.68rem;color:#e06060;font-style:italic;margin-top:.7rem;min-height:1.1em;letter-spacing:.04em}
+.auth-visitor{
+  margin-top:1.2rem;font-family:var(--ff-serif);font-size:.62rem;
+  color:var(--text-ghost);font-style:italic;
+}
+.auth-visitor span{color:var(--silver-dim);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.auth-visitor span:hover{color:var(--silver)}
+
+/* ══ SCREEN: LIBRARY ══ */
+#screen-library{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(139,16,32,.08) 0%,transparent 45%),
+    radial-gradient(ellipse at 20% 50%,rgba(100,100,160,.04) 0%,transparent 40%),
+    var(--void);
+  padding-bottom:5rem;
+}
+
+.lib-hero{text-align:center;padding:3rem 1.5rem 1.5rem;position:relative}
+.lib-hero::after{content:'';display:block;height:1px;background:linear-gradient(to right,transparent,var(--silver-border),transparent);margin-top:2rem}
+
+.lib-sigil-wrap{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:.8rem}
+.lib-sigil-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--crimson-dim))}
+.lib-sigil-line.r{background:linear-gradient(to left,transparent,var(--crimson-dim))}
+.lib-sigil{font-size:1.1rem;color:var(--crimson);filter:drop-shadow(0 0 8px var(--crimson-glow))}
+
+.lib-title{
+  font-family:var(--ff-deco);
+  font-size:clamp(1.8rem,6vw,3.4rem);
+  background:linear-gradient(135deg,#d0d0e0 0%,var(--silver) 40%,#f0f0ff 60%,var(--silver-dim) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:.12em;line-height:1.1;
+  filter:drop-shadow(0 0 20px var(--silver-glow));
+}
+.lib-house{
+  font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.4em;
+  color:var(--crimson);text-transform:uppercase;margin-top:.4rem;opacity:.75;
+}
+.lib-subtitle{font-family:var(--ff-serif);font-size:.68rem;color:var(--text-ghost);font-style:italic;margin-top:.25rem;letter-spacing:.08em}
+
+.lib-create-bar{display:flex;justify-content:center;gap:.85rem;padding:1.2rem 1.5rem 0;flex-wrap:wrap}
+.btn-create{
+  font-family:var(--ff-caps);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.58rem 1.5rem;
+  border:1px solid var(--silver-border);color:var(--silver-dim);
+  background:var(--silver-ghost);
+  transition:var(--ease);
+  position:relative;overflow:hidden;
+}
+.btn-create::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(190,190,210,.04) 0%,transparent 60%);opacity:0;transition:var(--ease)}
+.btn-create:hover{color:var(--silver);border-color:var(--silver-border-hi);background:rgba(190,190,210,.1)}
+.btn-create:hover::before{opacity:1}
+
+.shelf-section{max-width:1100px;margin:2.2rem auto 0;padding:0 1.5rem}
+.shelf-label{
+  font-family:var(--ff-caps);font-size:.52rem;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--text-ghost);margin-bottom:.9rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.shelf-label::before,.shelf-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--crimson-dim),transparent)}
+.shelf-label::after{background:linear-gradient(to left,var(--crimson-dim),transparent)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1.1rem}
+.empty-shelf{
+  grid-column:1/-1;padding:2.5rem;text-align:center;
+  border:1px dashed rgba(190,190,210,.1);
+  font-size:.7rem;color:var(--text-ghost);font-style:italic;letter-spacing:.08em;
+}
+
+/* Book card */
+.book-card{
+  background:linear-gradient(160deg,var(--deep) 0%,#0c0c1a 100%);
+  border:1px solid var(--silver-border);
+  position:relative;overflow:hidden;cursor:pointer;transition:var(--ease);
+  aspect-ratio:2/3;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.book-card::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(190,190,210,.03) 0%,transparent 50%);opacity:0;transition:var(--ease)}
+.book-card:hover{border-color:var(--silver-border-hi);transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,.7),0 0 20px var(--silver-ghost)}
+.book-card:hover::before{opacity:1}
+.bc-spine{position:absolute;top:0;left:0;bottom:0;width:7px;background:linear-gradient(to right,rgba(190,190,210,.25),rgba(190,190,210,.05))}
+.bc-top{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,rgba(190,190,210,.4),rgba(190,190,210,.05))}
+.bc-badge{
+  position:absolute;top:.65rem;right:.65rem;
+  font-family:var(--ff-caps);font-size:.46rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--silver-dim);border:1px solid var(--silver-border);padding:.1rem .32rem;
+}
+.bc-body{padding:.85rem .75rem .75rem 1rem;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 100%)}
+.bc-title{font-family:var(--ff-title);font-size:.95rem;color:var(--silver);line-height:1.15;margin-bottom:.2rem;filter:drop-shadow(0 0 6px var(--silver-ghost))}
+.bc-meta{font-family:var(--ff-serif);font-size:.54rem;color:var(--text-ghost);font-style:italic}
+.bc-mine-actions{display:flex;gap:.5rem;margin-top:.4rem}
+.bc-del{font-family:var(--ff-caps);font-size:.46rem;letter-spacing:.12em;color:var(--crimson);opacity:.6;text-transform:uppercase;transition:var(--ease)}
+.bc-del:hover{opacity:1}
+.bc-edit{font-family:var(--ff-caps);font-size:.46rem;letter-spacing:.12em;color:var(--silver-dim);opacity:.55;text-transform:uppercase;transition:var(--ease)}
+.bc-edit:hover{opacity:1;color:var(--silver)}
+
+/* Parchment card */
+.parch-card{
+  background:linear-gradient(160deg,#12100a 0%,#0c0a06 100%);
+  border:1px solid rgba(160,130,60,.18);
+  position:relative;overflow:hidden;cursor:pointer;transition:var(--ease);
+  aspect-ratio:3/4;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.parch-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,rgba(160,130,60,.4),rgba(120,100,30,.05))}
+.parch-card:hover{border-color:rgba(200,160,70,.35);transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,.7)}
+.pc-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:2rem;opacity:.04;pointer-events:none;color:var(--parch)}
+.pc-body{padding:.8rem;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 100%)}
+.pc-title{font-family:var(--ff-title);font-size:.92rem;color:#b09050;line-height:1.15;margin-bottom:.2rem}
+.pc-meta{font-family:var(--ff-serif);font-size:.54rem;color:rgba(160,130,60,.5);font-style:italic}
+
+/* ══ SCREEN: CREATE ══ */
+#screen-create{background:var(--abyss);padding-bottom:5rem}
+.create-header{max-width:700px;margin:0 auto 1.5rem;display:flex;align-items:center;gap:1.2rem;border-bottom:1px solid var(--silver-border);padding:1.5rem 1.5rem 1rem}
+.back-btn{font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.35rem .75rem;border:1px solid var(--silver-border);color:var(--text-dim);transition:var(--ease)}
+.back-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.create-screen-title{font-family:var(--ff-deco);font-size:1.2rem;color:var(--silver);font-weight:400;filter:drop-shadow(0 0 10px var(--silver-ghost))}
+.create-form{max-width:700px;margin:0 auto;padding:0 1.5rem}
+.fl{display:block;font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.28em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.42rem}
+.fg{margin-bottom:1.2rem}
+.fi-wide{width:100%;background:rgba(4,4,10,.8);border:1px solid var(--silver-border);color:var(--text);font-family:var(--ff-serif);font-size:.82rem;padding:.52rem .78rem;outline:none;transition:var(--ease);resize:vertical;display:block}
+.fi-wide:focus{border-color:var(--silver-border-hi);background:var(--deep)}
+.fi-wide::placeholder{color:var(--text-ghost);font-style:italic}
+.fi-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+
+/* Entry accordion */
+.entries-list{margin-bottom:.85rem}
+.ec{background:var(--deep);border:1px solid var(--silver-border);margin-bottom:.55rem;overflow:hidden}
+.ec-head{display:flex;align-items:center;padding:.52rem .78rem;background:var(--raised);gap:.7rem;cursor:pointer}
+.ec-head:hover{background:var(--void-mid)}
+.ec-num{font-family:var(--ff-caps);font-size:.52rem;color:var(--silver-dim);letter-spacing:.12em;min-width:20px}
+.ec-preview{flex:1;font-family:var(--ff-serif);font-size:.74rem;color:var(--text);font-style:italic}
+.ec-arrow{font-size:.58rem;color:var(--text-ghost);transition:var(--ease)}
+.ec.open .ec-arrow{transform:rotate(180deg)}
+.ec-body{display:none;padding:.78rem;border-top:1px solid var(--silver-border)}
+.ec.open .ec-body{display:block}
+.ec-del{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.12em;color:var(--crimson);opacity:.6;text-transform:uppercase;transition:var(--ease);margin-top:.4rem;display:inline-block}
+.ec-del:hover{opacity:1}
+.btn-add-entry{width:100%;padding:.58rem;border:1px dashed rgba(190,190,210,.12);font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);transition:var(--ease);margin-bottom:1.2rem}
+.btn-add-entry:hover{border-color:var(--silver-border-hi);color:var(--silver)}
+.type-toggle{display:flex;gap:.5rem;margin-bottom:1.4rem}
+.type-btn{flex:1;padding:.58rem;border:1px solid var(--silver-border);font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);transition:var(--ease)}
+.type-btn.active{color:var(--silver);border-color:var(--silver-border-hi);background:var(--silver-ghost)}
+.type-btn:hover:not(.active){color:var(--text);border-color:rgba(190,190,210,.25)}
+
+/* ══ SCREEN: READER ══ */
+#screen-reader{background:#030308;overflow:hidden}
+.reader-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.5rem 1.5rem;
+  background:rgba(3,3,8,.97);
+  border-bottom:1px solid var(--silver-border);
+  flex-shrink:0;z-index:20;gap:1rem;
+}
+.rd-title{font-family:var(--ff-title);font-size:1.2rem;color:var(--silver);filter:drop-shadow(0 0 12px var(--silver-ghost));flex:1;text-align:center}
+#reader-stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:1.2rem}
+#flip-mount{position:relative}
+.reader-controls{
+  display:flex;align-items:center;justify-content:center;gap:1.2rem;padding:.5rem 1.5rem;
+  background:rgba(3,3,8,.97);border-top:1px solid var(--silver-border);flex-shrink:0;
+}
+.rd-btn{font-family:var(--ff-serif);font-size:.74rem;font-style:italic;color:var(--silver-dim);border:1px solid var(--silver-border);padding:.28rem .95rem;transition:var(--ease)}
+.rd-btn:hover:not(:disabled){color:var(--silver);border-color:var(--silver-border-hi)}
+.rd-btn:disabled{opacity:.18;cursor:default}
+.rd-info{font-family:var(--ff-serif);font-size:.6rem;font-style:italic;color:var(--text-ghost);letter-spacing:.1em;min-width:90px;text-align:center}
+.rd-share{font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--silver-border);padding:.28rem .72rem;transition:var(--ease)}
+.rd-share:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.rd-share.copied{color:#6abf6a;border-color:#3a7a3a}
+.rd-scribe{font-family:var(--ff-serif);font-size:.58rem;color:var(--text-ghost);font-style:italic}
+
+/* ══ BOOK PAGES (dark gothic) ══ */
+.fp{width:100%;height:100%;overflow:hidden;position:relative}
+.fp-cover{background:linear-gradient(160deg,#0a0005 0%,#060003 40%,#0d0008 100%);display:flex;align-items:center;justify-content:center}
+.fp-cover-inner{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative}
+.fp-cover-inner::before{content:'';position:absolute;inset:1rem;border:1px solid rgba(190,190,210,.12)}
+.fp-cover-inner::after{content:'';position:absolute;inset:1.4rem;border:1px solid rgba(139,16,32,.15)}
+.fp-cv-sigil{font-size:1.5rem;color:var(--crimson);letter-spacing:.4em;margin-bottom:1rem;filter:drop-shadow(0 0 12px var(--crimson-glow))}
+.fp-cv-title{font-family:var(--ff-title);font-size:clamp(1.3rem,4vw,2rem);background:linear-gradient(135deg,var(--silver) 0%,#e8e8f8 50%,var(--silver-dim) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.06em;line-height:1.1;filter:drop-shadow(0 0 15px var(--silver-glow))}
+.fp-cv-div{width:44px;height:1px;background:linear-gradient(to right,transparent,var(--crimson-dim),transparent);margin:.7rem auto}
+.fp-cv-sub{font-family:var(--ff-serif);font-size:.62rem;color:var(--silver-dim);font-style:italic;letter-spacing:.1em;line-height:1.8}
+.fp-cv-author{font-family:var(--ff-title);font-size:.8rem;color:rgba(190,190,210,.3);margin-top:1.2rem}
+.fp-cv-bottom{position:absolute;bottom:1.5rem;font-family:var(--ff-caps);font-size:.48rem;color:var(--crimson);opacity:.35;letter-spacing:.22em;text-transform:uppercase}
+.fp-back{background:linear-gradient(160deg,#080006 0%,#050003 60%,#0a0006 100%);display:flex;align-items:center;justify-content:center}
+.fp-back-inner{text-align:center;position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fp-back-inner::before{content:'';position:absolute;inset:1.1rem;border:1px solid rgba(190,190,210,.07)}
+.fp-back-seal{font-size:1.8rem;color:var(--crimson);opacity:.18;letter-spacing:.4em}
+.fp-back-motto{font-family:var(--ff-serif);font-size:.58rem;color:rgba(190,190,210,.15);font-style:italic;letter-spacing:.1em;text-align:center;line-height:2.2;margin-top:.8rem}
+.fp-page{background:linear-gradient(160deg,#0c0a16 0%,#08060f 40%,#0c0a16 100%);position:relative}
+.fp-page::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 30%,rgba(139,16,32,.025) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(100,80,180,.02) 0%,transparent 50%);pointer-events:none}
+.fp-content{position:absolute;inset:0;padding:1.7rem 1.5rem 1.4rem;overflow:hidden;display:flex;flex-direction:column}
+.fp-left .fp-content::after,.fp-right .fp-content::before{content:'';position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(190,190,210,.1) 20%,rgba(190,190,210,.14) 50%,rgba(190,190,210,.1) 80%,transparent)}
+.fp-left .fp-content::after{right:0}
+.fp-right .fp-content::before{left:0}
+.fp-orn{position:absolute;font-size:.52rem;color:rgba(139,16,32,.25)}
+.fp-orn-tl{top:.42rem;left:.42rem}
+.fp-orn-br{bottom:.42rem;right:.42rem}
+.fp-toc-h{font-family:var(--ff-title);font-size:1.4rem;color:var(--silver);text-align:center;margin-bottom:.25rem;filter:drop-shadow(0 0 8px var(--silver-ghost))}
+.fp-toc-rule{border:none;height:1px;background:linear-gradient(to right,transparent,var(--crimson-dim),transparent);margin:.35rem 0 .8rem}
+.fp-toc-row{display:flex;align-items:baseline;gap:.25rem;margin-bottom:.32rem;border-bottom:1px dotted rgba(190,190,210,.07);padding-bottom:.25rem}
+.fp-toc-n{font-family:var(--ff-serif);font-size:.56rem;color:var(--crimson);font-style:italic;min-width:18px;opacity:.7}
+.fp-toc-t{font-family:var(--ff-title);font-size:.8rem;color:var(--text);flex:1;line-height:1.2}
+.fp-toc-d{font-family:var(--ff-serif);font-size:.5rem;color:var(--text-ghost);font-style:italic;white-space:nowrap}
+.fp-toc-seal{text-align:center;margin-top:.7rem;font-size:.8rem;color:var(--crimson);opacity:.15;letter-spacing:.3em}
+.fp-date{font-family:var(--ff-title);font-size:.66rem;color:var(--crimson);margin-bottom:.06rem;letter-spacing:.03em;opacity:.7}
+.fp-etitle{font-family:var(--ff-title);font-size:1.12rem;color:var(--silver);margin-bottom:.52rem;border-bottom:1px solid rgba(190,190,210,.1);padding-bottom:.32rem;letter-spacing:.04em;line-height:1.12;filter:drop-shadow(0 0 6px var(--silver-ghost))}
+.fp-body{font-family:var(--ff-serif);font-size:.7rem;line-height:1.66;color:var(--text);text-align:justify;hyphens:auto;flex:1;overflow:hidden}
+.fp-body p{margin-bottom:.5em}
+.fp-body em{font-style:italic;color:var(--silver-dim)}
+.fp-body strong{color:var(--silver);font-style:italic}
+.fp-body .li{margin-left:.75em;margin-bottom:.18em;font-style:italic}
+.fp-body .li::before{content:'— ';color:var(--crimson);opacity:.6}
+.fp-body p:first-child::first-letter{font-family:var(--ff-title);font-size:2.6em;float:left;line-height:.78;margin:.06em .08em -.06em 0;color:var(--silver);filter:drop-shadow(0 0 8px var(--silver-ghost))}
+.fp-pnum{position:absolute;bottom:.65rem;font-family:var(--ff-serif);font-size:.5rem;color:rgba(190,190,210,.18);font-style:italic;letter-spacing:.06em}
+.fp-left .fp-pnum{left:1.5rem}
+.fp-right .fp-pnum{right:1.5rem}
+.fp-cont{font-family:var(--ff-serif);font-size:.5rem;color:rgba(139,16,32,.35);font-style:italic;text-align:right;margin-top:.22rem}
+
+/* ══ PARCHMENT PAGES ══ */
+.pp{width:100%;height:100%;overflow:hidden;position:relative}
+.pp-parch{background:linear-gradient(150deg,#e4d09e 0%,#d4b878 35%,#dfc88a 65%,#c8a660 100%)}
+.pp-parch::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 25%,rgba(90,40,5,.09) 0%,transparent 50%),radial-gradient(ellipse at 75% 75%,rgba(80,35,5,.08) 0%,transparent 50%);pointer-events:none}
+.pp-content{position:absolute;inset:0;padding:1.8rem 1.8rem 1.5rem;overflow:hidden;display:flex;flex-direction:column}
+.pp-left .pp-content::after,.pp-right .pp-content::before{content:'';position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(100,60,0,.2) 20%,rgba(100,60,0,.25) 50%,rgba(100,60,0,.2) 80%,transparent)}
+.pp-left .pp-content::after{right:0}
+.pp-right .pp-content::before{left:0}
+.pp-stain{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:multiply}
+.pp-sa{width:45px;height:25px;background:radial-gradient(ellipse,rgba(90,40,5,.1) 0%,transparent 70%);top:14%;right:9%}
+.pp-sb{width:30px;height:30px;background:radial-gradient(ellipse,rgba(70,30,0,.08) 0%,transparent 70%);bottom:22%;left:7%}
+.pp-cover{background:linear-gradient(150deg,#e0ca95 0%,#cca660 30%,#d8be7a 65%,#c09050 100%);display:flex;align-items:center;justify-content:center}
+.pp-cover-inner{width:100%;height:100%;padding:2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}
+.pp-cover-inner::before{content:'';position:absolute;inset:.9rem;border:1px solid rgba(80,40,0,.2)}
+.pp-cover-inner::after{content:'';position:absolute;inset:1.3rem;border:1px solid rgba(80,40,0,.09)}
+.pp-cv-sigil{font-size:1.2rem;color:rgba(80,40,0,.22);letter-spacing:.4em;margin-bottom:.9rem}
+.pp-cv-title{font-family:var(--ff-title);font-size:clamp(1.3rem,4vw,1.9rem);color:#2a0e04;letter-spacing:.05em;line-height:1.1}
+.pp-cv-div{width:44px;height:1px;background:linear-gradient(to right,transparent,rgba(80,40,0,.4),transparent);margin:.65rem auto}
+.pp-cv-sub{font-family:var(--ff-serif);font-size:.6rem;color:rgba(60,25,5,.65);font-style:italic;letter-spacing:.08em;line-height:1.8}
+.pp-cv-author{font-family:var(--ff-title);font-size:.8rem;color:rgba(60,25,5,.4);margin-top:1rem}
+.pp-cv-bottom{position:absolute;bottom:1.5rem;font-family:var(--ff-serif);font-size:.5rem;color:rgba(60,25,5,.22);letter-spacing:.14em;font-style:italic}
+.pp-back{background:linear-gradient(150deg,#d8c288 0%,#c0a050 50%,#ccb268 100%);display:flex;align-items:center;justify-content:center}
+.pp-back-inner{text-align:center;position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pp-back-inner::before{content:'';position:absolute;inset:1.1rem;border:1px solid rgba(80,40,0,.1)}
+.pp-back-seal{font-size:1.6rem;color:rgba(80,40,0,.09);letter-spacing:.4em}
+.pp-back-motto{font-family:var(--ff-serif);font-size:.56rem;color:rgba(60,25,5,.22);font-style:italic;letter-spacing:.1em;line-height:2.2;margin-top:.7rem}
+.pp-date{font-family:var(--ff-title);font-size:.68rem;color:rgba(60,25,5,.65);margin-bottom:.06rem}
+.pp-etitle{font-family:var(--ff-title);font-size:1.1rem;color:#1e0c03;margin-bottom:.5rem;border-bottom:1px solid rgba(80,40,0,.2);padding-bottom:.35rem;line-height:1.12}
+.pp-body{font-family:var(--ff-serif);font-size:.7rem;line-height:1.68;color:#2c1106;text-align:justify;hyphens:auto;flex:1;overflow:hidden}
+.pp-body p{margin-bottom:.5em}
+.pp-body em{font-style:italic}
+.pp-body .li{margin-left:.75em;margin-bottom:.18em;font-style:italic}
+.pp-body .li::before{content:'— ';color:rgba(80,40,0,.55)}
+.pp-body p:first-child::first-letter{font-family:var(--ff-title);font-size:2.6em;float:left;line-height:.78;margin:.06em .08em -.06em 0;color:#1e0c03}
+.pp-pnum{position:absolute;bottom:.7rem;font-family:var(--ff-serif);font-size:.52rem;color:rgba(60,25,5,.32);font-style:italic}
+.pp-left .pp-pnum{left:1.8rem}
+.pp-right .pp-pnum{right:1.8rem}
+.pp-seal-line{margin-top:.8rem;font-family:var(--ff-title);font-size:.78rem;color:#3a1a06;text-align:right;font-style:italic;opacity:.7}
+
+/* ══ TOAST & MODAL ══ */
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(3rem);background:var(--raised);border:1px solid var(--silver-border-hi);padding:.52rem 1.4rem;font-family:var(--ff-caps);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--silver);z-index:999;opacity:0;transition:all .28s ease;white-space:nowrap;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+#modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+#modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--silver-border-hi);padding:2rem;max-width:340px;width:90%;text-align:center;box-shadow:0 0 40px rgba(139,16,32,.15)}
+.modal-title{font-family:var(--ff-deco);font-size:.92rem;color:var(--silver);margin-bottom:.7rem}
+.modal-body{font-family:var(--ff-serif);font-size:.74rem;color:var(--text-dim);margin-bottom:1.4rem;font-style:italic;line-height:1.6}
+.modal-btns{display:flex;gap:.7rem;justify-content:center}
+.modal-btn{font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.44rem 1.1rem;border:1px solid var(--silver-border);color:var(--text-dim);transition:var(--ease)}
+.modal-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.modal-btn.danger{color:var(--crimson);border-color:var(--crimson-dim)}
+.modal-btn.danger:hover{background:var(--crimson-dim);color:#ff9090}
+
+@media(max-width:600px){
+  .shelf{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .lib-create-bar{flex-direction:column;align-items:stretch;padding:1.2rem}
+  .btn-create{text-align:center}
+  .fi-row{grid-template-columns:1fr}
+  .reader-topbar .rd-scribe{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div id="topbar" style="display:none">
+  <div class="topbar-brand" onclick="goLibrary()">The Black Archive</div>
+  <div class="topbar-right">
+    <span class="topbar-scribe" id="topbar-scribe"></span>
+    <button class="tb-btn" id="tb-auth-btn" onclick="goAuth()" style="display:none">Enter the Archive</button>
+    <button class="tb-btn" id="tb-logout-btn" style="display:none" onclick="doLogout()">Depart</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN: AUTH ══ -->
+<section id="screen-auth" class="screen">
+  <div class="auth-box">
+    <span class="auth-corner tl">✦</span>
+    <span class="auth-corner tr">✦</span>
+    <span class="auth-corner bl">✦</span>
+    <span class="auth-corner br">✦</span>
+    <div class="auth-sigil">⸸</div>
+    <div class="auth-title">The Black Archive</div>
+    <div class="auth-house">House Mournstar</div>
+    <div class="auth-sub">Identify yourself, Scribe</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Enter</button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Claim a Name</button>
+    </div>
+    <div id="auth-login-form">
+      <input class="fi" id="login-name" type="text" placeholder="Your codename…" autocomplete="username">
+      <input class="fi" id="login-pass" type="password" placeholder="Your passphrase…" autocomplete="current-password">
+      <button class="btn-forge" onclick="doLogin()">✦ Enter the Archive ✦</button>
+    </div>
+    <div id="auth-register-form" style="display:none">
+      <input class="fi" id="reg-name" type="text" placeholder="Claim a codename…" autocomplete="username">
+      <input class="fi" id="reg-pass" type="password" placeholder="Choose a passphrase…" autocomplete="new-password">
+      <input class="fi" id="reg-pass2" type="password" placeholder="Confirm passphrase…" autocomplete="new-password">
+      <button class="btn-forge" onclick="doRegister()">✦ Claim Your Name ✦</button>
+    </div>
+    <div class="auth-err" id="auth-err"></div>
+    <div class="auth-visitor">
+      Or <span onclick="goLibrary()">browse the Archive as a visitor</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: LIBRARY ══ -->
+<section id="screen-library" class="screen with-topbar">
+  <div class="lib-hero">
+    <div class="lib-sigil-wrap">
+      <div class="lib-sigil-line"></div>
+      <div class="lib-sigil">⸸</div>
+      <div class="lib-sigil-line r"></div>
+    </div>
+    <div class="lib-title">The Black Archive</div>
+    <div class="lib-house">House Mournstar</div>
+    <div class="lib-subtitle">A Repository of Forbidden Manuscripts &amp; Private Correspondences</div>
+  </div>
+  <div class="lib-create-bar" id="lib-create-bar" style="display:none">
+    <button class="btn-create" onclick="goCreate('book')">📖 &nbsp;Bind a New Tome</button>
+    <button class="btn-create" onclick="goCreate('parchment')">📜 &nbsp;Write a Parchment</button>
+  </div>
+  <div class="shelf-section">
+    <div class="shelf-label">Tomes &amp; Journals</div>
+    <div class="shelf" id="shelf-books"></div>
+  </div>
+  <div class="shelf-section" style="margin-top:1.8rem">
+    <div class="shelf-label">Letters &amp; Parchments</div>
+    <div class="shelf" id="shelf-parchments"></div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: CREATE ══ -->
+<section id="screen-create" class="screen with-topbar">
+  <div class="create-header">
+    <button class="back-btn" onclick="goLibrary()">← Library</button>
+    <div class="create-screen-title" id="create-title-label">Bind a New Tome</div>
+  </div>
+  <div class="create-form">
+    <div class="type-toggle">
+      <button class="type-btn active" id="type-btn-book" onclick="setCreateType('book')">📖 &nbsp;Tome / Journal</button>
+      <button class="type-btn" id="type-btn-parchment" onclick="setCreateType('parchment')">📜 &nbsp;Letter / Parchment</button>
+    </div>
+    <div class="fg"><label class="fl">Title</label><input class="fi-wide" id="c-title" type="text" placeholder="Title of this work…"></div>
+    <div class="fi-row">
+      <div class="fg"><label class="fl">Author / Scribe</label><input class="fi-wide" id="c-author" type="text" placeholder="Written by…"></div>
+      <div class="fg"><label class="fl" id="c-sub-label">Subtitle</label><input class="fi-wide" id="c-subtitle" type="text" placeholder="Inscription or subtitle…"></div>
+    </div>
+    <div id="book-section">
+      <hr class="gr">
+      <div class="fl" style="margin-bottom:.8rem">Entries</div>
+      <div class="entries-list" id="entries-list"></div>
+      <button class="btn-add-entry" onclick="addEntry()">+ Add Entry</button>
+    </div>
+    <div id="parch-section" style="display:none">
+      <div class="fi-row">
+        <div class="fg"><label class="fl">Date / Occasion</label><input class="fi-wide" id="p-date" type="text" placeholder="28th of Second Seed…"></div>
+        <div class="fg"><label class="fl">To (recipient)</label><input class="fi-wide" id="p-to" type="text" placeholder="Addressed to…"></div>
+      </div>
+      <div class="fg"><label class="fl">Body</label><textarea class="fi-wide" id="p-body" rows="11" placeholder="Write the full text here…"></textarea></div>
+      <div class="fg"><label class="fl">Closing / Seal</label><input class="fi-wide" id="p-seal" type="text" placeholder="In the name of…"></div>
+    </div>
+    <hr class="gr">
+    <button class="btn-forge" id="forge-btn" onclick="forgeWork()">✦ Seal &amp; Archive this Tome ✦</button>
+    <div style="height:2.5rem"></div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: READER ══ -->
+<section id="screen-reader" class="screen">
+  <div class="reader-topbar">
+    <button class="tb-btn" onclick="goLibrary()">← Archive</button>
+    <div class="rd-title" id="rd-title"></div>
+    <div style="display:flex;align-items:center;gap:.7rem">
+      <span class="rd-scribe" id="rd-scribe"></span>
+      <button class="rd-share" id="rd-share" onclick="shareWork()">Share ✦</button>
+    </div>
+  </div>
+  <div id="reader-stage"><div id="flip-mount"></div></div>
+  <div class="reader-controls">
+    <button class="rd-btn" id="rd-prev">← Turn Back</button>
+    <div class="rd-info" id="rd-info"></div>
+    <button class="rd-btn" id="rd-next">Turn Page →</button>
+  </div>
+</section>
+
+<div id="toast"></div>
+<div id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title">Destroy this work?</div>
+    <div class="modal-body">This manuscript will be removed from the Archive permanently. Are you certain?</div>
+    <div class="modal-btns">
+      <button class="modal-btn" onclick="closeModal()">Keep it</button>
+      <button class="modal-btn danger" id="modal-confirm-btn">Burn it</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── State ── */
+var SESSION = { codename: null, id: null };
+var currentWork = null;
+var pfInstance = null;
+var createType = 'book';
+var editingId = null;
+var entryCount = 0;
+var pendingDeleteId = null;
+var ROMANS = ['i','ii','iii','iv','v','vi','vii','viii','ix','x','xi','xii','xiii','xiv','xv','xvi','xvii','xviii','xix','xx'];
+
+/* ── API ── */
+async function api(method, path, body) {
+  var opts = { method: method, headers: { 'Content-Type': 'application/json' }, credentials: 'include' };
+  if (body !== undefined) opts.body = JSON.stringify(body);
+  var res = await fetch(path, opts);
+  var data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+/* ── Init ── */
+async function init() {
+  try {
+    var me = await api('GET', '/api/auth/me');
+    SESSION.codename = me.codename;
+    SESSION.id = me.id;
+  } catch(e) {}
+
+  var params = new URLSearchParams(window.location.search);
+  var wid = params.get('work');
+  if (wid) {
+    await openWorkById(wid);
+  } else {
+    goLibrary();
+  }
+}
+
+/* ── Screen routing ── */
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('screen-' + name).classList.add('active');
+  var topbar = document.getElementById('topbar');
+  if (name === 'auth' || name === 'reader') {
+    topbar.style.display = 'none';
+  } else {
+    topbar.style.display = 'flex';
+    updateTopbar();
+  }
+}
+
+function updateTopbar() {
+  var scribeEl  = document.getElementById('topbar-scribe');
+  var authBtn   = document.getElementById('tb-auth-btn');
+  var logoutBtn = document.getElementById('tb-logout-btn');
+  var createBar = document.getElementById('lib-create-bar');
+  if (SESSION.codename) {
+    scribeEl.textContent = SESSION.codename;
+    authBtn.style.display   = 'none';
+    logoutBtn.style.display = '';
+    if (createBar) createBar.style.display = 'flex';
+  } else {
+    scribeEl.textContent = '';
+    authBtn.style.display   = '';
+    logoutBtn.style.display = 'none';
+    if (createBar) createBar.style.display = 'none';
+  }
+}
+
+function goAuth()    { showScreen('auth'); document.getElementById('auth-err').textContent = ''; }
+function goLibrary() { showScreen('library'); loadLibrary(); history.replaceState({},'',' /'); }
+function goCreate(type) {
+  if (!SESSION.codename) { goAuth(); return; }
+  editingId = null;
+  setCreateType(type);
+  resetForm();
+  showScreen('create');
+}
+
+/* ── Auth ── */
+function switchTab(tab) {
+  document.getElementById('auth-login-form').style.display    = tab === 'login'    ? '' : 'none';
+  document.getElementById('auth-register-form').style.display = tab === 'register' ? '' : 'none';
+  document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('auth-err').textContent = '';
+}
+
+async function doLogin() {
+  var codename   = document.getElementById('login-name').value.trim();
+  var passphrase = document.getElementById('login-pass').value;
+  document.getElementById('auth-err').textContent = '';
+  try {
+    var res = await api('POST', '/api/auth/login', { codename: codename, passphrase: passphrase });
+    SESSION.codename = res.codename;
+    goLibrary();
+  } catch(e) {
+    document.getElementById('auth-err').textContent = e.message;
+  }
+}
+
+async function doRegister() {
+  var codename  = document.getElementById('reg-name').value.trim();
+  var pass      = document.getElementById('reg-pass').value;
+  var pass2     = document.getElementById('reg-pass2').value;
+  document.getElementById('auth-err').textContent = '';
+  if (pass !== pass2) { document.getElementById('auth-err').textContent = 'Passphrases do not match.'; return; }
+  try {
+    var res = await api('POST', '/api/auth/register', { codename: codename, passphrase: pass });
+    SESSION.codename = res.codename;
+    goLibrary();
+  } catch(e) {
+    document.getElementById('auth-err').textContent = e.message;
+  }
+}
+
+async function doLogout() {
+  try { await api('POST', '/api/auth/logout'); } catch(e) {}
+  SESSION.codename = null; SESSION.id = null;
+  goLibrary();
+}
+
+document.getElementById('login-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+document.getElementById('reg-pass2').addEventListener('keydown', function(e){ if(e.key==='Enter') doRegister(); });
+
+/* ── Library ── */
+async function loadLibrary() {
+  try {
+    var data = await api('GET', '/api/library');
+    renderShelf('shelf-books',      data.books,      'book');
+    renderShelf('shelf-parchments', data.parchments, 'parchment');
+  } catch(e) { toast('Could not reach the Archive.'); }
+}
+
+function renderShelf(elId, items, type) {
+  var el = document.getElementById(elId);
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-shelf">' + (type==='book' ? 'No tomes bound yet. The shelf awaits.' : 'No parchments sealed yet.') + '</div>';
+    return;
+  }
+  el.innerHTML = items.map(function(w) {
+    var isOwn = (w.scribe_name === SESSION.codename);
+    var ownActions = isOwn
+      ? '<div class="bc-mine-actions"><button class="bc-edit" onclick="event.stopPropagation();editWork(\''+w.id+'\')">Edit</button><button class="bc-del" onclick="event.stopPropagation();confirmDelete(\''+w.id+'\')">Remove</button></div>'
+      : '';
+    if (type === 'book') {
+      return '<div class="book-card" onclick="openWorkById(\''+w.id+'\')">'
+        +'<div class="bc-spine"></div><div class="bc-top"></div>'
+        +'<div class="bc-badge">Tome</div>'
+        +'<div class="bc-body">'
+        +'<div class="bc-title">'+esc(w.title)+'</div>'
+        +'<div class="bc-meta">'+esc(w.scribe_name||'')+(w.entry_count?' &middot; '+w.entry_count+' entr'+(w.entry_count===1?'y':'ies'):'')+'</div>'
+        +ownActions+'</div></div>';
+    } else {
+      return '<div class="parch-card" onclick="openWorkById(\''+w.id+'\')">'
+        +'<div class="pc-icon">📜</div>'
+        +'<div class="pc-body">'
+        +'<div class="pc-title">'+esc(w.title)+'</div>'
+        +'<div class="pc-meta">'+esc(w.scribe_name||'')+(w.author?' &middot; '+esc(w.author):'')+'</div>'
+        +ownActions+'</div></div>';
+    }
+  }).join('');
+}
+
+/* ── Delete ── */
+function confirmDelete(id) {
+  pendingDeleteId = id;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-confirm-btn').onclick = function(){ doDelete(id); closeModal(); };
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+async function doDelete(id) {
+  try { await api('DELETE', '/api/works/'+id); toast('Manuscript removed from the Archive.'); loadLibrary(); }
+  catch(e) { toast(e.message); }
+}
+
+/* ── Creator ── */
+function setCreateType(type) {
+  createType = type;
+  document.getElementById('type-btn-book').classList.toggle('active',       type==='book');
+  document.getElementById('type-btn-parchment').classList.toggle('active',  type==='parchment');
+  document.getElementById('book-section').style.display   = type==='book'       ? '' : 'none';
+  document.getElementById('parch-section').style.display  = type==='parchment'  ? '' : 'none';
+  document.getElementById('create-title-label').textContent = type==='book' ? 'Bind a New Tome' : 'Write a Parchment';
+  document.getElementById('c-sub-label').textContent       = type==='book' ? 'Subtitle' : 'Context';
+  document.getElementById('forge-btn').textContent         = type==='book'
+    ? '✦ Seal & Archive this Tome ✦' : '✦ Seal & Archive this Parchment ✦';
+}
+
+function resetForm() {
+  ['c-title','c-author','c-subtitle','p-date','p-to','p-body','p-seal'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('entries-list').innerHTML = '';
+  entryCount = 0;
+  if (createType === 'book') addEntry();
+}
+
+function addEntry() {
+  entryCount++;
+  var id = 'ec-'+entryCount;
+  var el = document.createElement('div');
+  el.className = 'ec open'; el.id = id;
+  el.innerHTML =
+    '<div class="ec-head" onclick="toggleEntry(\''+id+'\')">'
+    +'<span class="ec-num">'+String(entryCount).padStart(2,'0')+'</span>'
+    +'<span class="ec-preview" id="'+id+'-prev">New Entry</span>'
+    +'<span class="ec-arrow">&#9662;</span></div>'
+    +'<div class="ec-body">'
+    +'<div class="fi-row" style="margin-bottom:.7rem">'
+    +'<div><label class="fl">Date</label><input class="fi-wide" id="'+id+'-date" type="text" placeholder="28th of Second Seed…" oninput="updateEcPreview(\''+id+'\')"></div>'
+    +'<div><label class="fl">Entry Title</label><input class="fi-wide" id="'+id+'-title" type="text" placeholder="The Returning…" oninput="updateEcPreview(\''+id+'\')"></div>'
+    +'</div>'
+    +'<div><label class="fl">Body</label><textarea class="fi-wide" id="'+id+'-body" rows="7" placeholder="Write the entry body here…"></textarea></div>'
+    +'<button class="ec-del" onclick="removeEntry(\''+id+'\')">&#10005; Remove entry</button>'
+    +'</div>';
+  document.getElementById('entries-list').appendChild(el);
+}
+function toggleEntry(id) { document.getElementById(id).classList.toggle('open'); }
+function updateEcPreview(id) {
+  var t = document.getElementById(id+'-title').value;
+  var d = document.getElementById(id+'-date').value;
+  document.getElementById(id+'-prev').textContent = t||d||'New Entry';
+}
+function removeEntry(id) { var el=document.getElementById(id); if(el) el.remove(); }
+
+async function editWork(id) {
+  if (!SESSION.codename) { goAuth(); return; }
+  try {
+    var work = await api('GET', '/api/works/'+id);
+    editingId = id;
+    setCreateType(work.type);
+    document.getElementById('c-title').value    = work.title||'';
+    document.getElementById('c-author').value   = work.author||'';
+    document.getElementById('c-subtitle').value = work.subtitle||'';
+    if (work.type==='book') {
+      document.getElementById('entries-list').innerHTML=''; entryCount=0;
+      (work.entries||[]).forEach(function(e){ addEntry(); var ecId='ec-'+entryCount; document.getElementById(ecId+'-title').value=e.title||''; document.getElementById(ecId+'-date').value=e.date_line||''; document.getElementById(ecId+'-body').value=e.body||''; updateEcPreview(ecId); });
+    } else {
+      var meta=work.meta||{};
+      document.getElementById('p-date').value  = meta.date||'';
+      document.getElementById('p-to').value    = meta.to||'';
+      document.getElementById('p-body').value  = (work.entries[0]||{}).body||'';
+      document.getElementById('p-seal').value  = meta.seal||'';
+    }
+    showScreen('create');
+  } catch(e) { toast(e.message); }
+}
+
+async function forgeWork() {
+  var title = document.getElementById('c-title').value.trim();
+  if (!title) { toast('A title is required.'); return; }
+  var payload;
+  if (createType==='book') {
+    var ents=[];
+    document.querySelectorAll('#entries-list .ec').forEach(function(card){
+      var id=card.id;
+      var t=document.getElementById(id+'-title').value.trim();
+      var d=document.getElementById(id+'-date').value.trim();
+      var b=document.getElementById(id+'-body').value.trim();
+      if(t||b) ents.push({title:t,date_line:d,body:b});
+    });
+    if(!ents.length){toast('Add at least one entry.');return;}
+    payload={type:'book',title:title,author:document.getElementById('c-author').value.trim(),subtitle:document.getElementById('c-subtitle').value.trim(),entries:ents};
+  } else {
+    var body=document.getElementById('p-body').value.trim();
+    if(!body){toast('The parchment cannot be empty.');return;}
+    payload={type:'parchment',title:title,author:document.getElementById('c-author').value.trim(),subtitle:document.getElementById('c-subtitle').value.trim(),
+      meta:{date:document.getElementById('p-date').value.trim(),to:document.getElementById('p-to').value.trim(),seal:document.getElementById('p-seal').value.trim()},
+      entries:[{title:title,date_line:document.getElementById('p-date').value.trim(),body:body}]};
+  }
+  try {
+    if(editingId) { await api('PUT','/api/works/'+editingId,payload); toast('Work updated.'); }
+    else          { await api('POST','/api/works',payload); toast('Sealed and archived.'); }
+    goLibrary();
+  } catch(e) { toast(e.message); }
+}
+
+/* ── Reader ── */
+async function openWorkById(id) {
+  try {
+    var work = await api('GET', '/api/works/'+id);
+    currentWork = work;
+    launchReader(work);
+    history.replaceState({},'','/?work='+id);
+  } catch(e) { toast('Could not open this work.'); }
+}
+
+function launchReader(work) {
+  showScreen('reader');
+  document.getElementById('rd-title').textContent  = work.title;
+  document.getElementById('rd-scribe').textContent = 'by '+(work.scribe_name||work.author||'');
+
+  var mount = document.getElementById('flip-mount');
+  mount.innerHTML = '';
+  if (pfInstance) { try{pfInstance.destroy();}catch(e){} pfInstance=null; }
+
+  var isBook = (work.type==='book');
+  var pages  = isBook ? buildBookPages(work) : buildParchPages(work);
+  pages.forEach(function(p){ mount.appendChild(p); });
+
+  var stage = document.getElementById('reader-stage');
+  var sw = stage.offsetWidth-48, sh = stage.offsetHeight-16;
+  var isMobile = sw < 600;
+  var pH = Math.min(sh*.92, 640);
+  var pW = isMobile ? Math.min(sw*.9,380) : Math.min(sw/2, pH*.68, 420);
+
+  pfInstance = new St.PageFlip(mount, {
+    width:Math.floor(pW), height:Math.floor(pH),
+    size:'fixed', showCover:true, drawShadow:true, flippingTime:800,
+    usePortrait:false, autoSize:true, maxShadowOpacity:.5,
+    mobileScrollSupport:false, swipeDistance:20, clickEventForward:false, useMouseEvents:true,
+  });
+
+  pfInstance.loadFromHTML(mount.querySelectorAll(isBook?'.fp':'.pp'));
+  pfInstance.on('flip', function(e){ updateRdUI(e.data); });
+  pfInstance.on('init', function(e){ updateRdUI(e.data); });
+
+  document.getElementById('rd-prev').onclick = function(){ pfInstance.flipPrev('top'); };
+  document.getElementById('rd-next').onclick = function(){ pfInstance.flipNext('bottom'); };
+  document.onkeydown = function(e){
+    if (!document.getElementById('screen-reader').classList.contains('active')) return;
+    if (e.key==='ArrowRight') pfInstance.flipNext('bottom');
+    if (e.key==='ArrowLeft')  pfInstance.flipPrev('top');
+  };
+}
+
+function updateRdUI(idx) {
+  var total = pfInstance.getPageCount();
+  var info  = document.getElementById('rd-info');
+  info.textContent = idx===0 ? 'Cover' : idx>=total-1 ? 'End' : 'Pages '+idx+'\u2013'+(idx+1);
+  document.getElementById('rd-prev').disabled = (idx===0);
+  document.getElementById('rd-next').disabled = (idx>=total-2);
+}
+
+/* ── Book page builder ── */
+function buildBookPages(work) {
+  var pages=[], pgn=1;
+  // Cover
+  var cover=mk('div','fp fp-cover','hard');
+  cover.innerHTML='<div class="fp-cover-inner"><div class="fp-cv-sigil">⸸</div>'
+    +'<div class="fp-cv-title">'+esc(work.title)+'</div><div class="fp-cv-div"></div>'
+    +'<div class="fp-cv-sub">'+esc(work.subtitle||'')+'</div>'
+    +'<div class="fp-cv-author">'+esc(work.author||work.scribe_name||'')+'</div>'
+    +'<div class="fp-cv-bottom">House Mournstar &middot; The Black Archive</div></div>';
+  pages.push(cover);
+  // TOC
+  var tocRows=(work.entries||[]).map(function(e,i){ return '<div class="fp-toc-row"><span class="fp-toc-n">'+(ROMANS[i]||i+1)+'.</span><span class="fp-toc-t">'+esc(e.title||'Untitled')+'</span><span class="fp-toc-d">'+esc(e.date_line||'')+'</span></div>'; }).join('');
+  var toc=mk('div','fp fp-page fp-right');
+  toc.innerHTML='<span class="fp-orn fp-orn-tl">⸸</span><div class="fp-content"><div class="fp-toc-h">Contents</div><hr class="fp-toc-rule">'+tocRows+'<div class="fp-toc-seal">⸸</div><div class="fp-pnum">i</div></div><span class="fp-orn fp-orn-br">⸸</span>';
+  pages.push(toc);
+  // Entries
+  (work.entries||[]).forEach(function(entry){
+    var html=t2h(entry.body||'');
+    var sideA=pgn%2===1?'fp-left':'fp-right';
+    var pA=mk('div','fp fp-page '+sideA);
+    pA.innerHTML='<span class="fp-orn fp-orn-tl">⸸</span><div class="fp-content">'
+      +(entry.date_line?'<div class="fp-date">'+esc(entry.date_line)+'</div>':'')
+      +'<div class="fp-etitle">'+esc(entry.title||'Untitled')+'</div>'
+      +'<div class="fp-body">'+html+'</div>'
+      +'<div class="fp-cont">continued ›</div>'
+      +'<div class="fp-pnum">'+pgn+'</div></div><span class="fp-orn fp-orn-br">⸸</span>';
+    pages.push(pA); pgn++;
+    var sideB=pgn%2===1?'fp-left':'fp-right';
+    var pB=mk('div','fp fp-page '+sideB);
+    pB.innerHTML='<span class="fp-orn fp-orn-tl">⸸</span><div class="fp-content">'
+      +'<div class="fp-body" style="margin-top:.3rem">'+html+'</div>'
+      +'<div class="fp-pnum">'+pgn+'</div></div><span class="fp-orn fp-orn-br">⸸</span>';
+    pages.push(pB); pgn++;
+  });
+  // Back cover
+  var back=mk('div','fp fp-back','hard');
+  back.innerHTML='<div class="fp-back-inner"><div class="fp-back-seal">⸸</div>'
+    +'<div class="fp-back-motto">Thus ends this accounting.<br>What follows is known only to the darkness<br>and to those who commissioned these words.</div></div>';
+  pages.push(back);
+  return pages;
+}
+
+/* ── Parchment page builder ── */
+function buildParchPages(work) {
+  var pages=[], meta=work.meta||{}, entry=(work.entries||[])[0]||{}, html=t2h(entry.body||'');
+  var cover=mk('div','pp pp-cover','hard');
+  cover.innerHTML='<div class="pp-cover-inner"><div class="pp-cv-sigil">&#10023; &middot; &#10023;</div>'
+    +'<div class="pp-cv-title">'+esc(work.title)+'</div><div class="pp-cv-div"></div>'
+    +'<div class="pp-cv-sub">'+(meta.date?esc(meta.date)+'<br>':'')+(meta.to?'To: '+esc(meta.to)+'<br>':'')+'</div>'
+    +'<div class="pp-cv-author">'+(work.author||work.scribe_name?'&mdash; '+esc(work.author||work.scribe_name)+' &mdash;':'')+'</div>'
+    +'<div class="pp-cv-bottom">The Black Archive</div></div>';
+  pages.push(cover);
+  var pA=mk('div','pp pp-parch pp-right');
+  pA.innerHTML='<div class="pp-sa pp-stain"></div><div class="pp-sb pp-stain"></div><div class="pp-content">'
+    +(meta.date?'<div class="pp-date">'+esc(meta.date)+'</div>':'')
+    +(meta.to?'<div class="pp-date">To: '+esc(meta.to)+'</div>':'')
+    +'<div class="pp-etitle">'+esc(work.title)+'</div>'
+    +'<div class="pp-body">'+html+'</div>'
+    +(meta.seal?'<div class="pp-seal-line">'+esc(meta.seal)+'</div>':'')
+    +'<div class="pp-pnum">1</div></div>';
+  pages.push(pA);
+  var pB=mk('div','pp pp-parch pp-left');
+  pB.innerHTML='<div class="pp-sb pp-stain"></div><div class="pp-content"><div class="pp-body">'+html+'</div><div class="pp-pnum">2</div></div>';
+  pages.push(pB);
+  var back=mk('div','pp pp-back','hard');
+  back.innerHTML='<div class="pp-back-inner"><div class="pp-back-seal">&#10023; &middot; &#10023;</div>'
+    +'<div class="pp-back-motto">Sealed by the Black Archive.<br>Let none read without sanction.</div></div>';
+  pages.push(back);
+  return pages;
+}
+
+/* ── Share ── */
+function shareWork() {
+  if (!currentWork) return;
+  var url = window.location.origin+'/?work='+currentWork.id;
+  navigator.clipboard.writeText(url).then(function(){
+    var btn=document.getElementById('rd-share');
+    btn.textContent='Copied ✓'; btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent='Share ✦'; btn.classList.remove('copied'); },2500);
+  }).catch(function(){ toast('Share link: /?work='+currentWork.id); });
+}
+
+/* ── Helpers ── */
+function mk(tag,cls,density){
+  var el=document.createElement(tag);
+  if(cls) el.className=cls;
+  if(density) el.dataset.density=density;
+  return el;
+}
+function esc(s){
+  if(!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function t2h(text){
+  if(!text) return '';
+  return text.split(/\n\n+/).map(function(para){
+    var p=para.trim(); if(!p) return '';
+    if(/^[-*] /m.test(p)){
+      return p.split('\n').filter(function(l){return l.trim();}).map(function(l){return '<div class="li">'+esc(l.replace(/^[-*]\s*/,''))+'</div>';}).join('');
+    }
+    return '<p>'+esc(p).replace(/\n/g,'<br>')+'</p>';
+  }).join('');
+}
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},3000);
+}
+
+/* ── Boot ── */
+init();
+</script>
+</body>
+</html>
