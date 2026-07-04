@@ -57,7 +57,7 @@ a{color:inherit;text-decoration:none}
 /* Screens */
 .screen{display:none;min-height:100vh}
 .screen.active{display:block}
-#screen-auth.active{display:flex;align-items:center;justify-content:center}
+#screen-auth.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem}
 #screen-reader.active{display:flex;flex-direction:column}
 
 /* Rules */
@@ -193,6 +193,12 @@ a{color:inherit;text-decoration:none}
 }
 .auth-visitor span{color:var(--silver-dim);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .auth-visitor span:hover{color:var(--silver)}
+.auth-creed{max-width:440px;margin:1.6rem auto 0;text-align:center}
+.auth-creed-rule{display:flex;align-items:center;gap:.6rem;justify-content:center;margin-bottom:.9rem;opacity:.5}
+.auth-creed-rule::before,.auth-creed-rule::after{content:'';height:1px;width:64px;background:linear-gradient(to right,transparent,rgba(139,16,32,.5),transparent)}
+.auth-creed-rule span{color:var(--crimson);font-size:.7rem}
+.auth-creed p{font-family:var(--ff-serif);font-size:.68rem;line-height:1.7;color:var(--text-ghost);font-style:italic;margin-bottom:.7rem}
+.auth-creed strong{color:var(--silver-dim);font-style:normal;letter-spacing:.02em}
 
 /* ══ SCREEN: LIBRARY ══ */
 #screen-library{
@@ -394,6 +400,7 @@ a{color:inherit;text-decoration:none}
 .fp-body .li{margin-left:.75em;margin-bottom:.18em;font-style:italic}
 .fp-body .li::before{content:'— ';color:var(--crimson);opacity:.6}
 .fp-body p:first-child::first-letter{font-family:var(--ff-title);font-size:2.6em;float:left;line-height:.78;margin:.06em .08em -.06em 0;color:var(--silver);filter:drop-shadow(0 0 8px var(--silver-ghost))}
+.fp-body.nocap p:first-child::first-letter{font-family:inherit;font-size:inherit;float:none;line-height:inherit;margin:0;color:inherit;filter:none}
 .fp-pnum{position:absolute;bottom:.65rem;font-family:var(--ff-serif);font-size:.5rem;color:rgba(190,190,210,.18);font-style:italic;letter-spacing:.06em}
 .fp-left .fp-pnum{left:1.5rem}
 .fp-right .fp-pnum{right:1.5rem}
@@ -504,6 +511,11 @@ a{color:inherit;text-decoration:none}
     <div class="auth-visitor">
       Or <span onclick="goLibrary()">browse the Library as a visitor</span>
     </div>
+  </div>
+  <div class="auth-creed">
+    <div class="auth-creed-rule"><span>⸸</span></div>
+    <p><strong>Claim a codename</strong>, then set down your deeds in your own hand. The field reports, letters, and journals you commit here are bound into tomes and shelved for all the Hold to read.</p>
+    <p>Write in character; the Library keeps what you leave. Only you may edit or unbind your own works — every tome carries a permanent link to share beyond these walls.</p>
   </div>
 </section>
 
@@ -898,18 +910,18 @@ function launchReader(work) {
   mount.innerHTML = '';
   if (pfInstance) { try{pfInstance.destroy();}catch(e){} pfInstance=null; }
 
-  var isBook = (work.type==='book');
-  var pages  = isBook ? buildBookPages(work) : buildParchPages(work);
-  pages.forEach(function(p){ mount.appendChild(p); });
-
   var stage = document.getElementById('reader-stage');
   var sw = stage.offsetWidth-48, sh = stage.offsetHeight-16;
   var isMobile = sw < 600;
-  var pH = Math.min(sh*.92, 640);
-  var pW = isMobile ? Math.min(sw*.9,380) : Math.min(sw/2, pH*.68, 420);
+  var pH = Math.floor(Math.min(sh*.92, 640));
+  var pW = Math.floor(isMobile ? Math.min(sw*.9,380) : Math.min(sw/2, pH*.68, 420));
+
+  var isBook = (work.type==='book');
+  var pages  = isBook ? buildBookPages(work, pW, pH) : buildParchPages(work, pW, pH);
+  pages.forEach(function(p){ mount.appendChild(p); });
 
   pfInstance = new St.PageFlip(mount, {
-    width:Math.floor(pW), height:Math.floor(pH),
+    width:pW, height:pH,
     size:'fixed', showCover:true, drawShadow:true, flippingTime:800,
     usePortrait:false, autoSize:true, maxShadowOpacity:.5,
     mobileScrollSupport:false, swipeDistance:20, clickEventForward:false, useMouseEvents:true,
@@ -936,9 +948,30 @@ function updateRdUI(idx) {
   document.getElementById('rd-next').disabled = (idx>=total-2);
 }
 
-/* ── Book page builder ── */
-function buildBookPages(work) {
+/* ── Text → block helpers (for pagination) ── */
+function makeBlocks(text){
+  var blocks=[];
+  String(text||'').split(/\n\n+/).forEach(function(para){
+    var p=para.trim(); if(!p) return;
+    if(/^[-*] /m.test(p)){
+      p.split('\n').forEach(function(l){ if(l.trim()) blocks.push({type:'li',text:l.replace(/^[-*]\s*/,'')}); });
+    } else {
+      blocks.push({type:'p',text:p});
+    }
+  });
+  return blocks;
+}
+function blockToHtml(b){
+  if(b.type==='li') return '<div class="li">'+esc(b.text)+'</div>';
+  return '<p>'+esc(b.text).replace(/\n/g,'<br>')+'</p>';
+}
+function blocksToHtml(arr){ return arr.map(blockToHtml).join(''); }
+
+/* ── Book page builder (measurement-based pagination) ── */
+function buildBookPages(work, pW, pH) {
   var pages=[], pgn=1;
+  function sideCls(){ return (pgn%2===1)?'fp-left':'fp-right'; }
+
   // Cover
   var cover=mk('div','fp fp-cover','hard');
   cover.innerHTML='<div class="fp-cover-inner"><div class="fp-cv-sigil">⸸</div>'
@@ -952,25 +985,65 @@ function buildBookPages(work) {
   var toc=mk('div','fp fp-page fp-right');
   toc.innerHTML='<span class="fp-orn fp-orn-tl">⸸</span><div class="fp-content"><div class="fp-toc-h">Contents</div><hr class="fp-toc-rule">'+tocRows+'<div class="fp-toc-seal">⸸</div><div class="fp-pnum">i</div></div><span class="fp-orn fp-orn-br">⸸</span>';
   pages.push(toc);
-  // Entries
+
+  // Off-screen measuring rig mirroring a real content page
+  var meas=mk('div','fp fp-page');
+  meas.style.cssText='position:absolute;left:-99999px;top:0;visibility:hidden;width:'+pW+'px;height:'+pH+'px';
+  var mc=mk('div','fp-content');
+  mc.style.cssText='position:static;height:auto;display:block';
+  meas.appendChild(mc); document.body.appendChild(meas);
+  var LIMIT=pH-2, FOOT='<div class="fp-cont">continued ›</div>';
+  function fits(html){ mc.innerHTML=html; return mc.offsetHeight<=LIMIT; }
+  function bodyWrap(inner,isFirst){ return '<div class="fp-body'+(isFirst?'':' nocap')+'">'+inner+'</div>'; }
+
+  function splitParagraph(block,hdr,isFirst){
+    var words=String(block.text).split(/\s+/), lo=1, hi=words.length, best=1;
+    while(lo<=hi){
+      var mid=(lo+hi)>>1;
+      if(fits(hdr+bodyWrap('<p>'+esc(words.slice(0,mid).join(' '))+'</p>',isFirst)+FOOT)){ best=mid; lo=mid+1; }
+      else hi=mid-1;
+    }
+    var restText=words.slice(best).join(' ');
+    return { fit:'<p>'+esc(words.slice(0,best).join(' '))+'</p>', rest: restText?{type:'p',text:restText}:null };
+  }
+
   (work.entries||[]).forEach(function(entry){
-    var html=t2h(entry.body||'');
-    var sideA=pgn%2===1?'fp-left':'fp-right';
-    var pA=mk('div','fp fp-page '+sideA);
-    pA.innerHTML='<span class="fp-orn fp-orn-tl">⸸</span><div class="fp-content">'
-      +(entry.date_line?'<div class="fp-date">'+esc(entry.date_line)+'</div>':'')
-      +'<div class="fp-etitle">'+esc(entry.title||'Untitled')+'</div>'
-      +'<div class="fp-body">'+html+'</div>'
-      +'<div class="fp-cont">continued ›</div>'
-      +'<div class="fp-pnum">'+pgn+'</div></div><span class="fp-orn fp-orn-br">⸸</span>';
-    pages.push(pA); pgn++;
-    var sideB=pgn%2===1?'fp-left':'fp-right';
-    var pB=mk('div','fp fp-page '+sideB);
-    pB.innerHTML='<span class="fp-orn fp-orn-tl">⸸</span><div class="fp-content">'
-      +'<div class="fp-body" style="margin-top:.3rem">'+html+'</div>'
-      +'<div class="fp-pnum">'+pgn+'</div></div><span class="fp-orn fp-orn-br">⸸</span>';
-    pages.push(pB); pgn++;
+    var header=(entry.date_line?'<div class="fp-date">'+esc(entry.date_line)+'</div>':'')
+              +'<div class="fp-etitle">'+esc(entry.title||'Untitled')+'</div>';
+    var blocks=makeBlocks(entry.body||''); if(!blocks.length) blocks=[{type:'p',text:'—'}];
+    var i=0, first=true, entryPages=[];
+    while(i<blocks.length){
+      var hdr=first?header:'';
+      var j=i, chosen=-1;
+      while(j<blocks.length){
+        if(fits(hdr+bodyWrap(blocksToHtml(blocks.slice(i,j+1)),first)+FOOT)){ chosen=j; j++; } else break;
+      }
+      if(chosen<0){
+        // even one block overflows an empty page → word-split (paragraphs) or force-place (li)
+        if(blocks[i].type==='p'){
+          var sp=splitParagraph(blocks[i],hdr,first);
+          entryPages.push(hdr+bodyWrap(sp.fit,first));
+          if(sp.rest){ blocks[i]=sp.rest; } else { i++; }
+        } else {
+          entryPages.push(hdr+bodyWrap(blockToHtml(blocks[i]),first)); i++;
+        }
+      } else {
+        entryPages.push(hdr+bodyWrap(blocksToHtml(blocks.slice(i,chosen+1)),first)); i=chosen+1;
+      }
+      first=false;
+    }
+    entryPages.forEach(function(inner,idx){
+      var isLast=(idx===entryPages.length-1);
+      var el=mk('div','fp fp-page '+sideCls());
+      el.innerHTML='<span class="fp-orn fp-orn-tl">⸸</span><div class="fp-content">'
+        +inner+(isLast?'':FOOT)
+        +'<div class="fp-pnum">'+pgn+'</div></div><span class="fp-orn fp-orn-br">⸸</span>';
+      pages.push(el); pgn++;
+    });
   });
+
+  document.body.removeChild(meas);
+
   // Back cover
   var back=mk('div','fp fp-back','hard');
   back.innerHTML='<div class="fp-back-inner"><div class="fp-back-seal">⸸</div>'
@@ -979,9 +1052,9 @@ function buildBookPages(work) {
   return pages;
 }
 
-/* ── Parchment page builder ── */
-function buildParchPages(work) {
-  var pages=[], meta=work.meta||{}, entry=(work.entries||[])[0]||{}, html=t2h(entry.body||'');
+/* ── Parchment page builder (paginated; short notes usually fit one leaf) ── */
+function buildParchPages(work, pW, pH) {
+  var pages=[], meta=work.meta||{}, entry=(work.entries||[])[0]||{};
   var cover=mk('div','pp pp-cover','hard');
   cover.innerHTML='<div class="pp-cover-inner"><div class="pp-cv-sigil">&#10023; &middot; &#10023;</div>'
     +'<div class="pp-cv-title">'+esc(work.title)+'</div><div class="pp-cv-div"></div>'
@@ -989,18 +1062,42 @@ function buildParchPages(work) {
     +'<div class="pp-cv-author">'+(work.author||work.scribe_name?'&mdash; '+esc(work.author||work.scribe_name)+' &mdash;':'')+'</div>'
     +'<div class="pp-cv-bottom">The Black Library</div></div>';
   pages.push(cover);
-  var pA=mk('div','pp pp-parch pp-right');
-  pA.innerHTML='<div class="pp-sa pp-stain"></div><div class="pp-sb pp-stain"></div><div class="pp-content">'
-    +(meta.date?'<div class="pp-date">'+esc(meta.date)+'</div>':'')
-    +(meta.to?'<div class="pp-date">To: '+esc(meta.to)+'</div>':'')
-    +'<div class="pp-etitle">'+esc(work.title)+'</div>'
-    +'<div class="pp-body">'+html+'</div>'
-    +(meta.seal?'<div class="pp-seal-line">'+esc(meta.seal)+'</div>':'')
-    +'<div class="pp-pnum">1</div></div>';
-  pages.push(pA);
-  var pB=mk('div','pp pp-parch pp-left');
-  pB.innerHTML='<div class="pp-sb pp-stain"></div><div class="pp-content"><div class="pp-body">'+html+'</div><div class="pp-pnum">2</div></div>';
-  pages.push(pB);
+
+  var header=(meta.date?'<div class="pp-date">'+esc(meta.date)+'</div>':'')
+            +(meta.to?'<div class="pp-date">To: '+esc(meta.to)+'</div>':'')
+            +'<div class="pp-etitle">'+esc(work.title)+'</div>';
+  var sealLine=meta.seal?'<div class="pp-seal-line">'+esc(meta.seal)+'</div>':'';
+
+  // measuring rig for pp-content
+  var meas=mk('div','pp pp-parch');
+  meas.style.cssText='position:absolute;left:-99999px;top:0;visibility:hidden;width:'+pW+'px;height:'+pH+'px';
+  var mc=mk('div','pp-content'); mc.style.cssText='position:static;height:auto;display:block';
+  meas.appendChild(mc); document.body.appendChild(meas);
+  var LIMIT=pH-2;
+  function fits(html){ mc.innerHTML=html; return mc.offsetHeight<=LIMIT; }
+
+  var blocks=makeBlocks(entry.body||''); if(!blocks.length) blocks=[{type:'p',text:'—'}];
+  var i=0, first=true, leaves=[], pnum=1;
+  while(i<blocks.length){
+    var hdr=first?header:'';
+    var j=i, chosen=-1;
+    while(j<blocks.length){
+      if(fits(hdr+'<div class="pp-body">'+blocksToHtml(blocks.slice(i,j+1))+'</div>')){ chosen=j; j++; } else break;
+    }
+    if(chosen<0){ chosen=i; } // let an oversize single block clip rather than loop
+    var isLastChunk=(chosen>=blocks.length-1);
+    leaves.push(hdr+'<div class="pp-body">'+blocksToHtml(blocks.slice(i,chosen+1))+'</div>'+(isLastChunk?sealLine:''));
+    i=chosen+1; first=false;
+  }
+  document.body.removeChild(meas);
+
+  leaves.forEach(function(inner,idx){
+    var stains=(idx===0)?'<div class="pp-sa pp-stain"></div><div class="pp-sb pp-stain"></div>':'<div class="pp-sb pp-stain"></div>';
+    var leaf=mk('div','pp pp-parch '+((idx%2===0)?'pp-right':'pp-left'));
+    leaf.innerHTML=stains+'<div class="pp-content">'+inner+'<div class="pp-pnum">'+(pnum++)+'</div></div>';
+    pages.push(leaf);
+  });
+
   var back=mk('div','pp pp-back','hard');
   back.innerHTML='<div class="pp-back-inner"><div class="pp-back-seal">&#10023; &middot; &#10023;</div>'
     +'<div class="pp-back-motto">Sealed by the Black Library.<br>Let none read without sanction.</div></div>';
