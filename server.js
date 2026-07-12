@@ -181,6 +181,38 @@ app.post('/api/admin/users', requireAdmin, async (req, res) => {
   } catch(err) { console.error(err); res.status(500).json({ error: 'Could not create the account.' }); }
 });
 
+app.post('/api/admin/users/:id/passphrase', requireAdmin, async (req, res) => {
+  try {
+    const target = scribes.findById.get(req.params.id);
+    if (!target) return res.status(404).json({ error: 'No such account.' });
+    const passphrase = sanitize(req.body.passphrase, 200);
+    if (!passphrase || passphrase.length < 4)
+      return res.status(400).json({ error: 'Passphrase must be at least 4 characters.' });
+    scribes.setPass.run(target.id, await bcrypt.hash(passphrase, 10));
+    res.json({ ok: true, codename: target.codename });
+  } catch(err) { console.error(err); res.status(500).json({ error: 'Could not update the passphrase.' }); }
+});
+
+app.delete('/api/admin/users/:id', requireAdmin, (req, res) => {
+  try {
+    const target = scribes.findById.get(req.params.id);
+    if (!target) return res.status(404).json({ error: 'No such account.' });
+    if (target.id === req.session.scribe.id)
+      return res.status(400).json({ error: 'You cannot delete your own account.' });
+    if (target.is_admin && (scribes.countAdmins.get()?.n || 0) <= 1)
+      return res.status(400).json({ error: 'Cannot delete the last curator.' });
+    // Cascade: drop copies checked out to them, then their authored works (entries + others' copies of them).
+    holdings.deleteByScribe.run(target.id);
+    for (const w of works.byScribe.all(target.id)) {
+      entries.deleteByWork.run(w.id);
+      holdings.deleteByWork.run(w.id);
+      works.hardDelete.run(w.id);
+    }
+    scribes.deleteById.run(target.id);
+    res.json({ ok: true });
+  } catch(err) { console.error(err); res.status(500).json({ error: 'Could not delete the account.' }); }
+});
+
 app.get('/api/admin/works', requireAdmin, (req, res) => {
   res.json({ works: works.allPublic.all() });
 });

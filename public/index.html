@@ -312,7 +312,7 @@ a{color:inherit;text-decoration:none}
 .back-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
 .create-screen-title{font-family:var(--ff-deco);font-size:1.2rem;color:var(--silver);font-weight:400;filter:drop-shadow(0 0 10px var(--silver-ghost))}
 .create-form{max-width:700px;margin:0 auto;padding:0 1.5rem}
-.fl{display:block;font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.28em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.42rem}
+.fl{display:block;font-family:var(--ff-caps);font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.42rem}
 .fg{margin-bottom:1.2rem}
 .fi-wide{width:100%;background:rgba(4,4,10,.8);border:1px solid var(--silver-border);color:var(--text);font-family:var(--ff-serif);font-size:.82rem;padding:.52rem .78rem;outline:none;transition:var(--ease);resize:vertical;display:block}
 .fi-wide:focus{border-color:var(--silver-border-hi);background:var(--deep)}
@@ -472,21 +472,31 @@ a{color:inherit;text-decoration:none}
 .adm-title{font-family:var(--ff-deco);font-size:1.2rem;color:var(--silver);filter:drop-shadow(0 0 10px var(--silver-ghost))}
 .adm-wrap{max-width:840px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
 .adm-panel{border:1px solid var(--silver-border);background:linear-gradient(160deg,var(--deep) 0%,var(--surface) 100%);padding:1.3rem}
-.adm-panel h3{font-family:var(--ff-caps);font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--silver-border)}
-.adm-hint{font-family:var(--ff-serif);font-size:.66rem;color:var(--text-ghost);font-style:italic;line-height:1.5;margin-bottom:.9rem}
-.adm-cred{background:rgba(4,4,10,.85);border:1px solid var(--gold-dim);padding:.8rem;margin-top:.8rem;font-family:var(--ff-serif);font-size:.72rem;color:var(--parch);line-height:1.7;word-break:break-word}
-.adm-cred b{color:var(--gold);font-family:var(--ff-caps);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
-.adm-users{list-style:none;margin-top:1rem;max-height:220px;overflow-y:auto}
-.adm-users li{display:flex;justify-content:space-between;align-items:center;padding:.4rem .2rem;border-bottom:1px solid var(--silver-ghost);font-family:var(--ff-serif);font-size:.76rem;color:var(--text)}
-.adm-users .u-meta{font-size:.56rem;color:var(--text-ghost);font-style:italic}
-.adm-users .u-admin{color:var(--crimson);font-family:var(--ff-caps);font-size:.48rem;letter-spacing:.12em;text-transform:uppercase}
+.adm-panel h3{font-family:var(--ff-caps);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--silver-border)}
+.adm-hint{font-family:var(--ff-serif);font-size:.78rem;color:var(--text-dim);font-style:italic;line-height:1.55;margin-bottom:.9rem}
+.adm-cred{background:rgba(4,4,10,.85);border:1px solid var(--gold-dim);padding:.85rem;margin-top:.8rem;font-family:var(--ff-serif);font-size:.84rem;color:var(--parch);line-height:1.7;word-break:break-word}
+.adm-cred b{color:var(--gold);font-family:var(--ff-caps);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase}
+.adm-users{list-style:none;margin-top:1rem;max-height:300px;overflow-y:auto}
+.adm-users li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;padding:.55rem .2rem;border-bottom:1px solid var(--silver-ghost);font-family:var(--ff-serif)}
+.adm-users .u-main{display:flex;flex-direction:column;gap:.12rem}
+.adm-users .u-name{font-size:.9rem;color:var(--text)}
+.adm-users .u-meta{font-size:.7rem;color:var(--text-ghost);font-style:italic}
+.adm-users .u-admin{color:var(--crimson);font-family:var(--ff-caps);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase}
+.u-actions{display:flex;gap:.4rem}
+.u-btn{font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.32rem .65rem;border:1px solid var(--silver-border);color:var(--silver-dim);transition:var(--ease);white-space:nowrap}
+.u-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.u-btn.danger{color:var(--crimson);border-color:var(--crimson-dim)}
+.u-btn.danger:hover{color:var(--crimson-hi);border-color:var(--crimson)}
+.u-reset{flex-basis:100%;display:flex;gap:.4rem;align-items:center;margin-top:.35rem}
+.u-reset-input{flex:1;min-width:0;background:rgba(4,4,10,.85);border:1px solid var(--silver-border);color:var(--text);font-family:var(--ff-serif);font-size:.82rem;padding:.4rem .55rem;outline:none}
+.u-reset-input:focus{border-color:var(--silver-border-hi)}
 .assign-list{margin-top:1rem;max-height:340px;overflow-y:auto;border:1px solid var(--silver-ghost)}
-.assign-row{display:flex;align-items:center;justify-content:space-between;gap:.7rem;padding:.5rem .7rem;border-bottom:1px solid var(--silver-ghost)}
+.assign-row{display:flex;align-items:center;justify-content:space-between;gap:.7rem;padding:.55rem .7rem;border-bottom:1px solid var(--silver-ghost)}
 .assign-row:last-child{border-bottom:none}
 .assign-info{flex:1;min-width:0}
-.assign-t{font-family:var(--ff-title);font-size:.9rem;color:var(--silver);line-height:1.1}
-.assign-m{font-family:var(--ff-serif);font-size:.56rem;color:var(--text-ghost);font-style:italic}
-.assign-btn{font-family:var(--ff-caps);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;padding:.32rem .7rem;border:1px solid var(--silver-border);color:var(--silver-dim);transition:var(--ease);white-space:nowrap}
+.assign-t{font-family:var(--ff-deco);font-weight:700;font-size:.92rem;color:var(--silver);line-height:1.2}
+.assign-m{font-family:var(--ff-serif);font-size:.68rem;color:var(--text-ghost);font-style:italic}
+.assign-btn{font-family:var(--ff-caps);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:.34rem .72rem;border:1px solid var(--silver-border);color:var(--silver-dim);transition:var(--ease);white-space:nowrap}
 .assign-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
 .assign-btn.on{color:#6abf6a;border-color:#3a7a3a;background:rgba(60,120,60,.12)}
 .tb-btn.curator{color:var(--crimson);border-color:var(--crimson-dim)}
@@ -827,14 +837,15 @@ async function releaseWork(btn, workId) {
   catch(e) { toast(e.message); btn.disabled = false; }
 }
 
-function genPass() {
+function randomPass() {
   var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
   var arr = new Uint32Array(14);
   (window.crypto || window.msCrypto).getRandomValues(arr);
   var out = '';
   for (var i=0;i<14;i++) out += chars[arr[i] % chars.length];
-  document.getElementById('adm-new-pass').value = out;
+  return out;
 }
+function genPass() { document.getElementById('adm-new-pass').value = randomPass(); }
 
 async function createAccount() {
   var codename  = document.getElementById('adm-new-name').value.trim();
@@ -860,8 +871,16 @@ async function loadAdminUsers() {
     ADMIN_USERS = data.users || [];
   } catch(e) { toast('Could not load members.'); return; }
   document.getElementById('adm-users').innerHTML = ADMIN_USERS.map(function(u){
-    return '<li><span>'+esc(u.codename)+(u.is_admin?' <span class="u-admin">Curator</span>':'')+'</span>'
-      +'<span class="u-meta">'+(u.holding_count||0)+' assigned &middot; '+(u.authored_count||0)+' written</span></li>';
+    var isSelf = (u.id === SESSION.id);
+    return '<li>'
+      +'<div class="u-main"><span class="u-name">'+esc(u.codename)+(u.is_admin?' <span class="u-admin">Curator</span>':'')+(isSelf?' <span class="u-admin" style="color:var(--silver-dim)">You</span>':'')+'</span>'
+      +'<span class="u-meta">'+(u.holding_count||0)+' assigned &middot; '+(u.authored_count||0)+' written</span></div>'
+      +'<div class="u-actions">'
+      +'<button class="u-btn" onclick="startResetPass(\''+u.id+'\')">Reset key</button>'
+      +(isSelf ? '' : '<button class="u-btn danger" onclick="confirmDeleteUser(\''+u.id+'\')">Remove</button>')
+      +'</div>'
+      +'<div class="u-reset" id="ureset-'+u.id+'" style="display:none"></div>'
+      +'</li>';
   }).join('');
   var sel = document.getElementById('adm-assign-user');
   var prev = sel.value;
@@ -869,6 +888,45 @@ async function loadAdminUsers() {
     return '<option value="'+esc(u.id)+'">'+esc(u.codename)+(u.is_admin?' (curator)':'')+'</option>';
   }).join('');
   if (prev) sel.value = prev;
+}
+
+function startResetPass(id){
+  var box=document.getElementById('ureset-'+id); if(!box) return;
+  var gen=randomPass();
+  box.innerHTML='<input class="u-reset-input" id="uresetinput-'+id+'" type="text" value="'+gen+'" autocomplete="off">'
+    +'<button class="u-btn" onclick="saveResetPass(\''+id+'\')">Save key</button>'
+    +'<button class="u-btn" onclick="cancelResetPass(\''+id+'\')">Cancel</button>';
+  box.style.display='flex';
+  var inp=document.getElementById('uresetinput-'+id); if(inp){ inp.focus(); inp.select(); }
+}
+function cancelResetPass(id){ var box=document.getElementById('ureset-'+id); if(box){ box.style.display='none'; box.innerHTML=''; } }
+async function saveResetPass(id){
+  var inp=document.getElementById('uresetinput-'+id); if(!inp) return;
+  var pass=inp.value.trim();
+  if(pass.length<4){ toast('Passphrase must be at least 4 characters.'); return; }
+  var u=ADMIN_USERS.find(function(x){return x.id===id;});
+  try{
+    await api('POST','/api/admin/users/'+id+'/passphrase',{passphrase:pass});
+    document.getElementById('adm-new-result').innerHTML='<div class="adm-cred"><b>Passphrase reset — give these to the operator:</b><br>Codename: '+esc(u?u.codename:'')+'<br>Passphrase: '+esc(pass)+'</div>';
+    cancelResetPass(id);
+    toast('Passphrase updated.');
+  }catch(e){ toast(e.message); }
+}
+
+function confirmDeleteUser(id){
+  var u=ADMIN_USERS.find(function(x){return x.id===id;}); if(!u) return;
+  var authored=u.authored_count||0;
+  var extra=authored>0 ? ' It also permanently deletes the '+authored+' work'+(authored===1?'':'s')+' they authored, including any copies checked out to others.' : '';
+  openConfirm('Delete '+u.codename+'?','This removes the account and everything checked out to it.'+extra+' This cannot be undone.','Delete account',true,function(){ doDeleteUser(id); });
+}
+async function doDeleteUser(id){
+  try{
+    await api('DELETE','/api/admin/users/'+id);
+    toast('Account deleted.');
+    var sel=document.getElementById('adm-assign-user');
+    if(sel && sel.value===id){ sel.value=''; loadAssignments(); }
+    loadAdminUsers(); loadArchive();
+  }catch(e){ toast(e.message); }
 }
 
 async function loadAssignments() {
@@ -943,10 +1001,17 @@ function renderShelf(elId, items, type) {
 }
 
 /* ── Delete ── */
-function confirmDelete(id) {
-  pendingDeleteId = id;
+function openConfirm(title, body, label, danger, onConfirm){
+  document.querySelector('#modal-overlay .modal-title').textContent = title;
+  document.querySelector('#modal-overlay .modal-body').textContent  = body;
+  var btn = document.getElementById('modal-confirm-btn');
+  btn.textContent = label;
+  btn.className = 'modal-btn' + (danger ? ' danger' : '');
+  btn.onclick = function(){ closeModal(); onConfirm(); };
   document.getElementById('modal-overlay').classList.add('open');
-  document.getElementById('modal-confirm-btn').onclick = function(){ doDelete(id); closeModal(); };
+}
+function confirmDelete(id) {
+  openConfirm('Destroy this work?', 'This manuscript will be removed from the Library permanently. Are you certain?', 'Burn it', true, function(){ doDelete(id); });
 }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 async function doDelete(id) {

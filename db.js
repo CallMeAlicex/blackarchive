@@ -116,6 +116,8 @@ const scribes = {
   findById:       { get: (id)       => get(`SELECT * FROM scribes WHERE id=?`, [id]) },
   setAdmin:       { run: (id, val)  => { run(`UPDATE scribes SET is_admin=? WHERE id=?`, [val ? 1 : 0, id]); } },
   setPass:        { run: (id, hash) => { run(`UPDATE scribes SET passphrase=? WHERE id=?`, [hash, id]); } },
+  deleteById:     { run: (id)       => { run(`DELETE FROM scribes WHERE id=?`, [id]); } },
+  countAdmins:    { get: ()         => get(`SELECT COUNT(*) as n FROM scribes WHERE is_admin=1`) },
   all: { all: () => all(`
     SELECT s.id, s.codename, s.is_admin, s.created_at,
            (SELECT COUNT(*) FROM holdings h WHERE h.scribe_id=s.id) as holding_count,
@@ -128,6 +130,8 @@ const holdings = {
   assign:   { run: (p) => { run(`INSERT OR IGNORE INTO holdings (id,scribe_id,work_id,assigned_by) VALUES (?,?,?,?)`,
     [p.id, p.scribe_id, p.work_id, p.assigned_by||null]); } },
   unassign: { run: (scribe_id, work_id) => { run(`DELETE FROM holdings WHERE scribe_id=? AND work_id=?`, [scribe_id, work_id]); } },
+  deleteByScribe: { run: (scribe_id) => { run(`DELETE FROM holdings WHERE scribe_id=?`, [scribe_id]); } },
+  deleteByWork:   { run: (work_id)   => { run(`DELETE FROM holdings WHERE work_id=?`, [work_id]); } },
   has:      { get: (scribe_id, work_id) => get(`SELECT 1 as ok FROM holdings WHERE scribe_id=? AND work_id=?`, [scribe_id, work_id]) },
   workIdsForScribe: { all: (scribe_id) => all(`SELECT work_id FROM holdings WHERE scribe_id=?`, [scribe_id]) },
 };
@@ -142,6 +146,8 @@ const works = {
     [p.title, p.author||'', p.subtitle||'', p.meta||'{}', p.id, p.scribe_id]); } },
 
   delete: { run: (id, scribe_id) => { run(`DELETE FROM works WHERE id=? AND scribe_id=?`, [id, scribe_id]); } },
+
+  hardDelete: { run: (id) => { run(`DELETE FROM works WHERE id=?`, [id]); } },
 
   findById: { get: (id) => get(`SELECT * FROM works WHERE id=?`, [id]) },
 
