@@ -155,5 +155,5 @@ app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.ht
 
 // ── BOOT ────────────────────────────────────────────────────
 initDb().then(async () => {
-  app.listen(PORT, () => console.log(`✦ The Arcanaeum of Winterhold is open on port ${PORT}`));
+  app.listen(PORT, () => console.log(`✦ The Black Library is open on port ${PORT}`));
 }).catch(err => { console.error('DB init failed:', err); process.exit(1); });

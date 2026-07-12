@@ -1,5 +1,5 @@
-// Seed the Arcanaeum with curated arcane lore, owned by a curator scribe.
-// Usage: BASE_URL=... CURATOR_NAME='Keeper of the Arcanaeum' CURATOR_PASS='...' node scripts/seed.mjs
+// Seed the Black Library with curated lore, owned by a curator scribe.
+// Usage: BASE_URL=... CURATOR_NAME='House Mournstar' CURATOR_PASS='...' node scripts/seed.mjs
 // Idempotent: skips any work whose title already exists in the library.
 import fs from 'fs';
 import path from 'path';
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BASE = process.env.BASE_URL || 'http://localhost:3000';
-const CURATOR_NAME = process.env.CURATOR_NAME || 'Keeper of the Arcanaeum';
+const CURATOR_NAME = process.env.CURATOR_NAME || 'House Mournstar';
 const CURATOR_PASS = process.env.CURATOR_PASS;
 if (!CURATOR_PASS) { console.error('Set CURATOR_PASS'); process.exit(1); }
 
@@ -23,200 +23,166 @@ async function api(method, p, body){
 
 const seedData = JSON.parse(fs.readFileSync(path.join(__dirname, 'seed-data.json'), 'utf8'));
 
-const apprenticeJournal = {
-  ...seedData.apprenticeJournal,
-  subtitle: seedData.apprenticeJournal.subtitle || 'The First Season at the College',
+const draugomyr = {
+  ...seedData.draugomyr,
+  subtitle: seedData.draugomyr.subtitle || 'Private Accounts of the Returned',
 };
 
-const fiveSchools = {
+const houseOfTroubles = {
   type: 'book',
-  title: 'The Five Schools: A Primer',
-  author: 'Recorded for the Arcanaeum',
-  subtitle: 'An Apprentice’s Introduction to the Living Arts of Magicka',
+  title: 'The House of Troubles',
+  author: 'Rendered anew for the Black Library',
+  subtitle: 'Of the Four Corners of the House of Troubles — the Daedra Who Test the Faithful',
   entries: [
-    { title: 'On Magicka Itself', date_line: 'A word before the schools',
-      body: `Before the schools, the source. Every spell an apprentice will ever cast is drawn from a single well, and that well is magicka — the raw stuff of creation that pours ceaselessly down from Aetherius, the plane of the stars, through the wounds the world was born with.
+    { title: 'The Four Who Trouble', date_line: 'A word before the reckoning',
+      body: `The wise of Morrowind name four among the Princes the House of Troubles, and they do not name them in praise. These are the Daedra who set themselves against the good order of things — who tempt, who ruin, who madden, who wager the souls of mortals as a gambler wagers coin.
 
-A mage does not make magicka any more than a miller makes the river. A mage only learns to turn the wheel. The schools you are about to study are five different wheels, five disciplines of the same current, and the difference between a novice and a master is not how much water they command but how little they waste.
+Yet the elders will tell you, quietly, that trouble is not the same as evil. A blade is tested at the forge and again at the whetstone. So too is a people tested by those who trouble them. What survives the House of Troubles is stronger for having passed beneath its roof.
 
-Learn this first, and the rest will come easier: you are not the source of your power. You are its student.` },
-    { title: 'Destruction', date_line: 'The first school',
-      body: `Destruction is the shaping of raw elemental force — fire, frost, and shock — into a weapon of the will. It is the loudest school and the most misunderstood, for the novice believes it is a school of anger, and it is not. Anger burns the caster first.
+Read on, then, and know your adversaries. To name a thing is the first ward against it.` },
+    { title: 'Molag Bal, the Schemer', date_line: 'Lord of Coldharbour, King of Rape',
+      body: `First and coldest is Molag Bal, whose domain is Coldharbour — a grey mockery of Nirn where every warmth is stolen and every hope is a lantern held just out of reach. He is called the Schemer, the Harvester, the Father of the first vampire, and he delights above all in the sowing of strife.
 
-Fire consumes and spreads; it punishes the massed and the flammable. Frost slows and drains, stealing the very warmth from muscle and mind, and here in the north it is the truest of the three. Shock strikes swift and sears the reserves of a rival mage, so that a lightning-caster is the natural bane of another spellsword.
+Where two houses might make peace, Molag Bal whispers grievance. Where a soul might rest, he offers a bargain that seems a mercy and proves a chain. He does not conquer with fire, as his brother does. He conquers with the slow patient corruption of the thing you love most, turned by degrees against you until you cannot tell captor from friend.
 
-The master of Destruction is not the one who casts the largest flame. It is the one who, holding the largest flame, chooses not to.` },
-    { title: 'Restoration', date_line: 'The second school',
-      body: `Restoration governs the mending of living things and the warding away of harm — the closing of wounds, the curing of poisons and disease, the turning of the undead, and the raising of barriers of protective light.
+Guard your oaths in his season. He cannot break what you will not offer him.` },
+    { title: 'Mehrunes Dagon, the Destroyer', date_line: 'Prince of Ambition and Ruin',
+      body: `Where Molag Bal is patient, Mehrunes Dagon is the sudden fire at the gate. His is the Deadlands, a realm of ash and burning rivers, and his sacraments are earthquakes, floods, and the razing of what mortals dared to build.
 
-It is fashionable among the proud to call it the lesser school, the healer’s trade. This is the vanity of those who have never bled out a pace from safety. He who can only wound is at the mercy of the first wound he cannot answer; he who can mend fears no such thing.
+Yet the priests warn against too simple a reading. Dagon is not only destruction; he is destruction as the herald of change. He is called upon by the ambitious, the revolutionary, the desperate who would tear down a rotten order rather than suffer it a day longer. Every empire he has ended believed itself eternal the morning before.
 
-Restoration is also the great foe of necromancy, for the same art that steadies the living will scatter the animate dead. There is a reason the College honours it, whatever the apprentices whisper in the halls.` },
-    { title: 'Alteration', date_line: 'The third school',
-      body: `Alteration is the art of imposing one’s will upon the physical laws of the world — hardening the flesh against a blade, bearing weight without strain, breathing beneath water, or persuading a locked mechanism to open as though it had never been shut.
+Fear him — but understand that what he unmakes, he unmakes because it had grown too proud to bend.` },
+    { title: 'Malacath, the Keeper of the Sworn Oath', date_line: 'The Reviled, God of the Spurned',
+      body: `Malacath is the Prince the other Princes do not count among their number, and in this exile lies the whole of his nature. He is god of the ostracized, the pariah, the oath-bound and the broken-toothed — patron of the Orsimer, who were themselves made from the ruin of another god.
 
-Its practitioners are a peculiar sort, given to the belief that solidity, gravity, and permanence are merely stubborn habits the world has fallen into and may, with sufficient argument, be talked out of. There is more truth in this than the other schools care to admit.
+His code is bitter and unbending: keep your word though it cost you everything, for the word is the only thing the spurned truly own. He is the least deceiving of the Troubles, for he despises deceit. His curse is not madness or ruin but truth spoken without mercy — the bloody honesty of the outcast who has nothing left to lose.
 
-Alteration teaches the deepest lesson of magic: that reality is not a wall but a wager, and most mortals never think to place a bet.` },
-    { title: 'Illusion', date_line: 'The fourth school',
-      body: `Illusion works not upon the world but upon the mind that perceives it — kindling courage or terror, calm or frenzy, and bending light itself so that the caster passes unseen.
+To swear falsely in his hearing is the one sin he will cross realms to answer.` },
+    { title: 'Sheogorath, the Sower of Flesh', date_line: 'The Madgod, Lord of the Never-There',
+      body: `Last and least predictable is Sheogorath, whose realm is the Shivering Isles and whose gift is madness. He is the Sower of Flesh, the Skooma-Cat, the raving lord who is jester and tyrant in a single breath. To meet his gaze is to lose the thread of your own reasoning.
 
-It is the gentlest school in its methods and the most feared in its reputation, for a hurled flame announces itself and a planted thought does not. The Illusionist may empty a battlefield without a drop of blood, or walk through a locked hall as though invisible, which in every practical sense she is.
+The Dunmer fear him not for cruelty but for caprice. Dagon you may resist; Bal you may refuse; Malacath you may satisfy with an honest oath. But there is no bargain to be struck with unreason. His blessings ruin as surely as his curses, and his curses, now and then, prove to be the only mercy a broken soul was ever offered.
 
-Guard yourself here above all: the mage who studies how feelings are placed in others soon learns to ask which of her own were ever truly her own. That question, honestly held, is the beginning of wisdom.` },
-    { title: 'Conjuration', date_line: 'The fifth school',
-      body: `Conjuration is the summoning of creatures and weapons from the realms of Oblivion and the binding of them, however briefly, to the summoner’s command. The flame atronach, the frost thrall, the spectral blade — all are called across a threshold that is meant to remain closed.
+He is the reminder folded into every prayer: that the mind is a candle, and the wind is always at the door.` },
+    { title: 'On the Purpose of Trouble', date_line: 'A word after the reckoning',
+      body: `So ends the naming of the Four. Do not mistake this accounting for worship — it is a map of the storms a soul must weather.
 
-Every conjuration is a door, and a door swings both ways. The bound thing serves only so long as the binding holds and the will behind it does not falter. Learn the closing words before the opening ones, and speak them faster than you can think.
+The Temple teaches that the House of Troubles was set against the Dunmer not to destroy them but to prove them, as fire proves the blade and winter proves the seed. The people who endure their tests without breaking, without bargaining, without going mad, become the ancestors the next generation will pray to.
 
-The most dangerous conjurer is not the one who cannot summon. It is the one who has forgotten how to send back.` },
-    { title: 'A Note on the Lost School', date_line: 'A word after the schools',
-      body: `The observant apprentice will count five schools here and recall that the old texts speak of six. The sixth was Mysticism — the study of magic’s own nature, of soul and scrying and the binding of unseen forces.
-
-In our age its arts have been parcelled out among the others or quietly set aside, and the Arcanaeum no longer lists it as a discipline of its own. Whether it was dissolved because it was understood or because it was feared, the catalogue does not say, and a catalogue that does not say is worth reading twice.
-
-Study the five. But remember that the map is not the country, and that magic is older than any College’s way of dividing it.` },
+Trouble, then, is the whetstone of the soul. Bless the House that sharpens you, and pray you are never dull enough to need its full attention.` },
   ],
 };
 
-const greatCollapse = {
+const doorsOfOblivion = {
   type: 'book',
-  title: 'The Great Collapse of Winterhold',
-  author: 'An account gathered from survivors',
-  subtitle: 'How the Sea Took the City and Spared the College',
+  title: 'The Doors of Oblivion',
+  author: 'A Wanderer’s Account, copied for the Black Library',
+  subtitle: 'A Traveler’s Map of the Realms Beyond the Doors',
   entries: [
-    { title: 'Before the Wave', date_line: 'In the years of plenty',
-      body: `Once Winterhold was a jarl’s seat and a city of consequence, its harbour busy, its streets climbing the cliff in tiers of stone and timber. The College stood then as it stands now, out upon its spire of rock, joined to the town by the great bridge — a neighbour the city tolerated more than loved, but a neighbour all the same.
+    { title: 'Coldharbour', date_line: 'The realm of Molag Bal',
+      body: `I have walked, in dream and in worse than dream, through several of the planes of Oblivion, and I set down what I saw that others might need never see it.
 
-Those who remember the old Winterhold remember it as cold but living, a place where the sea and the north had been bargained with, if never quite befriended. No one who walked those streets imagined the sea would one day simply take them back.
+Coldharbour is Nirn drowned and drained of colour. Its sky is a lid of ash; its towers are our towers, but wrong, leaning as if the whole world had given up. The soul-shriven wander its plazas, remembering warmth they can no longer feel. Here Molag Bal keeps his harvest. I did not linger. One does not linger.` },
+    { title: 'The Deadlands', date_line: 'The realm of Mehrunes Dagon',
+      body: `The Deadlands are fire made into geography. Rivers of lava thread black obsidian shelves; the air itself shimmers with heat that does not warm but only consumes. Spires of jagged stone claw upward, crowned with the sigil of the Destroyer.
 
-It is the way of catastrophes that they are unthinkable until the hour they arrive, and obvious ever after.` },
-    { title: 'The Night the Cliff Fell', date_line: 'The hour of the Collapse',
-      body: `The survivors do not agree on much, but they agree on the sound — a groan from deep in the rock, and then the sea rising where no tide had ever reached. In a single terrible night great sections of the cliff sheared away and slid into the water, and with them went the harbour, the lower town, and the greater part of the city and its people.
+Nothing here is meant to endure, and so nothing does — the land remakes itself in ruin daily, as if rehearsing the end it wishes upon our world. I crossed a bridge of bone that was gone when I looked back.` },
+    { title: 'Apocrypha', date_line: 'The realm of Hermaeus Mora',
+      body: `Of all the realms, Apocrypha unsettled me most, for it did not threaten my body but my certainty. It is an endless library beneath a green and lightless sky — shelves without end, books that write themselves, a sea of ink lapping at the margins.
 
-When the dawn came, Winterhold was a handful of houses on a broken cliff and a great empty wound where the rest had been. And out beyond the ruin, untouched, its lights still burning in the high windows, stood the College of Winterhold upon its spire, joined to what remained by the bridge that had somehow held.
+Here dwells Hermaeus Mora, who trades in forbidden knowing. Every book promises the one truth you have always wanted, and every reader who takes it pays a price they did not think to ask after. I closed the volume I found with my own name on the spine. I like to believe I closed it in time.` },
+    { title: 'The Ashpit', date_line: 'The realm of Malacath',
+      body: `The Ashpit is a plane of grey smoke and grinding wind, and it is, in its bleak way, honest. There are no illusions here to tempt a traveler, no false warmth, no whispered bargains — only the endless labour of the spurned and the smell of a forge that never cools.
 
-That the College stood while the city fell is the whole of the tragedy, and the whole of the grievance that has haunted the two ever since.` },
-    { title: 'The Blame', date_line: 'In the bitter years after',
-      body: `The people who remained needed a cause, as grieving people do, and the cause was near at hand and lit against the dark. They named the College. They said the mages had drawn the sea up with their meddling, or angered something better left alone, or simply that so much magic gathered in one place had rotted the very rock beneath the town.
+Malacath asks nothing of his realm but that it endure, as he endures, as his people endure. I found it harsh. I did not find it cruel. There is a difference, and the difference is the whole of him.` },
+    { title: 'Moonshadow', date_line: 'The realm of Azura',
+      body: `And lest this account be only terror, I will tell you of Moonshadow, which is beautiful past the reach of my poor words. Its air is rose and silver; its rivers run with light; every surface glows so softly that shadows themselves seem kind.
 
-The mages, for their part, pointed south, to the great eruption that had convulsed the whole of the north in those same years, and said the sea had risen everywhere, and that no spell of theirs had called it.
+It is said no mortal can look upon Azura’s realm without weeping, and I confess I did. Yet even beauty in Oblivion is a kind of test. To stay would be to forget the world you came from, and forgetting is its own doom. I turned back toward the grey doors, and I was glad, and I was sorry, in equal measure.` },
+    { title: 'The Doors That Do Not Open', date_line: 'A warning, freely given',
+      body: `There are realms I did not enter and will not name, for to name them is a kind of knocking. Let it be enough to say that the Doors of Oblivion are many, and most are locked for the traveler’s sake, not the Prince’s.
 
-The truth may be that both are right, or neither. What is certain is that the College could not save the city, or did not, and that a neighbour who stands untouched amid your ruin will always wear the look of a culprit, whether or not the crime was ever his.` },
-    { title: 'What the Silence Guards', date_line: 'A scholar’s unease',
-      body: `Here I set down the thing that unsettles me, and I set it down plainly. The Arcanaeum holds books on every disaster of the age — save this one. On the Collapse the shelves grow strangely thin, and the accounts that remain are cautious to the point of saying nothing at all.
-
-A library that falls silent on a single subject is not empty of an answer. It is keeping one. Whether the College keeps this silence out of guilt, or ignorance, or the ordinary decency of not wishing to reopen a wound, I cannot say.
-
-I record only this, for whoever reads it: that the Great Collapse is the ground the College stands upon, in every sense, and that no member of it should walk the bridge without knowing what lies drowned beneath the water on either side.` },
+If you find one standing open, ask yourself who opened it, and why, and whether the invitation is meant as welcome or as bait. Then close it, if you are wise, and walk the long grey road home.` },
   ],
 };
 
-const enchantment = {
+const spiritOfDaedra = {
   type: 'book',
-  title: 'On Soul Gems and the Craft of Enchantment',
-  author: 'Recorded for the Arcanaeum',
-  subtitle: 'Wherein the Binding of Power into Objects is Set Down for the Prudent',
+  title: 'Spirit of the Daedra',
+  author: 'A Catechism, set down by an unnamed cleric',
+  subtitle: 'Being the Answers Given by a Daedra to a Mortal Who Dared to Ask',
   entries: [
-    { title: 'The Vessel and the Charge', date_line: 'First principles',
-      body: `Enchantment is the art of binding a magical effect into an object, that a sword might burn or a ring might ward long after the mage who made it has set it down. But no enchantment holds without a charge, and no charge exists without a vessel to carry it. That vessel is the soul gem.
+    { title: 'Of Their Nature', date_line: 'The first asking',
+      body: `I asked the spirit: what are you, that the Aedra are not?
 
-A soul gem is a crystal capable of holding a soul — that is, the animating essence of a living thing — and it is the captured soul that powers the enchantment, spending itself slowly as the effect is used. Understand this and you understand the whole grim economy of the craft: every burning blade is paid for in a caught spirit.
+It answered: The Aedra gave of themselves to make your world, and are diminished, and sleep. We gave nothing, and are whole, and do not sleep. That is the difference you feel when you look upon us and shiver. They are the bones of your world. We are free of it.
 
-The apprentice who never asks whose spirit is the apprentice who should not be trusted with the craft at all.` },
-    { title: 'The Grades of the Gem', date_line: 'Of common vessels',
-      body: `Soul gems come in grades, from the petty to the grand, and a soul may only be housed in a vessel large enough to contain it. A lesser creature — a wolf, a skeever, a mudcrab — yields a lesser soul, fit for a petty or common gem and a modest enchantment. The great beasts of the wild yield greater souls, and greater power.
+I asked: then are you gods? It laughed, if that sound was laughter, and said: We are what does not die and does not change unless we will it. Call that what you like. Your naming does not bind us.` },
+    { title: 'Of Death and Return', date_line: 'The second asking',
+      body: `I asked: can you die?
 
-A gem must be empty to receive, and filled to be spent. A grand gem holding a mammoth’s soul may charge an enchantment of formidable strength; the same gem, cracked or ill-cast, may hold nothing at all and shatter in the working.
+It answered: We cannot die as you die, into silence and the soil. Unmake this shape and we are only sent home, to gather ourselves and return. Time is nothing to us. A century is a held breath. You count your years because you have so few; we do not count at all.
 
-Match the vessel to the intent. Ambition that outruns its gem is how apprentices lose fingers, and worse.` },
-    { title: 'The Black Gem and the Line Not Crossed', date_line: 'A warning set in plain words',
-      body: `There exists a gem that is not graded with the others, and the Arcanaeum names it only to forbid it: the black soul gem, which alone can hold the soul of a thinking, speaking being — a mortal.
+And this, it said, is why you should fear a bargain with us above a battle. You may win the battle. You cannot outlast the patience of a thing that has no ending.` },
+    { title: 'Of Worship and Use', date_line: 'The third asking',
+      body: `I asked: why do you answer mortals at all, if we are so small to you?
 
-To trap a beast’s soul is the ordinary cost of the craft. To trap a mortal’s is a crossing into necromancy and into cruelty, and it is forbidden within these walls without exception and without appeal. The power such a gem holds is real. So is the price, and the price is not paid by the enchanter.
+It answered: For the same reason you tend a garden. You are useful. You act in a world we cannot easily touch. You carry our will past doors closed to us. And you are entertaining — your brief fierce lives, your loves, your betrayals. We do not need your worship. We enjoy it, as you enjoy the song of a bird that does not sing for you.
 
-I set this down not to tempt but to forewarn. You will hear the black gem spoken of in low voices. Hear it, and turn away, and remember that the greatest enchanters this College ever raised had no need of it.` },
-    { title: 'The Discipline of the Craft', date_line: 'A closing counsel',
-      body: `Enchantment rewards patience above brilliance. The effect must be understood before it is bound; the vessel must be sound; the object must be worthy of the working, for a poor blade well enchanted is still a poor blade.
-
-Begin small. Bind a minor ward into a ring you will wear yourself, so that the first enchantment you trust your life to is one you made with your own hands and understand to its foundation. Learn to disenchant, too — to take an existing working apart and read how it was made — for there is no faster teacher than another mage’s finished art laid open on the bench.
-
-The forge and the flame are patient. Be patient with them, and they will hold your power long after your voice has gone quiet.` },
+Then it said: You came to ask what we are. The truer question is what you will become in the asking. That, at least, is not yet decided. Go, while it is still yours to decide.` },
   ],
 };
 
-const conjurersCautions = {
+const sorrowOfLamae = {
   type: 'book',
-  title: 'A Conjurer’s Cautions',
-  author: 'Set down by a tutor of the summoning arts',
-  subtitle: 'Seven Rules for the Safe Calling and Sending of the Bound',
+  title: 'The Sorrow of Lamae',
+  author: 'Rendered from the old Nedic verses',
+  subtitle: 'Of the First Cold Kiss — the Origin of the Blood-Cursed',
   entries: [
-    { title: 'Why These Rules Exist', date_line: 'Read before you summon',
-      body: `Every rule in this slim book was written in the aftermath of someone breaking it. I have taught the summoning arts at this College for many years, and I have buried students. This is not a text of theory. It is a text of survivors.
+    { title: 'The Wanderer', date_line: 'In the first years after the dawn',
+      body: `In the years when the Nords were young in Skyrim and the old faiths still walked the hills, there was a maiden named Lamae Beolfag, a wanderer and a healer, who gave shelter freely and asked no coin.
 
-Conjuration is the only school in which a moment’s lapse does not merely fail — it answers back. A botched fireball fizzles. A botched binding walks free. Keep that distinction always before you.
+One night in the cold she took in a stranger, pale and courteous, who named himself only as a traveler far from home. She warmed him at her fire and offered him her bread. She did not know that she had opened her door to Molag Bal, who wears courtesy the way a hunter wears the scent of the prey.` },
+    { title: 'The Cold Kiss', date_line: 'That same night',
+      body: `What the Lord of Coldharbour did to Lamae that night the verses tell only in shadow, and I will not drag it into the light. It is enough to say that he used her cruelly and left her broken upon the frozen ground, and that where his hands had touched her the warmth of life would never fully return.
 
-Learn these seven rules until you could recite them woken suddenly in the dark, for that is very often the hour you will need them.` },
-    { title: 'The First Three Rules', date_line: 'Of the circle and the word',
-      body: `First: never summon without your closing words already fixed in mind. Learn to send back before you learn to call forth. The apprentice who masters the opening and neglects the closing has built a door with no latch.
+The nomads who found her tried to burn her body upon a pyre, as was their custom. But she rose from the flames screaming, neither living nor dead, and the blood of those who had tended her was the only thirst that would quiet the cold he had left inside her. So was made the first of the blood-cursed. So began the long sorrow that has no ending.` },
+    { title: 'The Inheritance', date_line: 'And ever after',
+      body: `From Lamae’s cold kiss came all the lineages of the blood-drinkers that trouble Tamriel still — some proud, some wretched, some scarcely remembering the mother-wound from which they spring.
 
-Second: summon within a ward when you may, especially when you are learning. A bound circle of silver will hold what your will alone might drop, and it costs you nothing but the drawing of it.
-
-Third: never summon in anger, exhaustion, or fear. The binding is a contract of will, and a weakened will signs a weaker contract. The atronach knows the difference between a master and a frightened child playing at mastery. It waits for the child.` },
-    { title: 'The Last Four Rules', date_line: 'Of limits and humility',
-      body: `Fourth: summon one thing at a time until you are certain, then one more than you are certain of, and no further. Ambition in this school is measured in funerals.
-
-Fifth: know what you are calling. A flame atronach and a frost atronach answer to different tempers, and a Dremora is not an atronach at all but a thinking thing that will parse your every hesitation. Read the creature before you call it.
-
-Sixth: when the binding frays, do not fight it. Send the thing back at once and summon it anew. A clean dismissal and a fresh call are always safer than wrestling a slipping leash.
-
-Seventh, and last: when you are done, count what you summoned and count what you sent back, and do not leave the circle until the two numbers agree. More students have died to forgetting this rule than to any spell in the catalogue.` },
+The Temple sets this tale down not as legend but as warning: that the cruelty of a Prince does not end with its victim, but runs down through the ages like a stain through cloth. Molag Bal made of one woman’s ruin an inheritance for the world. Pity the blood-cursed, then, even as you ward yourself against them. Not one of them chose the sire of their sorrow.` },
   ],
 };
 
-const noticeToApprentices = {
+const whispersOfTheReach = {
   type: 'parchment',
-  title: 'Notice to Apprentices',
-  author: 'The Keeper of the Arcanaeum',
-  subtitle: 'Posted upon the door of the library',
-  meta: { date: 'By standing order of the College', to: 'All members and visitors', seal: 'Read, and be governed accordingly.' },
-  entries: [{ title: 'Notice to Apprentices', body: `The Arcanaeum is the heart of this College and is to be treated as such. What follows is not advice. It is the law of this hall.
+  title: 'Whispers of the Reach',
+  author: 'Collected from the hearths of Markarth',
+  subtitle: 'Rumours, freely gathered and dearly paid for',
+  meta: { date: 'Gathered over one long winter', to: 'Any who would listen', seal: 'Trust none of it; discard none of it.' },
+  entries: [{ title: 'Whispers of the Reach', body: `They say the Forsworn do not haunt the crags for gold or grievance alone, but keep an older pact with something in the stone that remembers when the Reach was theirs.
 
-No spell is to be cast among the stacks. Not a candle-flame, not a ward, not the smallest cantrip of light. Bring a lamp if you must, and mind it.
+They say a Markarth guardsman went down into the Warrens on a debt and came back up speaking to people no one else could see, and that his wages are still collected each moon by a hand that leaves no prints in the dust.
 
-No book leaves the Arcanaeum. Read where you stand or read at the tables; the shelves are not a lending shop, and a book gone wandering is a book gone forever.
+They say if you find a shrine to the old hag-gods with the offering still fresh, you should leave a coin and walk backward until the crags hide it, for whatever left that offering has not gone far.
 
-The chained case is not to be opened, questioned, or lingered before. Those books were shelved for a reason, and the reason is not owed to your curiosity.
-
-Return every volume to its place. A misfiled book is a lost book, and the Keeper’s patience for the careless is a resource more finite than magicka.
-
-Break these rules and you will not be scolded. You will simply find the doors of the Arcanaeum closed to you, and here, that is a colder exile than the bridge outside.` }],
+They say the Dwemer did not die. They say they are only late. Take all of it for what a rumour is worth — which in the Reach is more than most places, and less than the teller hopes.` }],
 };
 
-const letterFromTheNorth = {
+const hearthTales = {
   type: 'parchment',
-  title: 'A Letter from the Frozen North',
-  author: 'An apprentice, to her mother in Cyrodiil',
-  subtitle: 'Carried south by the first caravan of spring',
-  meta: { date: 'Written in the deep of winter', to: 'My mother, in warmer country', seal: 'Your daughter, who is not sorry she came.' },
-  entries: [{ title: 'A Letter from the Frozen North', body: `Mother — I know you wept when I chose the College, and I know Winterhold is only a name of cold and rumour to you, so let me tell you what it is truly like, that you may worry over the right things and not the wrong ones.
+  title: 'Hearth-Tales of the Pale',
+  author: 'As told to children who would not sleep',
+  subtitle: 'Folk-warnings of the northern holds',
+  meta: { date: 'Told in the dark months', to: 'The wakeful and the wary', seal: 'Mind the tales, and mind the dark.' },
+  entries: [{ title: 'Hearth-Tales of the Pale', body: `Mind the lights upon the moor. When the pale fires drift low over the snow and seem to beckon, it is the Wispmother’s daughters at their dance, and the traveler who follows their glow is never found whole, if found at all.
 
-It is cold beyond anything you have felt. The wind comes off the sea with teeth in it, and the town outside our walls is half a ruin, and the folk there hate us for standing when their city fell. All of this is true, and none of it is the whole of it.
+Mind the barrow-doors left ajar. The draugr keep their kings in the deep dark, and they do not sleep so much as wait. Take nothing from a barrow you were not given, for the dead of the north count their hoard, and they have a long memory and longer patience.
 
-For I have held frost in my bare hand and felt no pain. I have watched a woman close a wound with a word. I have stood on the high walls beneath the northern lights while the whole sky ran green and violet and poured its magic down upon the snow, and I have understood, in a way I cannot write small enough to fit this page, why I was born.
-
-Do not send for me. Do not send warmer clothes, though I will take them if you do. Send only word that you are well, and know that your daughter is where she is meant to be — cold to the bone and more alive than she has ever been. By hand and by Magnus, I remain yours.` }],
+Mind the ghost-lights on the water and the voice that calls your name in your mother’s voice from a house you know to be empty. Skyrim is old, and the old places keep old hungers. The hearth-tales are not told to frighten children. They are told so the children live to tell them.` }],
 };
 
-const WORKS = [
-  apprenticeJournal,
-  fiveSchools,
-  greatCollapse,
-  enchantment,
-  conjurersCautions,
-  noticeToApprentices,
-  letterFromTheNorth,
-];
+const WORKS = [ draugomyr, houseOfTroubles, doorsOfOblivion, spiritOfDaedra, sorrowOfLamae, whispersOfTheReach, hearthTales ];
 
 async function main(){
   // Register curator, or log in if the codename is already claimed.
