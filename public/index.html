@@ -461,7 +461,53 @@ a{color:inherit;text-decoration:none}
 .modal-btn.danger{color:var(--crimson);border-color:var(--crimson-dim)}
 .modal-btn.danger:hover{background:var(--crimson-dim);color:#eaf6ff}
 
+/* ══ SCREEN: CATALOG (The Stacks) ══ */
+#screen-catalog{background:radial-gradient(ellipse at 50% 0%,rgba(52,170,220,.06) 0%,transparent 45%),var(--void);padding-bottom:5rem}
+.cat-hero{text-align:center;padding:2.6rem 1.5rem .8rem;position:relative}
+.cat-sigil-wrap{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:.7rem}
+.cat-sigil-line{flex:1;max-width:120px;height:1px;background:linear-gradient(to right,transparent,var(--crimson-dim))}
+.cat-sigil-line.r{background:linear-gradient(to left,transparent,var(--crimson-dim))}
+.cat-sigil{font-size:1rem;color:var(--crimson);filter:drop-shadow(0 0 8px var(--crimson-glow))}
+.cat-title{font-family:var(--ff-deco);font-size:clamp(1.6rem,5vw,2.8rem);background:linear-gradient(135deg,#d0d0e0 0%,var(--silver) 40%,#f0f0ff 60%,var(--silver-dim) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.12em;filter:drop-shadow(0 0 20px var(--silver-glow))}
+.cat-house{font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.4em;color:var(--crimson);text-transform:uppercase;margin-top:.35rem;opacity:.75}
+.cat-sub{font-family:var(--ff-serif);font-size:.68rem;color:var(--text-ghost);font-style:italic;margin-top:.25rem;letter-spacing:.08em}
+.cat-toolbar{max-width:1180px;margin:1.4rem auto 0;padding:0 1.5rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;justify-content:center}
+.cat-field{display:flex;flex-direction:column;gap:.3rem}
+.cat-field label{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.24em;text-transform:uppercase;color:var(--text-ghost)}
+.cat-select,.cat-search{background:rgba(4,6,15,.85);border:1px solid var(--silver-border);color:var(--text);font-family:var(--ff-serif);font-size:.75rem;padding:.42rem .6rem;outline:none;transition:var(--ease)}
+.cat-select:focus,.cat-search:focus{border-color:var(--silver-border-hi);background:var(--abyss)}
+.cat-search{min-width:190px}
+.cat-search::placeholder{color:var(--text-ghost);font-style:italic}
+.cat-reset{font-family:var(--ff-caps);font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--silver-border);padding:.46rem .85rem;transition:var(--ease)}
+.cat-reset:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.cat-count{max-width:1180px;margin:1.3rem auto 0;padding:0 1.5rem;font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:baseline;gap:.5rem}
+.cat-count b{color:var(--silver);font-size:1rem;font-family:var(--ff-deco);letter-spacing:.02em}
+.cat-grid{max-width:1180px;margin:.7rem auto 0;padding:0 1.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:1rem}
+.cat-card{background:linear-gradient(160deg,var(--deep) 0%,#0c1020 100%);border:1px solid var(--silver-border);padding:1rem 1rem .85rem;position:relative;display:flex;flex-direction:column;min-height:190px;transition:var(--ease);cursor:pointer;overflow:hidden}
+.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--crimson-dim),transparent)}
+.cat-card:hover{border-color:var(--silver-border-hi);transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.6),0 0 18px var(--crimson-glow)}
+.cat-skill{align-self:flex-start;font-family:var(--ff-caps);font-size:.46rem;letter-spacing:.16em;text-transform:uppercase;color:var(--crimson);border:1px solid var(--crimson-dim);padding:.12rem .42rem;margin-bottom:.5rem}
+.cat-ct{font-family:var(--ff-title);font-size:1.16rem;color:var(--silver);line-height:1.12;margin-bottom:.15rem;filter:drop-shadow(0 0 6px var(--silver-ghost))}
+.cat-cauthor{font-family:var(--ff-serif);font-size:.58rem;color:var(--crimson);font-style:italic;margin-bottom:.55rem;opacity:.85}
+.cat-cauthor .ser{color:var(--text-ghost);opacity:.9}
+.cat-syn{font-family:var(--ff-serif);font-size:.68rem;line-height:1.5;color:var(--text-dim);flex:1;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.cat-card.open .cat-syn{-webkit-line-clamp:unset;display:block}
+.cat-foot{display:flex;align-items:center;justify-content:space-between;margin-top:.7rem;padding-top:.55rem;border-top:1px solid var(--silver-ghost)}
+.cat-status{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase}
+.cat-status.available{color:#5fbf87}
+.cat-status.checked_out{color:#c8a24a}
+.cat-status.not_owned{color:var(--text-ghost)}
+.cat-status.borrowed{color:#9a86d8}
+.cat-copies{font-family:var(--ff-caps);font-size:.52rem;color:var(--silver-dim);border:1px solid var(--silver-border);border-radius:50%;min-width:1.5rem;height:1.5rem;padding:0 .3rem;display:flex;align-items:center;justify-content:center}
+.cat-empty{grid-column:1/-1;padding:3rem;text-align:center;border:1px dashed var(--silver-ghost);color:var(--text-ghost);font-style:italic;font-size:.75rem;letter-spacing:.06em}
+.tb-nav{display:flex;gap:.4rem;margin-right:.3rem}
+.tb-nav .tb-btn.on{color:var(--silver);border-color:var(--silver-border-hi);background:var(--silver-ghost)}
+
 @media(max-width:600px){
+  .cat-grid{grid-template-columns:1fr}
+  .cat-toolbar{align-items:stretch}
+  .cat-field{flex:1;min-width:44%}
+  .cat-search{min-width:0;width:100%}
   .shelf{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
   .lib-create-bar{flex-direction:column;align-items:stretch;padding:1.2rem}
   .btn-create{text-align:center}
@@ -476,6 +522,10 @@ a{color:inherit;text-decoration:none}
 <div id="topbar" style="display:none">
   <div class="topbar-brand" onclick="goLibrary()">The Arcanaeum</div>
   <div class="topbar-right">
+    <div class="tb-nav">
+      <button class="tb-btn" id="tb-nav-tomes" onclick="goLibrary()">Tomes</button>
+      <button class="tb-btn" id="tb-nav-catalogue" onclick="goCatalog()">Catalogue</button>
+    </div>
     <span class="topbar-scribe" id="topbar-scribe"></span>
     <button class="tb-btn" id="tb-auth-btn" onclick="goAuth()" style="display:none">Enter the Arcanaeum</button>
     <button class="tb-btn" id="tb-logout-btn" style="display:none" onclick="doLogout()">Depart</button>
@@ -544,6 +594,41 @@ a{color:inherit;text-decoration:none}
     <div class="shelf-label">Letters &amp; Parchments</div>
     <div class="shelf" id="shelf-parchments"></div>
   </div>
+</section>
+
+<!-- ══ SCREEN: CATALOG (The Stacks) ══ -->
+<section id="screen-catalog" class="screen with-topbar">
+  <div class="cat-hero">
+    <div class="cat-sigil-wrap">
+      <div class="cat-sigil-line"></div>
+      <div class="cat-sigil">❖</div>
+      <div class="cat-sigil-line r"></div>
+    </div>
+    <div class="cat-title">The Stacks</div>
+    <div class="cat-house">College of Winterhold</div>
+    <div class="cat-sub">Catalogue of Volumes Held in the Arcanaeum</div>
+  </div>
+  <div class="cat-toolbar">
+    <div class="cat-field"><label>Skill</label><select class="cat-select" id="cat-f-skill" onchange="renderCatalog()"></select></div>
+    <div class="cat-field"><label>Series</label><select class="cat-select" id="cat-f-series" onchange="renderCatalog()"></select></div>
+    <div class="cat-field"><label>Genre</label><select class="cat-select" id="cat-f-genre" onchange="renderCatalog()"></select></div>
+    <div class="cat-field"><label>Status</label><select class="cat-select" id="cat-f-status" onchange="renderCatalog()">
+      <option value="">All</option>
+      <option value="available">On the shelf</option>
+      <option value="checked_out">Checked out</option>
+      <option value="borrowed">Borrowed copy</option>
+      <option value="not_owned">Not held</option>
+    </select></div>
+    <div class="cat-field"><label>Sort</label><select class="cat-select" id="cat-f-sort" onchange="renderCatalog()">
+      <option value="title">Title</option>
+      <option value="author">Author</option>
+      <option value="series">Series</option>
+    </select></div>
+    <div class="cat-field"><label>Search</label><input class="cat-search" id="cat-f-search" type="text" placeholder="Title, author, subject…" oninput="renderCatalog()"></div>
+    <button class="cat-reset" onclick="resetCatFilters()">Reset</button>
+  </div>
+  <div class="cat-count"><b id="cat-count-n">0</b> volumes found</div>
+  <div class="cat-grid" id="cat-grid"></div>
 </section>
 
 <!-- ══ SCREEN: CREATE ══ -->
@@ -645,6 +730,8 @@ async function init() {
   var wid = params.get('work');
   if (wid) {
     await openWorkById(wid);
+  } else if (params.get('view') === 'catalog') {
+    goCatalog();
   } else if (SESSION.codename) {
     goLibrary();
   } else {
@@ -684,13 +771,94 @@ function updateTopbar() {
 }
 
 function goAuth()    { showScreen('auth'); document.getElementById('auth-err').textContent = ''; }
-function goLibrary() { showScreen('library'); loadLibrary(); history.replaceState({},'',' /'); }
+function goLibrary() { showScreen('library'); setNav('tomes'); loadLibrary(); history.replaceState({},'',' /'); }
 function goCreate(type) {
   if (!SESSION.codename) { goAuth(); return; }
   editingId = null;
   setCreateType(type);
   resetForm();
   showScreen('create');
+}
+
+/* ── Catalogue (The Stacks) ── */
+var CATALOG = null;
+var STATUS_LABEL = { available:'On the shelf', checked_out:'Checked out', borrowed:'Borrowed copy', not_owned:'Not held' };
+
+async function goCatalog(){
+  showScreen('catalog');
+  setNav('catalogue');
+  history.replaceState({},'','/?view=catalog');
+  if (CATALOG === null) {
+    try { var r = await fetch('/catalog.json'); CATALOG = await r.json(); }
+    catch(e){ CATALOG = []; toast('Could not load the catalogue.'); }
+    buildCatFilters();
+  }
+  renderCatalog();
+}
+
+function setNav(which){
+  var t=document.getElementById('tb-nav-tomes'), c=document.getElementById('tb-nav-catalogue');
+  if(t) t.classList.toggle('on', which==='tomes');
+  if(c) c.classList.toggle('on', which==='catalogue');
+}
+
+function catVal(id){ var el=document.getElementById(id); return el?el.value:''; }
+function uniqSorted(arr){ return Array.from(new Set(arr.filter(Boolean))).sort(function(a,b){return a.localeCompare(b);}); }
+function fillSelect(id, values, allLabel){
+  var el=document.getElementById(id); if(!el) return;
+  el.innerHTML = '<option value="">'+allLabel+'</option>' + values.map(function(v){ return '<option value="'+esc(v)+'">'+esc(v)+'</option>'; }).join('');
+}
+function buildCatFilters(){
+  fillSelect('cat-f-skill',  uniqSorted((CATALOG||[]).map(function(b){return b.skill;})),  'All');
+  fillSelect('cat-f-series', uniqSorted((CATALOG||[]).map(function(b){return b.series;})), 'All');
+  fillSelect('cat-f-genre',  uniqSorted((CATALOG||[]).map(function(b){return b.genre;})),  'All');
+}
+function resetCatFilters(){
+  ['cat-f-skill','cat-f-series','cat-f-genre','cat-f-status'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('cat-f-sort').value='title';
+  document.getElementById('cat-f-search').value='';
+  renderCatalog();
+}
+function renderCatalog(){
+  if(!CATALOG) return;
+  var fSkill=catVal('cat-f-skill'), fSeries=catVal('cat-f-series'), fGenre=catVal('cat-f-genre'),
+      fStatus=catVal('cat-f-status'), fSort=catVal('cat-f-sort')||'title';
+  var q=(document.getElementById('cat-f-search').value||'').trim().toLowerCase();
+  var rows=CATALOG.filter(function(b){
+    if(fSkill && b.skill!==fSkill) return false;
+    if(fSeries && b.series!==fSeries) return false;
+    if(fGenre && b.genre!==fGenre) return false;
+    if(fStatus && (b.status||'available')!==fStatus) return false;
+    if(q){
+      var hay=((b.title||'')+' '+(b.author||'')+' '+(b.series||'')+' '+(b.synopsis||'')+' '+(b.skill||'')).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  });
+  rows.sort(function(a,b){
+    if(fSort==='series'){
+      var c=(a.series||'~').toLowerCase().localeCompare((b.series||'~').toLowerCase());
+      if(c) return c;
+      return (a.index||0)-(b.index||0) || (a.title||'').localeCompare(b.title||'');
+    }
+    var ka=(a[fSort]||'~').toLowerCase(), kb=(b[fSort]||'~').toLowerCase();
+    return ka.localeCompare(kb) || (a.title||'').localeCompare(b.title||'');
+  });
+  document.getElementById('cat-count-n').textContent = rows.length;
+  var grid=document.getElementById('cat-grid');
+  if(!rows.length){ grid.innerHTML='<div class="cat-empty">No volumes in the stacks match your search.</div>'; return; }
+  grid.innerHTML = rows.map(function(b){
+    var status=b.status||'available';
+    var meta=esc(b.author||'Unknown') + (b.series?' <span class="ser">&middot; '+esc(b.series)+(b.index?', '+b.index:'')+'</span>':'');
+    var copies=(b.copies!=null)?('<div class="cat-copies">'+esc(String(b.copies))+'</div>'):'';
+    return '<div class="cat-card" onclick="this.classList.toggle(\'open\')">'
+      + (b.skill?'<div class="cat-skill">'+esc(b.skill)+' skill</div>':'')
+      + '<div class="cat-ct">'+esc(b.title)+'</div>'
+      + '<div class="cat-cauthor">'+meta+'</div>'
+      + '<div class="cat-syn">'+esc(b.synopsis||'')+'</div>'
+      + '<div class="cat-foot"><span class="cat-status '+status+'">'+esc(STATUS_LABEL[status]||status)+'</span>'+copies+'</div>'
+      + '</div>';
+  }).join('');
 }
 
 /* ── Auth ── */
