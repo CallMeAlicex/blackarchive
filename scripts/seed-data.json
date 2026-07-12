@@ -1,69 +1,64 @@
 {
-  "draugomyr": {
+  "apprenticeJournal": {
     "type": "book",
-    "title": "Draugomyr",
-    "author": "Draugomyr of Falkreath",
-    "subtitle": "Private Accounts of the Returned · Second Seed to Midyear · Era of the Fourth",
+    "title": "The Frostbound Ledger",
+    "author": "Sevrin, Apprentice of the Arcanaeum",
+    "subtitle": "The First Season at the College — Sun's Dusk to Morning Star · Era of the Fourth",
     "entries": [
       {
-        "title": "The Returning",
-        "date_line": "28th of Second Seed, Turdas",
-        "body": "After spending a few days dedicating myself to gathering clothes, working for gold, begging for armor, and purchasing weapons, I have finally decided to work on the image of being a Priest of Arkay. Rather ironic. But it is one way to gain my lord's attention. What better way for my master to see his servant in need of his blessing than to don the image of his foe and mock his foe's practice with every act and breath.\n\nSetting my eyes on the largest graveyard in Skyrim — Falkreath. There I shall work to call upon my lord's blessing and restore me to my accursed station. I long to break flesh and spirit till they are nothing but thralls.\n\nThankfully, it was too easy. I simply walked up to the masses of Falkreath and informed them that I, Draugomyr, was a Priest of Arkay. These cattle are starving for faith, and I easily earned my place as their priest. As much as I hated it, I had to act like one. To provide prayers and sermons to the weary.\n\nI even held my first sermon to the town. I even suggested them: \"Grant me the weapons of the undead you have triumphed over, for I will bless them!\" Fools. The moment they leave me to it, I pray to Molag Bal and curse these weapons further.\n\nAll in the name of my master. Harvester. Schemer. Ravager. Dominator. Lord of Coldharbour. Father of Vampires. Stone-Fire... Molag Bal.\n\nFor the while, I am welcome to stay in their Hall of The Dead. One day I must own the keys to this place so that I may work on restoring my vampirism. I curse them for what they had taken from me. But I know well enough that it is still within me."
+        "title": "The Bridge",
+        "date_line": "3rd of Sun's Dusk, Loredas",
+        "body": "I came to Winterhold expecting a city and found a cliff with a handful of houses clinging to it, as if the town itself were afraid to let go. They tell me most of it fell into the sea a lifetime ago. Only the College remained, out across the great stone bridge, standing on its spire of rock above nothing at all.\n\nThe gatekeeper — a Breton woman with frost in her voice — would not let me cross until I had shown her a spark of magic in my own hand. My fingers shook with the cold, but a thread of flame answered me, and she stepped aside without a word.\n\nSo I have crossed the bridge. Behind me, the wind. Ahead, the light of the Arcanaeum burning in its high windows. I do not think I shall sleep."
       },
       {
-        "title": "The Feasting",
-        "date_line": "30th of Second Seed, Loredas",
-        "body": "Ser Belethor Banning — a man who had fallen during the battle of Falkreath against the undead. I managed to steal a mouthful's worth of blood from the wound to mask my consumption from them. It is not fresh, but it is one way to salvage any hints of vampirism, or to merely satiate the lingering thirst of my nature.\n\nAfter that, I spent the rest of the day mingling with the cattle, earning their trust while honing my body. Scouring Skyrim for clues of my kind. I feel like an outsider now that I am human... again. It is sickening. I do not wish to end up in Sovngarde or in Aetherius. I loathe the idea. I'd rather be damned on Nirn as a vampire.\n\nFor now, my daughter will have to stay near the Colovian Highlands till the coast is clear. And fortunately, by the grace of Molag Bal, I met Jarl Alleric, and he granted me the Hall of the Dead.\n\n400 septims per week? How much does a priest earn here?! I suppose I have to really act out as one. Fine. In Molag Bal's name I shall. The more sacred I appear, the more sacrilegious my deeds would be. And it is perfect."
+        "title": "The Arcanaeum",
+        "date_line": "5th of Sun's Dusk, Tirdas",
+        "body": "They gave me a bed in the Hall of Attainment and a single instruction: read. The Arcanaeum is the library that crowns the College, a great curving hall of shelves that seem to lean inward as though listening. The keeper watches over it and does not suffer folded pages, spilled ink, or spoken spells among the stacks.\n\nI have never seen so many books in one place. Whole shelves on Destruction alone; whole shelves on things I did not know had names. I took down a treatise on the schools of magic and read until the candle guttered.\n\nMagic, it seems, is not one art but many, and no mage masters them all. One must choose where to set one's feet. I have not yet chosen. But I have begun."
       },
       {
-        "title": "The Wolf In Shepherd's Clothing",
-        "date_line": "31st of Second Seed, Sundas",
-        "body": "Daily prayers for the grave, then for the town. But in between those moments, I have to dig up whatever rumor I can find. Amidst my travels, I came across something I thought I would never find.\n\nVampire dust.\n\nRemains of my kind, or what's left of them. Perhaps I can salvage what little blessings it has. Maybe it would provide me with an ample chance of quietly joining the ranks of the undead, without even stirring them from their works.\n\nSo much work… I loathe that I can feel the sting of the sun despite being a mortal. The thirst is still there. The need. Potent.\n\nI will set my mind on this work. And hope that I succeed so that I may return into the sliver of darkness to where I belong, away from everything, and simply feed myself till the world eats itself."
+        "title": "First Frost",
+        "date_line": "9th of Sun's Dusk, Middas",
+        "body": "My first proper lesson. The tutor set a candle-flame between us and asked me not to snuff it but to still it — to draw the warmth out of the air around it until the flame itself shivered and turned blue.\n\nDestruction, she said, is not only fire. It is the shaping of raw force, and cold is force as surely as heat. To freeze is only to command the heat elsewhere.\n\nI failed a dozen times and put out the candle twice. On the thirteenth, the flame paled and a rime of ice crept across the table toward my hand, and I felt for one heartbeat the whole cold weight of the north pass through me like a held breath. Then it broke, and I was only a tired apprentice in a stone room. But I had done it. Once is enough to know a thing is real."
       },
       {
-        "title": "A Cut",
-        "date_line": "1st of Midyear, Morndas",
-        "body": "Spent my nights attending a sermon led by a Kyne Priestess, Kaeri. The highlight was a drunken huntress by the name of Velora Rosemund who traveled with me after. Either she is that trusting or that bold.\n\nWithout anyone's notice, I invited her to stay in the Hall of the Dead for the night. Thankfully, she did not recall — especially the part where I cut her wrist open and drank her blood while stowing it away for later use in my work.\n\nVampire dust usually served as a primary ingredient for cures because it contains the remnants of vampiric essence. What I need to do is revitalize it. The dust is usually the heart of a vampire that withers upon their demise.\n\nIf I were to find a heart, then acclimate it with the dust — give it enough life to corrupt the blood it would pump — then I can no doubt retain my blessing. The trouble is that my talents went away when I was cured. I will need to work with crude and gristly methods."
+        "title": "On Being Watched",
+        "date_line": "14th of Sun's Dusk, Fredas",
+        "body": "The townsfolk of Winterhold do not love us. When I crossed to the inn for supper an old man spat in the snow as I passed and named the College the cause of the Collapse — as if we had called the sea up to swallow their homes.\n\nThe truth is more troubling than the accusation. No one at the College will say for certain what caused the great wave that took the city. Some blame the eruption far to the south. Some blame the mages who were here before us. The books in the Arcanaeum grow strangely quiet on the matter, and a quiet book is often the loudest kind.\n\nI begin to understand that to study here is to live beside a wound no one will name."
       },
       {
-        "title": "Flesh",
-        "date_line": "2nd of Midyear, Tirdas",
-        "body": "I need a catalyst that triggers a regenerative response in the heart. The heart coated thoroughly with vampire dust, filled with blood. Once I trigger the heart to pump and confuse the lingering essence of the vampire dust — it would corrupt the heart and have it squeeze out blood. Preferably vampire blood.\n\nThere is one catalyst that has sufficient magical potency to provide a vestige of life.\n\nDaedric hearts.\n\nNow that is a monumental challenge. Finding one would be one task. But it can be a catalyst and a pump. I am stuck with a hindrance, however.\n\nHow can I make it pulse? Smiths can have a Daedra Heart breathe power into ebony and create the finest of armors. But I am not smithing. I am trying to buy a few seconds' worth of unliving to squeeze out vampiric blood. I will need to venture out of Falkreath soon."
+        "title": "The Conjuration Ward",
+        "date_line": "20th of Sun's Dusk, Sundas",
+        "body": "Today I watched a senior mage summon a flame atronach inside a ring of silver set into the floor. It rose out of nothing, a burning figure turning slowly in place, and it fixed its molten eyes on each of us in turn as if choosing.\n\nConjuration, the tutor warned, is a doorway, and a doorway swings both ways. The bound thing serves only so long as the binding holds and the summoner's will does not falter. She made us recite the closing words until we could say them faster than we could think them.\n\n\"The most dangerous mage,\" she told us, \"is not the one who cannot summon. It is the one who forgets how to send back.\" I have written the closing words on the inside of my wrist in ink. I will not be that mage."
       },
       {
-        "title": "Spark",
-        "date_line": "3rd of Midyear, Middas",
-        "body": "I must find something to trigger a pulse. Then it hit me. Void Salts!\n\nVoid Salts contain slivers of energy almost akin to being electrocuted — just enough to trigger a reaction. Especially if it comes into contact with something wet, like water. Or in my case… blood.\n\nSo at least I know what I must gather:\n- Human Hearts\n- Human Flesh\n- Daedra Hearts\n- Void Salts\n- Vampire Dust\n- Blood\n\nOnce I have all these, I will need a secure space — an environment and container that should store and coalesce the components. I should treat it in the same manner as a subject who wants to become a vampire."
+        "title": "Restoration, Which They Mock",
+        "date_line": "28th of Sun's Dusk, Turdas",
+        "body": "There is a fashion among some apprentices to sneer at Restoration — to call it the healer's trade, unworthy of a true mage. I confess I half believed it until this evening.\n\nThe tutor drew a blade across her own palm without flinching and let it bleed, then closed her hand and opened it again, whole and clean, the light of the mending still fading from her skin. Then she asked which of us could do the same, and the room went very silent.\n\nTo unmake a wound is no lesser art than to make one. He who can only harm is at the mercy of the first wound he cannot answer. I mean to learn this school, whatever the others say. Pride is a poor bandage."
       },
       {
-        "title": "Another Blood",
-        "date_line": "4th of Midyear, Turdas",
-        "body": "Zevrin Valen — another corpse delivered to me. It took great effort to find any wound from which I could draw blood. They were not wrong; he seemed to display some rapid aging. Curious… Of course, I had to digest some while I was at it.\n\nI stored the blood in Rimerock Burrow. While there, I realized this is the perfect place to conduct my work. The temperature was perfect, and the area is secluded enough.\n\nComponent Observations:\n- Daedra Hearts — constantly showing signs of healthiness regardless of age. Like it is perpetual, inert. Worthy as a catalyst.\n- Void Salts — passively contain electrical charges. Friction, water contact, and impact can trigger sparks.\n- Human Hearts and Flesh, freshly stolen from Hagravens, stored safely there.\n- Blood of Velora Rosemund, Ser Belethor Banning, and Zevrin Valen stored. Will use Zevrin's.\n\nI also etched the proper schematic and flow of the components. Focused on conversion, corruption, and assimilation."
+        "title": "The Locked Case",
+        "date_line": "4th of Evening Star, Morndas",
+        "body": "There is a case at the far end of the Arcanaeum, glass and iron, and the books within it are chained. The keeper will not open it, and when I asked what they were, only said: \"Books that were opened once already, by someone who is no longer here to regret it.\"\n\nI have learned since that they concern the older schools — the arts the College no longer teaches openly. Necromancy is forbidden within these walls, and there are other studies darker still that are not even given the dignity of a name in the catalogue.\n\nI understand the reason. I also understand, now, the particular hunger that comes over a scholar when a thing is placed behind glass. That hunger is itself a subject worth studying. I study it, and I keep walking."
       },
       {
-        "title": "The Blood Diagram",
-        "date_line": "5th of Midyear, Fredas",
-        "body": "Rudimentary, yes. That is the purpose. Forward intent, faith-fueled, and direct.\n\n- Vampire Dust — the corrupting element, the curse.\n- The desired outcome: Vampirism.\n- Blood and mortal flesh — the victim element, the target.\n- The Daedra Heart — centerpiece, life giver, the catalyst.\n\nThe Daedric elements of Void Salts, Daedra Heart, and Vampire Dust are a changing element. Combined with the creating elements of Human Flesh and Zevrin's Blood — this should equal a conversion that leads to a Daedric Element.\n\nThen I should be able to corrupt the blood into a vampiric one."
+        "title": "Aurora",
+        "date_line": "11th of Evening Star, Fredas",
+        "body": "Tonight the sky over the College caught fire without heat. The northern lights — great slow banners of green and violet — hung above the spire and turned the snow every colour at once. The apprentices went up to the walls to watch, and even the sour senior mages came, and for a while no one spoke of the Collapse or the townsfolk or the chained books.\n\nOne of the older Altmer told me the lights are the breath of Aetherius seen through the wounds the world was born with — that magicka itself pours down through them, and that the first mages learned their art by watching the sky and trying to answer it.\n\nI do not know if that is true. But I stood in the cold with light running over my hands, and I thought: this is why I crossed the bridge. Not for the power. For this."
       },
       {
-        "title": "Dogs",
-        "date_line": "6th of Midyear, Loredas",
-        "body": "Sidetracked from my work. Yesterday, no doubt the werebeasts had utilized Hircine's Summoning Day and today's.\n\nBut I swear — if I become a werewolf out of this, I will lose it.\n\nI had to move my components. Currently moved to an island close to Castle Volkihar. The cold is much safer there. But I will have to look for other places just to be sure.\n\nWill take a day's worth of absence for now. And hope to Molag Bal that I do not get turned into a dog."
+        "title": "Alteration and the Weight of Things",
+        "date_line": "19th of Evening Star, Middas",
+        "body": "Alteration is the strangest school, and the tutor who teaches it is stranger still. He spent our whole lesson insisting that stone is only a habit the world has, and that a sufficiently stubborn mage may persuade it to have a different one.\n\nHe hardened his own skin until a hammer rang off his forearm like an anvil. Then he made the floor beneath a chair briefly forget it was solid, and the chair sank to its seat and stuck there.\n\n\"Reality,\" he said, \"is an argument, and most people never think to join it.\" I am not sure I followed all of it. But I lifted a candlestick without touching it, and though it wobbled like a newborn foal, it rose. The world can be argued with. I have written that down twice so I will not forget it."
       },
       {
-        "title": "Necromancer's Moon",
-        "date_line": "8th of Midyear, Morndas",
-        "body": "Private info from the Court Mage of Falkreath informed me of cults utilizing the Necromancer's Moon. I have to play both sides — be useful enough to the court while keeping the cult's tracks safe.\n\nI also thought of another combination: fill the Daedra Heart with Vampire Dust and Zevrin's blood, coat it with Void Salts, and directly consume it. Almost like a cocktail — but a forward approach. I know there is a chance to become one by eating vampire dust, so this will not hurt.\n\nIn other news, Velora finally delivered my robes and amulet. This should sell my image even more. I was also offered a position in Windhelm to tend their Hall of the Dead.\n\nThe place is clean, private — and most of all, ripe with death and near vampiric attacks."
+        "title": "Illusion, and Whom to Trust",
+        "date_line": "27th of Evening Star, Loredas",
+        "body": "The Illusion tutor kept us waiting an hour, then revealed she had been sitting among us the whole time, cloaked from our sight. Half the class had been speaking freely of her, and she let us finish before she let us see her. A cruel lesson, and an effective one.\n\nIllusion works not on the world but on the mind — courage and fear, calm and fury, the very seeing of the eye. It is the gentlest school and the most feared, for a fireball can be seen coming and a whispered false thought cannot.\n\nShe made me feel a joy I had no reason for, then took it away, so that I might know the difference between a feeling I had earned and one that had been placed in me. I have not stopped thinking about how rarely, in an ordinary life, we are ever told the difference."
       },
       {
-        "title": "Fruitless",
-        "date_line": "10th of Midyear, Middas",
-        "body": "I performed the experiments, but the trials appear fruitless. Both attempts brought only mockery. I do not wish to remain a mortal. I feel my very own right, my very own dignity stripped of its form. Every second feels like theft by the Aedra. It cannot be like this.\n\nAnd here I am in Windhelm, since that damned priest wanted to reside in Falkreath. I do not have the privacy I needed. But I had prior arrangements to acquire the Hall of the Dead here.\n\nThese days already feel boring. Numb. What's harder here is that I cannot be preyed upon by other vampires because I already look like one."
-      },
-      {
-        "title": "The New Night",
-        "date_line": "15th of Midyear, Morndas",
-        "body": "I felt forsaken into the hands of the Aedra. I loathe the notion of it. All I sought was to become who I always have been. I had lied, schemed, and corrupted. Yet my prayers, my deeds, fell silent and still. Empty. Misbegotten.\n\nDays toiled into numbed nothingness. But then — a change.\n\nVelora.\n\nAfflicted by a vampire, she thought she could trust me to tend her injuries. She just made herself fall into a spider's web. When I found out that she was indeed infected, I was looking at a miracle. A dark gift to my efforts.\n\nShe is my… unwilling and unsuspecting deliverance.\n\nShe is perfect — it was her blood I stole first after the longest while here in Skyrim. And her blood is the key! My return! My life! My matron! My font!\n\nMy greatest sin for the new night.\n\nThis will be a great gift to Molag Bal — a devotee of Dibella, taken away and corrupted with this terrifying blessing. I could not think of a better gift for the Father of Vampires.\n\nOne way or another."
+        "title": "The Choice",
+        "date_line": "6th of Morning Star, Sundas",
+        "body": "A season gone, and the keeper asked me today what I mean to study. I have touched every school and mastered none. Fire and frost, mending and warding, the summoned flame, the argued stone, the whispered feeling.\n\nI told her the truth: that I do not wish to choose, that each school seems a window onto the same vast room seen from a different wall. She did not scold me for it. She said the greatest scholars of the Arcanaeum have always been the ones who kept every window open, though it is the longer and colder road.\n\nSo that is the road I will walk. I set this ledger upon the shelf now, that whoever comes after me — some frightened apprentice fresh across the bridge — may know that the cold is worth it, and the light is real, and the closing words go on the inside of the wrist. Begin, and keep beginning."
       }
     ]
   }

@@ -1,6 +1,6 @@
-# The Black Library
+# The Arcanaeum
 
-A gothic repository of flippable manuscripts. Scribes claim a codename, bind tomes or write parchments, and share them with the world via a permanent link.
+An arcane repository of flippable manuscripts for the College of Winterhold. Mages claim a name in the register, bind tomes or write parchments, and share them with the world via a permanent link.
 
 ---
 
@@ -30,20 +30,20 @@ Confirm with `railway volume list` — it should show `Status: Ready` attached t
 
 ---
 
-## Seeding the Library
+## Seeding the Arcanaeum
 
-There is no auto-seed on boot. Curated lore is seeded via a reusable script, owned by a "curator"
-scribe so the official tomes have an in-world keeper:
+There is no auto-seed on boot. Curated arcane lore is seeded via a reusable script, owned by a
+"curator" scribe so the official tomes have an in-world keeper:
 
 ```bash
 BASE_URL=https://your-app.up.railway.app \
-CURATOR_NAME='House Mournstar' \
+CURATOR_NAME='Keeper of the Arcanaeum' \
 CURATOR_PASS='your-secret' \
 node scripts/seed.mjs
 ```
 
 The script is idempotent (skips any work whose title already exists). Content lives in
-`scripts/seed.mjs`; the Draugomyr journal is kept in `scripts/seed-data.json`.
+`scripts/seed.mjs`; the apprentice journal (The Frostbound Ledger) is kept in `scripts/seed-data.json`.
 
 ---
 
