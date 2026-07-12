@@ -29,6 +29,7 @@ const SCHEMA = `
     id          TEXT PRIMARY KEY,
     codename    TEXT UNIQUE NOT NULL,
     passphrase  TEXT NOT NULL,
+    is_admin    INTEGER NOT NULL DEFAULT 0,
     created_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
   );
 
@@ -53,9 +54,27 @@ const SCHEMA = `
     body        TEXT NOT NULL DEFAULT ''
   );
 
+  CREATE TABLE IF NOT EXISTS holdings (
+    id          TEXT PRIMARY KEY,
+    scribe_id   TEXT NOT NULL REFERENCES scribes(id),
+    work_id     TEXT NOT NULL REFERENCES works(id),
+    assigned_by TEXT,
+    assigned_at INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+    UNIQUE(scribe_id, work_id)
+  );
+
   CREATE INDEX IF NOT EXISTS idx_works_scribe ON works(scribe_id);
   CREATE INDEX IF NOT EXISTS idx_entries_work ON entries(work_id, position);
+  CREATE INDEX IF NOT EXISTS idx_holdings_scribe ON holdings(scribe_id);
 `;
+
+// Migrate older databases that predate the is_admin column.
+function migrate() {
+  const cols = all(`PRAGMA table_info(scribes)`).map(c => c.name);
+  if (!cols.includes('is_admin')) {
+    db.run(`ALTER TABLE scribes ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0`);
+  }
+}
 
 // ── Helper: run a statement ─────────────────────────────────
 function run(sql, params) {
@@ -85,9 +104,25 @@ function all(sql, params) {
 
 // ── Public API (mirrors better-sqlite3 interface used in server.js) ──
 const scribes = {
-  create: { run: (p) => { run(`INSERT INTO scribes (id,codename,passphrase) VALUES (?,?,?)`, [p.id, p.codename, p.passphrase]); } },
+  create: { run: (p) => { run(`INSERT INTO scribes (id,codename,passphrase,is_admin) VALUES (?,?,?,?)`, [p.id, p.codename, p.passphrase, p.is_admin ? 1 : 0]); } },
   findByCodename: { get: (codename) => get(`SELECT * FROM scribes WHERE lower(codename)=lower(?)`, [codename]) },
   findById:       { get: (id)       => get(`SELECT * FROM scribes WHERE id=?`, [id]) },
+  setAdmin:       { run: (id, val)  => { run(`UPDATE scribes SET is_admin=? WHERE id=?`, [val ? 1 : 0, id]); } },
+  setPass:        { run: (id, hash) => { run(`UPDATE scribes SET passphrase=? WHERE id=?`, [hash, id]); } },
+  all: { all: () => all(`
+    SELECT s.id, s.codename, s.is_admin, s.created_at,
+           (SELECT COUNT(*) FROM holdings h WHERE h.scribe_id=s.id) as holding_count,
+           (SELECT COUNT(*) FROM works w WHERE w.scribe_id=s.id) as authored_count
+    FROM scribes s ORDER BY s.is_admin DESC, lower(s.codename) ASC
+  `) },
+};
+
+const holdings = {
+  assign:   { run: (p) => { run(`INSERT OR IGNORE INTO holdings (id,scribe_id,work_id,assigned_by) VALUES (?,?,?,?)`,
+    [p.id, p.scribe_id, p.work_id, p.assigned_by||null]); } },
+  unassign: { run: (scribe_id, work_id) => { run(`DELETE FROM holdings WHERE scribe_id=? AND work_id=?`, [scribe_id, work_id]); } },
+  has:      { get: (scribe_id, work_id) => get(`SELECT 1 as ok FROM holdings WHERE scribe_id=? AND work_id=?`, [scribe_id, work_id]) },
+  workIdsForScribe: { all: (scribe_id) => all(`SELECT work_id FROM holdings WHERE scribe_id=?`, [scribe_id]) },
 };
 
 const works = {
@@ -112,6 +147,16 @@ const works = {
     SELECT w.*, (SELECT COUNT(*) FROM entries e WHERE e.work_id=w.id) as entry_count
     FROM works w WHERE w.scribe_id=? ORDER BY w.created_at DESC
   `, [scribe_id]) },
+
+  // A member's personal library: works they authored plus works assigned to them.
+  forScribeLibrary: { all: (scribe_id) => all(`
+    SELECT w.*, s.codename as scribe_name,
+           (SELECT COUNT(*) FROM entries e WHERE e.work_id=w.id) as entry_count,
+           (w.scribe_id=? ) as is_own
+    FROM works w JOIN scribes s ON s.id=w.scribe_id
+    WHERE w.scribe_id=? OR w.id IN (SELECT work_id FROM holdings WHERE scribe_id=?)
+    ORDER BY w.created_at DESC
+  `, [scribe_id, scribe_id, scribe_id]) },
 };
 
 const entries = {
@@ -139,8 +184,9 @@ async function initDb() {
     db = new SQL.Database();
   }
   db.run(SCHEMA);
+  migrate();
   persist(); // save schema immediately
   return db;
 }
 
-module.exports = { initDb, db: () => db, scribes, works, entries, saveEntriesForWork };
+module.exports = { initDb, db: () => db, scribes, works, entries, holdings, saveEntriesForWork };

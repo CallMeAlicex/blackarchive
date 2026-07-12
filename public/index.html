@@ -342,7 +342,7 @@ a{color:inherit;text-decoration:none}
   border-bottom:1px solid var(--silver-border);
   flex-shrink:0;z-index:20;gap:1rem;
 }
-.rd-title{font-family:var(--ff-title);font-size:1.2rem;color:var(--silver);filter:drop-shadow(0 0 12px var(--silver-ghost));flex:1;text-align:center}
+.rd-title{font-family:var(--ff-caps);font-weight:600;font-size:1rem;letter-spacing:.06em;color:var(--silver);filter:drop-shadow(0 0 12px var(--silver-ghost));flex:1;text-align:center}
 #reader-stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:1.2rem}
 #flip-mount{position:relative;overflow:hidden}
 .reader-controls{
@@ -388,12 +388,12 @@ a{color:inherit;text-decoration:none}
 .fp-toc-rule{border:none;height:1px;background:linear-gradient(to right,transparent,var(--crimson-dim),transparent);margin:.35rem 0 .8rem}
 .fp-toc-row{display:flex;align-items:baseline;gap:.25rem;margin-bottom:.32rem;border-bottom:1px dotted rgba(190,190,210,.07);padding-bottom:.25rem}
 .fp-toc-n{font-family:var(--ff-serif);font-size:.56rem;color:var(--crimson);font-style:italic;min-width:18px;opacity:.7}
-.fp-toc-t{font-family:var(--ff-title);font-size:.8rem;color:var(--text);flex:1;line-height:1.2}
+.fp-toc-t{font-family:var(--ff-caps);font-weight:600;font-size:.82rem;color:var(--text);flex:1;line-height:1.25}
 .fp-toc-d{font-family:var(--ff-serif);font-size:.5rem;color:var(--text-ghost);font-style:italic;white-space:nowrap}
 .fp-toc-seal{text-align:center;margin-top:.7rem;font-size:.8rem;color:var(--crimson);opacity:.15;letter-spacing:.3em}
 .fp-date{font-family:var(--ff-title);font-size:.66rem;color:var(--crimson);margin-bottom:.06rem;letter-spacing:.03em;opacity:.7}
-.fp-etitle{font-family:var(--ff-title);font-size:1.12rem;color:var(--silver);margin-bottom:.52rem;border-bottom:1px solid rgba(190,190,210,.1);padding-bottom:.32rem;letter-spacing:.04em;line-height:1.12;filter:drop-shadow(0 0 6px var(--silver-ghost))}
-.fp-body{font-family:var(--ff-serif);font-size:.7rem;line-height:1.66;color:var(--text);text-align:justify;hyphens:auto;flex:1;overflow:hidden}
+.fp-etitle{font-family:var(--ff-caps);font-weight:600;font-size:1.02rem;color:var(--silver);margin-bottom:.5rem;border-bottom:1px solid rgba(190,190,210,.14);padding-bottom:.34rem;letter-spacing:.03em;line-height:1.2;filter:drop-shadow(0 0 6px var(--silver-ghost))}
+.fp-body{font-family:var(--ff-serif);font-size:.82rem;line-height:1.72;color:var(--text);text-align:justify;hyphens:auto;flex:1;overflow:hidden}
 .fp-body p{margin-bottom:.5em}
 .fp-body em{font-style:italic;color:var(--silver-dim)}
 .fp-body strong{color:var(--silver);font-style:italic}
@@ -433,8 +433,8 @@ a{color:inherit;text-decoration:none}
 .pp-back-seal{font-size:1.6rem;color:rgba(80,40,0,.09);letter-spacing:.4em}
 .pp-back-motto{font-family:var(--ff-serif);font-size:.56rem;color:rgba(60,25,5,.22);font-style:italic;letter-spacing:.1em;line-height:2.2;margin-top:.7rem}
 .pp-date{font-family:var(--ff-title);font-size:.68rem;color:rgba(60,25,5,.65);margin-bottom:.06rem}
-.pp-etitle{font-family:var(--ff-title);font-size:1.1rem;color:#1e0c03;margin-bottom:.5rem;border-bottom:1px solid rgba(80,40,0,.2);padding-bottom:.35rem;line-height:1.12}
-.pp-body{font-family:var(--ff-serif);font-size:.7rem;line-height:1.68;color:#2c1106;text-align:justify;hyphens:auto;flex:1;overflow:hidden}
+.pp-etitle{font-family:var(--ff-caps);font-weight:600;font-size:1.02rem;color:#1e0c03;margin-bottom:.5rem;border-bottom:1px solid rgba(80,40,0,.2);padding-bottom:.35rem;line-height:1.2}
+.pp-body{font-family:var(--ff-serif);font-size:.82rem;line-height:1.72;color:#2c1106;text-align:justify;hyphens:auto;flex:1;overflow:hidden}
 .pp-body p{margin-bottom:.5em}
 .pp-body em{font-style:italic}
 .pp-body .li{margin-left:.75em;margin-bottom:.18em;font-style:italic}
@@ -460,12 +460,39 @@ a{color:inherit;text-decoration:none}
 .modal-btn.danger{color:var(--crimson);border-color:var(--crimson-dim)}
 .modal-btn.danger:hover{background:var(--crimson-dim);color:#ff9090}
 
+/* ══ SCREEN: CURATOR (admin) ══ */
+#screen-admin{background:var(--abyss);padding-bottom:5rem}
+.adm-header{max-width:840px;margin:0 auto 1.5rem;display:flex;align-items:center;gap:1.2rem;border-bottom:1px solid var(--silver-border);padding:1.5rem 1.5rem 1rem}
+.adm-title{font-family:var(--ff-deco);font-size:1.2rem;color:var(--silver);filter:drop-shadow(0 0 10px var(--silver-ghost))}
+.adm-wrap{max-width:840px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.adm-panel{border:1px solid var(--silver-border);background:linear-gradient(160deg,var(--deep) 0%,var(--surface) 100%);padding:1.3rem}
+.adm-panel h3{font-family:var(--ff-caps);font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--silver-border)}
+.adm-hint{font-family:var(--ff-serif);font-size:.66rem;color:var(--text-ghost);font-style:italic;line-height:1.5;margin-bottom:.9rem}
+.adm-cred{background:rgba(4,4,10,.85);border:1px solid var(--gold-dim);padding:.8rem;margin-top:.8rem;font-family:var(--ff-serif);font-size:.72rem;color:var(--parch);line-height:1.7;word-break:break-word}
+.adm-cred b{color:var(--gold);font-family:var(--ff-caps);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
+.adm-users{list-style:none;margin-top:1rem;max-height:220px;overflow-y:auto}
+.adm-users li{display:flex;justify-content:space-between;align-items:center;padding:.4rem .2rem;border-bottom:1px solid var(--silver-ghost);font-family:var(--ff-serif);font-size:.76rem;color:var(--text)}
+.adm-users .u-meta{font-size:.56rem;color:var(--text-ghost);font-style:italic}
+.adm-users .u-admin{color:var(--crimson);font-family:var(--ff-caps);font-size:.48rem;letter-spacing:.12em;text-transform:uppercase}
+.assign-list{margin-top:1rem;max-height:340px;overflow-y:auto;border:1px solid var(--silver-ghost)}
+.assign-row{display:flex;align-items:center;justify-content:space-between;gap:.7rem;padding:.5rem .7rem;border-bottom:1px solid var(--silver-ghost)}
+.assign-row:last-child{border-bottom:none}
+.assign-info{flex:1;min-width:0}
+.assign-t{font-family:var(--ff-title);font-size:.9rem;color:var(--silver);line-height:1.1}
+.assign-m{font-family:var(--ff-serif);font-size:.56rem;color:var(--text-ghost);font-style:italic}
+.assign-btn{font-family:var(--ff-caps);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;padding:.32rem .7rem;border:1px solid var(--silver-border);color:var(--silver-dim);transition:var(--ease);white-space:nowrap}
+.assign-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.assign-btn.on{color:#6abf6a;border-color:#3a7a3a;background:rgba(60,120,60,.12)}
+.tb-btn.curator{color:var(--crimson);border-color:var(--crimson-dim)}
+.tb-btn.curator:hover{color:var(--crimson-hi);border-color:var(--crimson)}
+
 @media(max-width:600px){
   .shelf{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
   .lib-create-bar{flex-direction:column;align-items:stretch;padding:1.2rem}
   .btn-create{text-align:center}
   .fi-row{grid-template-columns:1fr}
   .reader-topbar .rd-scribe{display:none}
+  .adm-wrap{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -476,6 +503,7 @@ a{color:inherit;text-decoration:none}
   <div class="topbar-brand" onclick="goLibrary()">The Black Library</div>
   <div class="topbar-right">
     <span class="topbar-scribe" id="topbar-scribe"></span>
+    <button class="tb-btn curator" id="tb-admin-btn" style="display:none" onclick="goAdmin()">Curator's Desk</button>
     <button class="tb-btn" id="tb-auth-btn" onclick="goAuth()" style="display:none">Enter the Library</button>
     <button class="tb-btn" id="tb-logout-btn" style="display:none" onclick="doLogout()">Depart</button>
   </div>
@@ -492,30 +520,17 @@ a{color:inherit;text-decoration:none}
     <div class="auth-title">The Black Library</div>
     <div class="auth-house">House Mournstar</div>
     <div class="auth-sub">Identify yourself, Scribe</div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Enter</button>
-      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Claim a Name</button>
-    </div>
     <div id="auth-login-form">
       <input class="fi" id="login-name" type="text" placeholder="Your codename…" autocomplete="username">
       <input class="fi" id="login-pass" type="password" placeholder="Your passphrase…" autocomplete="current-password">
       <button class="btn-forge" onclick="doLogin()">✦ Enter the Library ✦</button>
     </div>
-    <div id="auth-register-form" style="display:none">
-      <input class="fi" id="reg-name" type="text" placeholder="Claim a codename…" autocomplete="username">
-      <input class="fi" id="reg-pass" type="password" placeholder="Choose a passphrase…" autocomplete="new-password">
-      <input class="fi" id="reg-pass2" type="password" placeholder="Confirm passphrase…" autocomplete="new-password">
-      <button class="btn-forge" onclick="doRegister()">✦ Claim Your Name ✦</button>
-    </div>
     <div class="auth-err" id="auth-err"></div>
-    <div class="auth-visitor">
-      Or <span onclick="goLibrary()">browse the Library as a visitor</span>
-    </div>
   </div>
   <div class="auth-creed">
     <div class="auth-creed-rule"><span>⸸</span></div>
-    <p><strong>Claim a codename</strong>, then set down your deeds in your own hand. The field reports, letters, and journals you commit here are bound into tomes and shelved for all the Hold to read.</p>
-    <p>Write in character; the Library keeps what you leave. Only you may edit or unbind your own works — every tome carries a permanent link to share beyond these walls.</p>
+    <p>The Black Library is kept by <strong>House Mournstar</strong>. Its doors do not open to strangers — access is granted by the Keeper alone.</p>
+    <p>If you have been given a codename and passphrase, enter them above. If you have not, then this library was not meant for your eyes, and the Keeper will know if you are expected.</p>
   </div>
 </section>
 
@@ -542,6 +557,39 @@ a{color:inherit;text-decoration:none}
   <div class="shelf-section" style="margin-top:1.8rem">
     <div class="shelf-label">Letters &amp; Parchments</div>
     <div class="shelf" id="shelf-parchments"></div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: CURATOR (admin) ══ -->
+<section id="screen-admin" class="screen with-topbar">
+  <div class="adm-header">
+    <button class="back-btn" onclick="goLibrary()">← Library</button>
+    <div class="adm-title">Curator's Desk</div>
+  </div>
+  <div class="adm-wrap">
+    <div class="adm-panel">
+      <h3>Create an Account</h3>
+      <div class="adm-hint">Make an account for an operator, then pass them the codename and passphrase below. Their library begins empty until you assign copies to it.</div>
+      <input class="fi-wide" id="adm-new-name" type="text" placeholder="Operator codename (e.g. Sparow)…" autocomplete="off" style="margin-bottom:.7rem">
+      <div class="fi-row" style="margin-bottom:.7rem">
+        <input class="fi-wide" id="adm-new-pass" type="text" placeholder="Passphrase…" autocomplete="off">
+        <button class="back-btn" onclick="genPass()" style="white-space:nowrap">✦ Generate</button>
+      </div>
+      <label class="fl" style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;text-transform:none;letter-spacing:.02em">
+        <input type="checkbox" id="adm-new-admin"> Grant curator (admin) access
+      </label>
+      <button class="btn-forge" onclick="createAccount()">✦ Create Account ✦</button>
+      <div id="adm-new-result"></div>
+      <h3 style="margin-top:1.6rem">Members</h3>
+      <ul class="adm-users" id="adm-users"></ul>
+    </div>
+    <div class="adm-panel">
+      <h3>Assign Copies</h3>
+      <div class="adm-hint">Choose an operator, then grant or revoke copies of the Library's works. Assigned works appear in that operator's personal library.</div>
+      <label class="fl">Operator</label>
+      <select class="fi-wide" id="adm-assign-user" onchange="loadAssignments()" style="margin-bottom:1rem"></select>
+      <div class="assign-list" id="assign-list"><div class="adm-hint" style="padding:1rem">Select an operator to manage their library.</div></div>
+    </div>
   </div>
 </section>
 
@@ -613,7 +661,7 @@ a{color:inherit;text-decoration:none}
 
 <script>
 /* ── State ── */
-var SESSION = { codename: null, id: null };
+var SESSION = { codename: null, id: null, is_admin: false };
 var currentWork = null;
 var pfInstance = null;
 var createType = 'book';
@@ -638,17 +686,16 @@ async function init() {
     var me = await api('GET', '/api/auth/me');
     SESSION.codename = me.codename;
     SESSION.id = me.id;
+    SESSION.is_admin = !!me.is_admin;
   } catch(e) {}
+
+  // Invite-only: anyone not signed in lands on the sign-in screen.
+  if (!SESSION.codename) { goAuth(); return; }
 
   var params = new URLSearchParams(window.location.search);
   var wid = params.get('work');
-  if (wid) {
-    await openWorkById(wid);
-  } else if (SESSION.codename) {
-    goLibrary();
-  } else {
-    goAuth();
-  }
+  if (wid) { await openWorkById(wid); }
+  else { goLibrary(); }
 }
 
 /* ── Screen routing ── */
@@ -668,16 +715,19 @@ function updateTopbar() {
   var scribeEl  = document.getElementById('topbar-scribe');
   var authBtn   = document.getElementById('tb-auth-btn');
   var logoutBtn = document.getElementById('tb-logout-btn');
+  var adminBtn  = document.getElementById('tb-admin-btn');
   var createBar = document.getElementById('lib-create-bar');
   if (SESSION.codename) {
     scribeEl.textContent = SESSION.codename;
     authBtn.style.display   = 'none';
     logoutBtn.style.display = '';
+    if (adminBtn) adminBtn.style.display = SESSION.is_admin ? '' : 'none';
     if (createBar) createBar.style.display = 'flex';
   } else {
     scribeEl.textContent = '';
     authBtn.style.display   = '';
     logoutBtn.style.display = 'none';
+    if (adminBtn) adminBtn.style.display = 'none';
     if (createBar) createBar.style.display = 'none';
   }
 }
@@ -693,14 +743,6 @@ function goCreate(type) {
 }
 
 /* ── Auth ── */
-function switchTab(tab) {
-  document.getElementById('auth-login-form').style.display    = tab === 'login'    ? '' : 'none';
-  document.getElementById('auth-register-form').style.display = tab === 'register' ? '' : 'none';
-  document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
-  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
-  document.getElementById('auth-err').textContent = '';
-}
-
 async function doLogin() {
   var codename   = document.getElementById('login-name').value.trim();
   var passphrase = document.getElementById('login-pass').value;
@@ -708,21 +750,8 @@ async function doLogin() {
   try {
     var res = await api('POST', '/api/auth/login', { codename: codename, passphrase: passphrase });
     SESSION.codename = res.codename;
-    goLibrary();
-  } catch(e) {
-    document.getElementById('auth-err').textContent = e.message;
-  }
-}
-
-async function doRegister() {
-  var codename  = document.getElementById('reg-name').value.trim();
-  var pass      = document.getElementById('reg-pass').value;
-  var pass2     = document.getElementById('reg-pass2').value;
-  document.getElementById('auth-err').textContent = '';
-  if (pass !== pass2) { document.getElementById('auth-err').textContent = 'Passphrases do not match.'; return; }
-  try {
-    var res = await api('POST', '/api/auth/register', { codename: codename, passphrase: pass });
-    SESSION.codename = res.codename;
+    SESSION.is_admin = !!res.is_admin;
+    try { var me = await api('GET','/api/auth/me'); SESSION.id = me.id; } catch(e2){}
     goLibrary();
   } catch(e) {
     document.getElementById('auth-err').textContent = e.message;
@@ -731,12 +760,100 @@ async function doRegister() {
 
 async function doLogout() {
   try { await api('POST', '/api/auth/logout'); } catch(e) {}
-  SESSION.codename = null; SESSION.id = null;
-  goLibrary();
+  SESSION.codename = null; SESSION.id = null; SESSION.is_admin = false;
+  goAuth();
 }
 
 document.getElementById('login-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-document.getElementById('reg-pass2').addEventListener('keydown', function(e){ if(e.key==='Enter') doRegister(); });
+
+/* ── Curator's Desk (admin) ── */
+var ADMIN_USERS = [];
+var ADMIN_WORKS = [];
+
+function goAdmin() {
+  if (!SESSION.is_admin) { goLibrary(); return; }
+  showScreen('admin');
+  document.getElementById('adm-new-result').innerHTML = '';
+  ADMIN_WORKS = [];
+  document.getElementById('assign-list').innerHTML = '<div class="adm-hint" style="padding:1rem">Select an operator to manage their library.</div>';
+  loadAdminUsers();
+}
+
+function genPass() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  var arr = new Uint32Array(14);
+  (window.crypto || window.msCrypto).getRandomValues(arr);
+  var out = '';
+  for (var i=0;i<14;i++) out += chars[arr[i] % chars.length];
+  document.getElementById('adm-new-pass').value = out;
+}
+
+async function createAccount() {
+  var codename  = document.getElementById('adm-new-name').value.trim();
+  var pass      = document.getElementById('adm-new-pass').value.trim();
+  var makeAdmin = document.getElementById('adm-new-admin').checked;
+  var resEl     = document.getElementById('adm-new-result');
+  resEl.innerHTML = '';
+  if (!codename || !pass) { toast('Codename and passphrase are both required.'); return; }
+  try {
+    await api('POST', '/api/admin/users', { codename: codename, passphrase: pass, is_admin: makeAdmin });
+    resEl.innerHTML = '<div class="adm-cred"><b>Account created — give these to the operator:</b><br>Codename: '+esc(codename)+'<br>Passphrase: '+esc(pass)+'</div>';
+    document.getElementById('adm-new-name').value = '';
+    document.getElementById('adm-new-pass').value = '';
+    document.getElementById('adm-new-admin').checked = false;
+    loadAdminUsers();
+    toast('Account created.');
+  } catch(e) { toast(e.message); }
+}
+
+async function loadAdminUsers() {
+  try {
+    var data = await api('GET', '/api/admin/users');
+    ADMIN_USERS = data.users || [];
+  } catch(e) { toast('Could not load members.'); return; }
+  document.getElementById('adm-users').innerHTML = ADMIN_USERS.map(function(u){
+    return '<li><span>'+esc(u.codename)+(u.is_admin?' <span class="u-admin">Curator</span>':'')+'</span>'
+      +'<span class="u-meta">'+(u.holding_count||0)+' assigned &middot; '+(u.authored_count||0)+' written</span></li>';
+  }).join('');
+  var sel = document.getElementById('adm-assign-user');
+  var prev = sel.value;
+  sel.innerHTML = '<option value="">— choose an operator —</option>' + ADMIN_USERS.map(function(u){
+    return '<option value="'+esc(u.id)+'">'+esc(u.codename)+(u.is_admin?' (curator)':'')+'</option>';
+  }).join('');
+  if (prev) sel.value = prev;
+}
+
+async function loadAssignments() {
+  var scribeId = document.getElementById('adm-assign-user').value;
+  var listEl = document.getElementById('assign-list');
+  if (!scribeId) { listEl.innerHTML = '<div class="adm-hint" style="padding:1rem">Select an operator to manage their library.</div>'; return; }
+  try {
+    if (!ADMIN_WORKS.length) { var w = await api('GET', '/api/admin/works'); ADMIN_WORKS = w.works || []; }
+    var h = await api('GET', '/api/admin/users/'+scribeId+'/holdings');
+    var held = {};
+    (h.work_ids||[]).forEach(function(id){ held[id] = true; });
+    if (!ADMIN_WORKS.length) { listEl.innerHTML = '<div class="adm-hint" style="padding:1rem">The Library holds no works yet.</div>'; return; }
+    listEl.innerHTML = ADMIN_WORKS.map(function(w){
+      var on = !!held[w.id];
+      return '<div class="assign-row">'
+        +'<div class="assign-info"><div class="assign-t">'+esc(w.title)+'</div>'
+        +'<div class="assign-m">'+esc(w.scribe_name||'')+' &middot; '+(w.type==='book'?'Tome':'Parchment')+'</div></div>'
+        +'<button class="assign-btn'+(on?' on':'')+'" onclick="toggleAssign(this,\''+scribeId+'\',\''+w.id+'\')">'+(on?'Assigned ✓':'Assign')+'</button>'
+        +'</div>';
+    }).join('');
+  } catch(e) { toast(e.message); }
+}
+
+async function toggleAssign(btn, scribeId, workId) {
+  var on = btn.classList.contains('on');
+  btn.disabled = true;
+  try {
+    if (on) { await api('POST','/api/admin/unassign',{scribe_id:scribeId,work_id:workId}); btn.classList.remove('on'); btn.textContent='Assign'; }
+    else    { await api('POST','/api/admin/assign',  {scribe_id:scribeId,work_id:workId}); btn.classList.add('on');    btn.textContent='Assigned ✓'; }
+    loadAdminUsers();
+  } catch(e) { toast(e.message); }
+  btn.disabled = false;
+}
 
 /* ── Library ── */
 async function loadLibrary() {

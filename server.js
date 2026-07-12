@@ -7,7 +7,7 @@ const bcrypt       = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const path         = require('path');
 
-const { initDb, scribes, works, entries, saveEntriesForWork } = require('./db');
+const { initDb, scribes, works, entries, holdings, saveEntriesForWork } = require('./db');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +28,20 @@ function requireAuth(req, res, next) {
   next();
 }
 
+function requireAdmin(req, res, next) {
+  if (!req.session?.scribe?.id) return res.status(401).json({ error: 'You must be signed in.' });
+  const me = scribes.findById.get(req.session.scribe.id);
+  if (!me || !me.is_admin) return res.status(403).json({ error: 'Curator access only.' });
+  req.me = me;
+  next();
+}
+
+function isAdmin(req) {
+  if (!req.session?.scribe?.id) return false;
+  const me = scribes.findById.get(req.session.scribe.id);
+  return !!(me && me.is_admin);
+}
+
 function sanitize(str, max=500) {
   if (typeof str !== 'string') return '';
   return str.trim().slice(0, max);
@@ -41,28 +55,7 @@ function workWithEntries(work) {
 }
 
 // ── AUTH ────────────────────────────────────────────────────
-app.post('/api/auth/register', async (req, res) => {
-  try {
-    const codename   = sanitize(req.body.codename, 40);
-    const passphrase = sanitize(req.body.passphrase, 200);
-    if (!codename || codename.length < 2)
-      return res.status(400).json({ error: 'Codename must be at least 2 characters.' });
-    if (!passphrase || passphrase.length < 4)
-      return res.status(400).json({ error: 'Passphrase must be at least 4 characters.' });
-    if (!/^[\w\s\-'.]+$/.test(codename))
-      return res.status(400).json({ error: 'Codename may only contain letters, numbers, spaces, hyphens, and apostrophes.' });
-    const existing = scribes.findByCodename.get(codename);
-    if (existing) return res.status(409).json({ error: 'That codename is already claimed.' });
-    const hashed = await bcrypt.hash(passphrase, 10);
-    const id = uuidv4();
-    scribes.create.run({ id, codename, passphrase: hashed });
-    req.session.scribe = { id, codename };
-    return res.json({ ok: true, codename });
-  } catch(err) {
-    console.error('register error:', err);
-    return res.status(500).json({ error: 'Something went wrong.' });
-  }
-});
+// Self-registration is disabled — accounts are created by a curator (see /api/admin/users).
 
 app.post('/api/auth/login', async (req, res) => {
   try {
@@ -73,7 +66,7 @@ app.post('/api/auth/login', async (req, res) => {
     const match = await bcrypt.compare(passphrase, scribe.passphrase);
     if (!match) return res.status(401).json({ error: 'Incorrect passphrase.' });
     req.session.scribe = { id: scribe.id, codename: scribe.codename };
-    return res.json({ ok: true, codename: scribe.codename });
+    return res.json({ ok: true, codename: scribe.codename, is_admin: !!scribe.is_admin });
   } catch(err) {
     console.error('login error:', err);
     return res.status(500).json({ error: 'Something went wrong.' });
@@ -85,22 +78,34 @@ app.post('/api/auth/logout', (req, res) => {
 });
 
 app.get('/api/auth/me', (req, res) => {
-  if (req.session?.scribe) return res.json({ codename: req.session.scribe.codename, id: req.session.scribe.id });
+  if (req.session?.scribe) {
+    const me = scribes.findById.get(req.session.scribe.id);
+    return res.json({ codename: req.session.scribe.codename, id: req.session.scribe.id, is_admin: !!(me && me.is_admin) });
+  }
   return res.json({ codename: null });
 });
 
 // ── LIBRARY ─────────────────────────────────────────────────
-app.get('/api/library', (req, res) => {
+app.get('/api/library', requireAuth, (req, res) => {
   try {
-    const all = works.allPublic.all();
-    res.json({ books: all.filter(w=>w.type==='book'), parchments: all.filter(w=>w.type==='parchment') });
+    const admin = isAdmin(req);
+    const all = admin ? works.allPublic.all() : works.forScribeLibrary.all(req.session.scribe.id);
+    res.json({
+      books: all.filter(w=>w.type==='book'),
+      parchments: all.filter(w=>w.type==='parchment'),
+      is_admin: admin
+    });
   } catch(err) { res.status(500).json({ error: 'Could not load the archive.' }); }
 });
 
-app.get('/api/works/:id', (req, res) => {
+app.get('/api/works/:id', requireAuth, (req, res) => {
   try {
     const work = works.findById.get(req.params.id);
     if (!work) return res.status(404).json({ error: 'Not found.' });
+    const allowed = isAdmin(req)
+      || work.scribe_id === req.session.scribe.id
+      || holdings.has.get(req.session.scribe.id, work.id);
+    if (!allowed) return res.status(403).json({ error: 'This volume has not been assigned to your library.' });
     const scribe = scribes.findById.get(work.scribe_id);
     res.json({ ...workWithEntries(work), scribe_name: scribe?.codename || 'Unknown' });
   } catch(err) { res.status(500).json({ error: 'Could not retrieve this work.' }); }
@@ -151,9 +156,83 @@ app.delete('/api/works/:id', requireAuth, (req, res) => {
   } catch(err) { res.status(500).json({ error: 'Could not remove this work.' }); }
 });
 
+// ── ADMIN (curator only) ────────────────────────────────────
+app.get('/api/admin/users', requireAdmin, (req, res) => {
+  res.json({ users: scribes.all.all() });
+});
+
+app.post('/api/admin/users', requireAdmin, async (req, res) => {
+  try {
+    const codename   = sanitize(req.body.codename, 40);
+    const passphrase = sanitize(req.body.passphrase, 200);
+    if (!codename || codename.length < 2)
+      return res.status(400).json({ error: 'Codename must be at least 2 characters.' });
+    if (!passphrase || passphrase.length < 4)
+      return res.status(400).json({ error: 'Passphrase must be at least 4 characters.' });
+    if (!/^[\w\s\-'.]+$/.test(codename))
+      return res.status(400).json({ error: 'Codename may only contain letters, numbers, spaces, hyphens, and apostrophes.' });
+    if (scribes.findByCodename.get(codename))
+      return res.status(409).json({ error: 'That codename is already claimed.' });
+    const id = uuidv4();
+    scribes.create.run({ id, codename, passphrase: await bcrypt.hash(passphrase, 10), is_admin: req.body.is_admin ? 1 : 0 });
+    res.status(201).json({ ok: true, id, codename });
+  } catch(err) { console.error(err); res.status(500).json({ error: 'Could not create the account.' }); }
+});
+
+app.get('/api/admin/works', requireAdmin, (req, res) => {
+  res.json({ works: works.allPublic.all() });
+});
+
+app.get('/api/admin/users/:id/holdings', requireAdmin, (req, res) => {
+  res.json({ work_ids: holdings.workIdsForScribe.all(req.params.id).map(r => r.work_id) });
+});
+
+app.post('/api/admin/assign', requireAdmin, (req, res) => {
+  try {
+    const scribe_id = sanitize(req.body.scribe_id, 60);
+    const work_id   = sanitize(req.body.work_id, 60);
+    if (!scribes.findById.get(scribe_id)) return res.status(404).json({ error: 'No such account.' });
+    if (!works.findById.get(work_id))     return res.status(404).json({ error: 'No such work.' });
+    holdings.assign.run({ id: uuidv4(), scribe_id, work_id, assigned_by: req.session.scribe.id });
+    res.json({ ok: true });
+  } catch(err) { console.error(err); res.status(500).json({ error: 'Could not assign the copy.' }); }
+});
+
+app.post('/api/admin/unassign', requireAdmin, (req, res) => {
+  try {
+    const scribe_id = sanitize(req.body.scribe_id, 60);
+    const work_id   = sanitize(req.body.work_id, 60);
+    holdings.unassign.run(scribe_id, work_id);
+    res.json({ ok: true });
+  } catch(err) { console.error(err); res.status(500).json({ error: 'Could not unassign the copy.' }); }
+});
+
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+
+// Ensure the curator (admin) account exists. Codename defaults to "K-M".
+// On first boot with an ADMIN_PASS set, the account is created; if it already
+// exists it is (re)promoted to admin, and its passphrase reset only if ADMIN_RESET=1.
+async function ensureAdmin() {
+  const NAME = process.env.ADMIN_NAME || 'K-M';
+  const existing = scribes.findByCodename.get(NAME);
+  if (existing) {
+    if (!existing.is_admin) { scribes.setAdmin.run(existing.id, 1); console.log(`Promoted ${NAME} to curator.`); }
+    if (process.env.ADMIN_PASS && process.env.ADMIN_RESET === '1') {
+      scribes.setPass.run(existing.id, await bcrypt.hash(process.env.ADMIN_PASS, 10));
+      console.log(`Reset ${NAME} passphrase.`);
+    }
+    return;
+  }
+  if (!process.env.ADMIN_PASS) {
+    console.warn(`No curator account and no ADMIN_PASS set — set ADMIN_PASS to bootstrap the ${NAME} account.`);
+    return;
+  }
+  scribes.create.run({ id: uuidv4(), codename: NAME, passphrase: await bcrypt.hash(process.env.ADMIN_PASS, 10), is_admin: 1 });
+  console.log(`Bootstrapped curator account: ${NAME}`);
+}
 
 // ── BOOT ────────────────────────────────────────────────────
 initDb().then(async () => {
+  await ensureAdmin();
   app.listen(PORT, () => console.log(`✦ The Black Library is open on port ${PORT}`));
 }).catch(err => { console.error('DB init failed:', err); process.exit(1); });
