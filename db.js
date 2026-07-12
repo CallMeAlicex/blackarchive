@@ -41,6 +41,7 @@ const SCHEMA = `
     author      TEXT,
     subtitle    TEXT,
     meta        TEXT NOT NULL DEFAULT '{}',
+    archived    INTEGER NOT NULL DEFAULT 0,
     created_at  INTEGER NOT NULL DEFAULT (strftime('%s','now')),
     updated_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
   );
@@ -68,11 +69,17 @@ const SCHEMA = `
   CREATE INDEX IF NOT EXISTS idx_holdings_scribe ON holdings(scribe_id);
 `;
 
-// Migrate older databases that predate the is_admin column.
+// Migrate older databases that predate newer columns.
 function migrate() {
-  const cols = all(`PRAGMA table_info(scribes)`).map(c => c.name);
-  if (!cols.includes('is_admin')) {
+  const scols = all(`PRAGMA table_info(scribes)`).map(c => c.name);
+  if (!scols.includes('is_admin')) {
     db.run(`ALTER TABLE scribes ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0`);
+  }
+  const wcols = all(`PRAGMA table_info(works)`).map(c => c.name);
+  if (!wcols.includes('archived')) {
+    db.run(`ALTER TABLE works ADD COLUMN archived INTEGER NOT NULL DEFAULT 0`);
+    // Grandfather every pre-existing work into the Master Archive (one-time, on first add of the column).
+    db.run(`UPDATE works SET archived=1`);
   }
 }
 
@@ -126,8 +133,10 @@ const holdings = {
 };
 
 const works = {
-  create: { run: (p) => { run(`INSERT INTO works (id,scribe_id,type,title,author,subtitle,meta) VALUES (?,?,?,?,?,?,?)`,
-    [p.id, p.scribe_id, p.type, p.title, p.author||'', p.subtitle||'', p.meta||'{}']); } },
+  create: { run: (p) => { run(`INSERT INTO works (id,scribe_id,type,title,author,subtitle,meta,archived) VALUES (?,?,?,?,?,?,?,?)`,
+    [p.id, p.scribe_id, p.type, p.title, p.author||'', p.subtitle||'', p.meta||'{}', p.archived ? 1 : 0]); } },
+
+  setArchived: { run: (id, val) => { run(`UPDATE works SET archived=? WHERE id=?`, [val ? 1 : 0, id]); } },
 
   update: { run: (p) => { run(`UPDATE works SET title=?,author=?,subtitle=?,meta=?,updated_at=strftime('%s','now') WHERE id=? AND scribe_id=?`,
     [p.title, p.author||'', p.subtitle||'', p.meta||'{}', p.id, p.scribe_id]); } },
@@ -140,6 +149,25 @@ const works = {
     SELECT w.*, s.codename as scribe_name,
            (SELECT COUNT(*) FROM entries e WHERE e.work_id=w.id) as entry_count
     FROM works w JOIN scribes s ON s.id=w.scribe_id
+    ORDER BY w.created_at DESC
+  `) },
+
+  // The Master Archive: works the curator has adopted (or that were grandfathered in).
+  masterArchive: { all: () => all(`
+    SELECT w.*, s.codename as scribe_name,
+           (SELECT COUNT(*) FROM entries e WHERE e.work_id=w.id) as entry_count,
+           (SELECT COUNT(*) FROM holdings h WHERE h.work_id=w.id) as copies_out
+    FROM works w JOIN scribes s ON s.id=w.scribe_id
+    WHERE w.archived=1
+    ORDER BY w.created_at DESC
+  `) },
+
+  // Operator-authored works not yet adopted — candidates for the Master Archive.
+  pendingAdoption: { all: () => all(`
+    SELECT w.*, s.codename as scribe_name,
+           (SELECT COUNT(*) FROM entries e WHERE e.work_id=w.id) as entry_count
+    FROM works w JOIN scribes s ON s.id=w.scribe_id
+    WHERE w.archived=0
     ORDER BY w.created_at DESC
   `) },
 

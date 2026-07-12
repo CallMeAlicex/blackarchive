@@ -584,10 +584,18 @@ a{color:inherit;text-decoration:none}
       <ul class="adm-users" id="adm-users"></ul>
     </div>
     <div class="adm-panel">
-      <h3>Assign Copies</h3>
-      <div class="adm-hint">Choose an operator, then grant or revoke copies of the Library's works. Assigned works appear in that operator's personal library.</div>
+      <h3>Master Archive</h3>
+      <div class="adm-hint">Operators write their own tomes. Adopt one into the Master Archive to make it available for checking out to other operators.</div>
+      <label class="fl">Awaiting adoption</label>
+      <div class="assign-list" id="pending-list" style="margin-bottom:1.2rem"><div class="adm-hint" style="padding:1rem">No operator works awaiting adoption.</div></div>
+      <label class="fl">In the Master Archive</label>
+      <div class="assign-list" id="archive-list"><div class="adm-hint" style="padding:1rem">The Master Archive is empty.</div></div>
+    </div>
+    <div class="adm-panel" style="grid-column:1/-1">
+      <h3>Check Out Copies</h3>
+      <div class="adm-hint">Choose an operator, then check out or return copies of Master Archive works. Checked-out works appear in that operator's personal library.</div>
       <label class="fl">Operator</label>
-      <select class="fi-wide" id="adm-assign-user" onchange="loadAssignments()" style="margin-bottom:1rem"></select>
+      <select class="fi-wide" id="adm-assign-user" onchange="loadAssignments()" style="margin-bottom:1rem;max-width:360px"></select>
       <div class="assign-list" id="assign-list"><div class="adm-hint" style="padding:1rem">Select an operator to manage their library.</div></div>
     </div>
   </div>
@@ -777,6 +785,40 @@ function goAdmin() {
   ADMIN_WORKS = [];
   document.getElementById('assign-list').innerHTML = '<div class="adm-hint" style="padding:1rem">Select an operator to manage their library.</div>';
   loadAdminUsers();
+  loadArchive();
+}
+
+async function loadArchive() {
+  try {
+    var pend = (await api('GET', '/api/admin/pending')).works || [];
+    var arch = (await api('GET', '/api/admin/archive')).works || [];
+    ADMIN_WORKS = arch;
+    var pEl = document.getElementById('pending-list');
+    pEl.innerHTML = pend.length ? pend.map(function(w){
+      return '<div class="assign-row"><div class="assign-info"><div class="assign-t">'+esc(w.title)+'</div>'
+        +'<div class="assign-m">by '+esc(w.scribe_name||'')+' &middot; '+(w.type==='book'?'Tome':'Parchment')+'</div></div>'
+        +'<button class="assign-btn" onclick="adoptWork(this,\''+w.id+'\')">Adopt →</button></div>';
+    }).join('') : '<div class="adm-hint" style="padding:1rem">No operator works awaiting adoption.</div>';
+    var aEl = document.getElementById('archive-list');
+    aEl.innerHTML = arch.length ? arch.map(function(w){
+      return '<div class="assign-row"><div class="assign-info"><div class="assign-t">'+esc(w.title)+'</div>'
+        +'<div class="assign-m">by '+esc(w.scribe_name||'')+' &middot; '+(w.copies_out||0)+' checked out</div></div>'
+        +'<button class="assign-btn on" onclick="releaseWork(this,\''+w.id+'\')">Release</button></div>';
+    }).join('') : '<div class="adm-hint" style="padding:1rem">The Master Archive is empty.</div>';
+  } catch(e) { toast(e.message); }
+}
+
+async function adoptWork(btn, workId) {
+  btn.disabled = true;
+  try { await api('POST','/api/admin/adopt',{work_id:workId}); toast('Adopted into the Master Archive.'); loadArchive(); }
+  catch(e) { toast(e.message); btn.disabled = false; }
+}
+
+async function releaseWork(btn, workId) {
+  btn.disabled = true;
+  try { await api('POST','/api/admin/release',{work_id:workId}); toast('Released from the Master Archive.'); loadArchive();
+    var sel=document.getElementById('adm-assign-user'); if(sel && sel.value) loadAssignments(); }
+  catch(e) { toast(e.message); btn.disabled = false; }
 }
 
 function genPass() {
@@ -828,11 +870,11 @@ async function loadAssignments() {
   var listEl = document.getElementById('assign-list');
   if (!scribeId) { listEl.innerHTML = '<div class="adm-hint" style="padding:1rem">Select an operator to manage their library.</div>'; return; }
   try {
-    if (!ADMIN_WORKS.length) { var w = await api('GET', '/api/admin/works'); ADMIN_WORKS = w.works || []; }
+    var w = await api('GET', '/api/admin/archive'); ADMIN_WORKS = w.works || [];
     var h = await api('GET', '/api/admin/users/'+scribeId+'/holdings');
     var held = {};
     (h.work_ids||[]).forEach(function(id){ held[id] = true; });
-    if (!ADMIN_WORKS.length) { listEl.innerHTML = '<div class="adm-hint" style="padding:1rem">The Library holds no works yet.</div>'; return; }
+    if (!ADMIN_WORKS.length) { listEl.innerHTML = '<div class="adm-hint" style="padding:1rem">The Master Archive is empty. Adopt a work first.</div>'; return; }
     listEl.innerHTML = ADMIN_WORKS.map(function(w){
       var on = !!held[w.id];
       return '<div class="assign-row">'

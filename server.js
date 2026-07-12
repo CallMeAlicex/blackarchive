@@ -118,9 +118,11 @@ app.post('/api/works', requireAuth, (req, res) => {
     if (!['book','parchment'].includes(type)) return res.status(400).json({ error: 'Invalid type.' });
     if (!sanitize(title)) return res.status(400).json({ error: 'A title is required.' });
     const id = uuidv4();
+    // Curator-authored works enter the Master Archive directly; operator works stay
+    // personal until the curator adopts them.
     works.create.run({ id, scribe_id: req.session.scribe.id, type,
       title: sanitize(title,200), author: sanitize(author,200),
-      subtitle: sanitize(subtitle,300), meta: JSON.stringify(meta||{}) });
+      subtitle: sanitize(subtitle,300), meta: JSON.stringify(meta||{}), archived: isAdmin(req) ? 1 : 0 });
     if (Array.isArray(ents) && ents.length) {
       saveEntriesForWork(id, ents.map(e => ({ id: uuidv4(),
         title: sanitize(e.title,200), date_line: sanitize(e.date_line,200), body: sanitize(e.body,20000) })));
@@ -187,12 +189,36 @@ app.get('/api/admin/users/:id/holdings', requireAdmin, (req, res) => {
   res.json({ work_ids: holdings.workIdsForScribe.all(req.params.id).map(r => r.work_id) });
 });
 
+app.get('/api/admin/archive', requireAdmin, (req, res) => {
+  res.json({ works: works.masterArchive.all() });
+});
+
+app.get('/api/admin/pending', requireAdmin, (req, res) => {
+  res.json({ works: works.pendingAdoption.all() });
+});
+
+app.post('/api/admin/adopt', requireAdmin, (req, res) => {
+  const work_id = sanitize(req.body.work_id, 60);
+  if (!works.findById.get(work_id)) return res.status(404).json({ error: 'No such work.' });
+  works.setArchived.run(work_id, 1);
+  res.json({ ok: true });
+});
+
+app.post('/api/admin/release', requireAdmin, (req, res) => {
+  const work_id = sanitize(req.body.work_id, 60);
+  if (!works.findById.get(work_id)) return res.status(404).json({ error: 'No such work.' });
+  works.setArchived.run(work_id, 0);
+  res.json({ ok: true });
+});
+
 app.post('/api/admin/assign', requireAdmin, (req, res) => {
   try {
     const scribe_id = sanitize(req.body.scribe_id, 60);
     const work_id   = sanitize(req.body.work_id, 60);
     if (!scribes.findById.get(scribe_id)) return res.status(404).json({ error: 'No such account.' });
-    if (!works.findById.get(work_id))     return res.status(404).json({ error: 'No such work.' });
+    const work = works.findById.get(work_id);
+    if (!work) return res.status(404).json({ error: 'No such work.' });
+    if (!work.archived) return res.status(400).json({ error: 'Adopt this work into the Master Archive before checking it out.' });
     holdings.assign.run({ id: uuidv4(), scribe_id, work_id, assigned_by: req.session.scribe.id });
     res.json({ ok: true });
   } catch(err) { console.error(err); res.status(500).json({ error: 'Could not assign the copy.' }); }
