@@ -8,6 +8,7 @@ const { v4: uuidv4 } = require('uuid');
 const path         = require('path');
 
 const { initDb, scribes, works, entries, holdings, saveEntriesForWork } = require('./db');
+const { ensureReportCatchment } = require('./scripts/report-catchment');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -292,5 +293,6 @@ async function ensureAdmin() {
 // ── BOOT ────────────────────────────────────────────────────
 initDb().then(async () => {
   await ensureAdmin();
+  await ensureReportCatchment({ scribes, works, saveEntriesForWork });
   app.listen(PORT, () => console.log(`✦ The Black Library is open on port ${PORT}`));
 }).catch(err => { console.error('DB init failed:', err); process.exit(1); });
