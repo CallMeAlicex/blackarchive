@@ -75,10 +75,30 @@ const SCHEMA = `
     updated_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
   );
 
+  -- Cross-references: which souls a work (report/catchment) names.
+  CREATE TABLE IF NOT EXISTS mentions (
+    id        TEXT PRIMARY KEY,
+    soul_id   TEXT NOT NULL,
+    work_id   TEXT NOT NULL,
+    UNIQUE(soul_id, work_id)
+  );
+
+  -- Unrecorded names a report named that aren't yet in the Index — leads.
+  CREATE TABLE IF NOT EXISTS investigations (
+    id          TEXT PRIMARY KEY,
+    name        TEXT NOT NULL,
+    name_key    TEXT NOT NULL UNIQUE,
+    work_id     TEXT,
+    status      TEXT NOT NULL DEFAULT 'open',
+    created_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+  );
+
   CREATE INDEX IF NOT EXISTS idx_works_scribe ON works(scribe_id);
   CREATE INDEX IF NOT EXISTS idx_entries_work ON entries(work_id, position);
   CREATE INDEX IF NOT EXISTS idx_holdings_scribe ON holdings(scribe_id);
   CREATE INDEX IF NOT EXISTS idx_souls_name ON souls(name);
+  CREATE INDEX IF NOT EXISTS idx_mentions_soul ON mentions(soul_id);
+  CREATE INDEX IF NOT EXISTS idx_mentions_work ON mentions(work_id);
 `;
 
 // Migrate older databases that predate newer columns.
