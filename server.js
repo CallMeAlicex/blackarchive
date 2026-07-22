@@ -9,6 +9,7 @@ const path         = require('path');
 
 const { initDb, scribes, works, entries, holdings, saveEntriesForWork } = require('./db');
 const { ensureReportCatchment } = require('./scripts/report-catchment');
+const { ensurePrincesTextbook } = require('./scripts/princes-textbook');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -294,5 +295,6 @@ async function ensureAdmin() {
 initDb().then(async () => {
   await ensureAdmin();
   await ensureReportCatchment({ scribes, works, saveEntriesForWork });
+  await ensurePrincesTextbook({ scribes, works, saveEntriesForWork });
   app.listen(PORT, () => console.log(`✦ The Black Library is open on port ${PORT}`));
 }).catch(err => { console.error('DB init failed:', err); process.exit(1); });
