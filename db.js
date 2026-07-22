@@ -64,9 +64,21 @@ const SCHEMA = `
     UNIQUE(scribe_id, work_id)
   );
 
+  CREATE TABLE IF NOT EXISTS souls (
+    id          TEXT PRIMARY KEY,
+    name        TEXT NOT NULL,
+    race        TEXT,
+    status      TEXT,
+    known       TEXT NOT NULL DEFAULT '',
+    created_by  TEXT,
+    created_at  INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+    updated_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+  );
+
   CREATE INDEX IF NOT EXISTS idx_works_scribe ON works(scribe_id);
   CREATE INDEX IF NOT EXISTS idx_entries_work ON entries(work_id, position);
   CREATE INDEX IF NOT EXISTS idx_holdings_scribe ON holdings(scribe_id);
+  CREATE INDEX IF NOT EXISTS idx_souls_name ON souls(name);
 `;
 
 // Migrate older databases that predate newer columns.
@@ -193,6 +205,19 @@ const works = {
   `, [scribe_id, scribe_id, scribe_id]) },
 };
 
+// The Index of Souls — House Mournstar's record of the people of Skyrim.
+const souls = {
+  create: { run: (p) => { run(`INSERT INTO souls (id,name,race,status,known,created_by) VALUES (?,?,?,?,?,?)`,
+    [p.id, p.name, p.race||'', p.status||'', p.known||'', p.created_by||null]); } },
+  update: { run: (p) => { run(`UPDATE souls SET name=?,race=?,status=?,known=?,updated_at=strftime('%s','now') WHERE id=?`,
+    [p.name, p.race||'', p.status||'', p.known||'', p.id]); } },
+  findById:   { get: (id)   => get(`SELECT s.*, sc.codename as recorder FROM souls s LEFT JOIN scribes sc ON sc.id=s.created_by WHERE s.id=?`, [id]) },
+  findByName: { get: (name) => get(`SELECT * FROM souls WHERE lower(name)=lower(?)`, [name]) },
+  recent:     { all: (n)    => all(`SELECT * FROM souls ORDER BY updated_at DESC LIMIT ?`, [n||3]) },
+  all:        { all: ()     => all(`SELECT s.*, sc.codename as recorder FROM souls s LEFT JOIN scribes sc ON sc.id=s.created_by ORDER BY lower(s.name) ASC`) },
+  count:      { get: ()     => get(`SELECT COUNT(*) as n FROM souls`) },
+};
+
 const entries = {
   insert:       { run: (p) => { run(`INSERT INTO entries (id,work_id,position,title,date_line,body) VALUES (?,?,?,?,?,?)`,
     [p.id, p.work_id, p.position, p.title||'', p.date_line||'', p.body||'']); } },
@@ -223,4 +248,4 @@ async function initDb() {
   return db;
 }
 
-module.exports = { initDb, db: () => db, scribes, works, entries, holdings, saveEntriesForWork };
+module.exports = { initDb, db: () => db, scribes, works, entries, holdings, souls, saveEntriesForWork };

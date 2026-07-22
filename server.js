@@ -7,9 +7,10 @@ const bcrypt       = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const path         = require('path');
 
-const { initDb, scribes, works, entries, holdings, saveEntriesForWork } = require('./db');
+const { initDb, scribes, works, entries, holdings, souls, saveEntriesForWork } = require('./db');
 const { ensureReportCatchment } = require('./scripts/report-catchment');
 const { ensurePrincesTextbook } = require('./scripts/princes-textbook');
+const { ensureSoulsSeed } = require('./scripts/souls-seed');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -85,6 +86,56 @@ app.get('/api/auth/me', (req, res) => {
     return res.json({ codename: req.session.scribe.codename, id: req.session.scribe.id, is_admin: !!(me && me.is_admin) });
   }
   return res.json({ codename: null });
+});
+
+// ── THE HALL (landing summary) ──────────────────────────────
+// Everything the Hall's section cards need, in one call.
+app.get('/api/hall', requireAuth, (req, res) => {
+  try {
+    const recentSouls = souls.recent.all(3);
+    const soulCount = souls.count.get()?.n || 0;
+    const tomes = works.masterArchive.all().filter(w => w.type === 'book').slice(0, 3);
+    const sworn = scribes.all.all().map(s => ({
+      codename: s.codename, is_admin: !!s.is_admin, filed: s.authored_count || 0,
+    }));
+    res.json({ souls: recentSouls, soul_count: soulCount, tomes, sworn, is_admin: isAdmin(req) });
+  } catch (err) { console.error(err); res.status(500).json({ error: 'The Hall could not be opened.' }); }
+});
+
+// ── INDEX OF SOULS ──────────────────────────────────────────
+app.get('/api/souls', requireAuth, (req, res) => {
+  try {
+    const q = sanitize(req.query.q, 80).toLowerCase();
+    let list = souls.all.all();
+    if (q) list = list.filter(s =>
+      (s.name||'').toLowerCase().includes(q) ||
+      (s.race||'').toLowerCase().includes(q) ||
+      (s.status||'').toLowerCase().includes(q) ||
+      (s.known||'').toLowerCase().includes(q));
+    res.json({ souls: list, count: souls.count.get()?.n || 0 });
+  } catch (err) { res.status(500).json({ error: 'Could not open the Index of Souls.' }); }
+});
+
+app.get('/api/souls/:id', requireAuth, (req, res) => {
+  const soul = souls.findById.get(req.params.id);
+  if (!soul) return res.status(404).json({ error: 'No such soul is recorded.' });
+  res.json(soul);
+});
+
+app.post('/api/souls', requireAuth, (req, res) => {
+  try {
+    const name = sanitize(req.body.name, 120);
+    if (!name) return res.status(400).json({ error: 'A name is required to record a soul.' });
+    if (souls.findByName.get(name))
+      return res.status(409).json({ error: 'That soul is already in the Index.' });
+    const id = uuidv4();
+    souls.create.run({ id, name,
+      race:   sanitize(req.body.race, 60),
+      status: sanitize(req.body.status, 120),
+      known:  sanitize(req.body.known, 8000),
+      created_by: req.session.scribe.id });
+    res.status(201).json(souls.findById.get(id));
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Could not record this soul.' }); }
 });
 
 // ── LIBRARY ─────────────────────────────────────────────────
@@ -296,5 +347,6 @@ initDb().then(async () => {
   await ensureAdmin();
   await ensureReportCatchment({ scribes, works, saveEntriesForWork });
   await ensurePrincesTextbook({ scribes, works, saveEntriesForWork });
+  ensureSoulsSeed({ scribes, souls });
   app.listen(PORT, () => console.log(`✦ The Black Library is open on port ${PORT}`));
 }).catch(err => { console.error('DB init failed:', err); process.exit(1); });

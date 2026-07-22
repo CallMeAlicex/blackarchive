@@ -516,15 +516,79 @@ a{color:inherit;text-decoration:none}
   .reader-topbar .rd-scribe{display:none}
   .adm-wrap{grid-template-columns:1fr}
 }
+
+/* ── The Hall ── */
+.hall-hearth{text-align:center;padding:2.6rem 1.5rem 1.4rem;position:relative;background:radial-gradient(120% 100% at 50% 0%,var(--crimson-glow),transparent 68%)}
+.hall-hearth::after{content:'';display:block;height:1px;background:linear-gradient(to right,transparent,var(--crimson-dim),transparent);margin-top:1.6rem}
+.hall-name{font-family:var(--ff-deco);font-weight:700;font-size:clamp(1.6rem,4vw,2.3rem);color:var(--silver);letter-spacing:.02em;filter:drop-shadow(0 0 14px var(--silver-glow))}
+.hall-line{font-family:var(--ff-serif);font-style:italic;font-size:.8rem;color:var(--text-dim);margin-top:.5rem}
+.hall-motto{font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);opacity:.85;margin-top:.7rem}
+.hall-grid{max-width:1000px;margin:1.4rem auto 0;padding:0 1.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:1rem}
+.hcard{display:flex;flex-direction:column;border:1px solid var(--silver-border);background:rgba(18,18,32,.42);min-height:210px}
+.hcard.crimson{border-color:var(--crimson-dim);background:rgba(28,12,18,.36)}
+.hcard-head{display:flex;justify-content:space-between;align-items:baseline;padding:.7rem .85rem;border-bottom:1px solid var(--silver-border)}
+.hcard.crimson .hcard-head{border-bottom-color:var(--crimson-dim)}
+.hcard-h{font-family:var(--ff-caps);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim)}
+.hcard.crimson .hcard-h{color:var(--crimson-hi)}
+.hcard-count{font-family:var(--ff-serif);font-size:.58rem;letter-spacing:.06em;color:var(--text-ghost)}
+.hcard-body{flex:1;padding:.2rem .85rem}
+.hrow{padding:.55rem 0;border-bottom:1px solid rgba(190,190,210,.08)}
+.hrow:last-child{border-bottom:none}
+.hrow-t{font-family:var(--ff-serif);font-size:.86rem;color:var(--text)}
+.hrow-s{font-family:var(--ff-serif);font-style:italic;font-size:.66rem;color:var(--text-ghost);margin-top:.15rem}
+.hrow-r{display:flex;justify-content:space-between;align-items:center}
+.hcard-foot{padding:.6rem .85rem;border-top:1px solid var(--silver-border);text-align:right}
+.hcard.crimson .hcard-foot{border-top-color:var(--crimson-dim)}
+.hcard-link{font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);cursor:pointer}
+.hcard.crimson .hcard-link{color:var(--crimson-hi)}
+.hcard-link:hover{color:var(--silver)}
+.hcard.forthcoming{opacity:.62}
+.hcard.forthcoming .hcard-body{display:flex;align-items:center;justify-content:center;text-align:center}
+.hcard-soon{font-family:var(--ff-serif);font-style:italic;font-size:.72rem;color:var(--text-ghost);line-height:1.5}
+.wtag{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:.1rem .35rem;margin-right:.35rem;color:var(--void)}
+.wtag.seek{background:var(--gold)}
+.wtag.watch{background:#6a7a8a}
+.wtag.verify{background:#5a2028;color:var(--parch)}
+.hall-foot{max-width:1000px;margin:1.2rem auto 0;padding:0 1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem}
+.hall-foot-note{font-family:var(--ff-serif);font-style:italic;font-size:.66rem;color:var(--text-ghost)}
+.hall-ooc{font-family:var(--ff-caps);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:#7a8a9a;border:1px dashed rgba(120,140,160,.3);padding:.35rem .7rem;cursor:pointer}
+
+/* ── Index of Souls ── */
+.souls-wrap{max-width:820px;margin:0 auto;padding:1.4rem 1.2rem 3rem}
+.souls-top{display:flex;align-items:center;gap:1rem;margin-bottom:.4rem}
+.souls-title{font-family:var(--ff-deco);font-size:1.4rem;color:var(--silver);filter:drop-shadow(0 0 10px var(--silver-ghost));flex:1}
+.souls-count{font-family:var(--ff-caps);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--crimson-hi)}
+.souls-search{width:100%;margin:.6rem 0 1rem;padding:.7rem .9rem;background:rgba(4,4,10,.8);border:1px solid var(--silver-border);color:var(--text);font-family:var(--ff-serif);font-size:.82rem}
+.souls-search:focus{outline:none;border-color:var(--silver-border-hi)}
+.soul-form{border:1px solid var(--crimson-dim);background:rgba(28,12,18,.3);padding:.9rem;margin-bottom:1.4rem}
+.soul-form h4{font-family:var(--ff-caps);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--crimson-hi);margin-bottom:.6rem}
+.soul-form .fi,.soul-form .fi-wide{width:100%;margin-bottom:.55rem;padding:.55rem .7rem;background:rgba(4,4,10,.8);border:1px solid var(--silver-border);color:var(--text);font-family:var(--ff-serif);font-size:.8rem}
+.soul-form textarea{resize:vertical;min-height:4.5rem}
+.soul-form-row{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}
+.soul-list{display:flex;flex-direction:column}
+.soul-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem .2rem;border-bottom:1px solid rgba(190,190,210,.1);cursor:pointer}
+.soul-row:hover{background:rgba(190,190,210,.03)}
+.soul-row-name{font-family:var(--ff-serif);font-size:.98rem;color:var(--text)}
+.soul-row-sub{font-family:var(--ff-serif);font-style:italic;font-size:.68rem;color:var(--text-ghost);margin-top:.12rem}
+.soul-row-race{font-family:var(--ff-caps);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);white-space:nowrap}
+.soul-detail{max-width:720px;margin:0 auto;padding:1.4rem 1.4rem 3rem}
+.sd-name{font-family:var(--ff-deco);font-size:1.7rem;color:var(--silver);filter:drop-shadow(0 0 10px var(--silver-ghost))}
+.sd-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0 1rem}
+.sd-tag{font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;padding:.2rem .6rem;border:1px solid var(--silver-border);color:var(--silver-dim)}
+.sd-tag.status{border-color:var(--crimson-dim);color:var(--crimson-hi)}
+.sd-known{font-family:var(--ff-serif);font-size:.92rem;line-height:1.75;color:var(--text)}
+.sd-foot{margin-top:1.4rem;font-family:var(--ff-serif);font-style:italic;font-size:.66rem;color:var(--text-ghost)}
 </style>
 </head>
 <body>
 
 <!-- ══ TOPBAR ══ -->
 <div id="topbar" style="display:none">
-  <div class="topbar-brand" onclick="goLibrary()">The Black Library</div>
+  <div class="topbar-brand" onclick="goHall()">House Mournstar</div>
   <div class="topbar-right">
     <span class="topbar-scribe" id="topbar-scribe"></span>
+    <button class="tb-btn" id="tb-hall-btn" style="display:none" onclick="goHall()">The Hall</button>
+    <button class="tb-btn" id="tb-stacks-btn" style="display:none" onclick="goLibrary()">The Stacks</button>
     <button class="tb-btn curator" id="tb-admin-btn" style="display:none" onclick="goAdmin()">Curator's Desk</button>
     <button class="tb-btn" id="tb-auth-btn" onclick="goAuth()" style="display:none">Enter the Library</button>
     <button class="tb-btn" id="tb-logout-btn" style="display:none" onclick="doLogout()">Depart</button>
@@ -583,6 +647,55 @@ a{color:inherit;text-decoration:none}
   <div class="shelf-section" id="unadopted-section" style="margin-top:1.8rem;display:none">
     <div class="shelf-label">Not Adopted &middot; Awaiting the Curator</div>
     <div class="shelf" id="shelf-unadopted"></div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: THE HALL ══ -->
+<section id="screen-hall" class="screen with-topbar">
+  <div class="hall-hearth">
+    <div class="hall-name">The Hall</div>
+    <div class="hall-line" id="hall-line">The lamps are lit.</div>
+    <div class="hall-motto">— What is known is never lost —</div>
+  </div>
+  <div class="hall-grid" id="hall-grid"></div>
+  <div class="hall-foot">
+    <span class="hall-foot-note">Every leaf you file, the House remembers.</span>
+    <span class="hall-ooc" onclick="toast('The Antechamber is being prepared.')">The Antechamber · out of character</span>
+  </div>
+</section>
+
+<!-- ══ SCREEN: INDEX OF SOULS ══ -->
+<section id="screen-souls" class="screen with-topbar">
+  <div class="souls-wrap">
+    <div class="souls-top">
+      <button class="back-btn" onclick="goHall()">← The Hall</button>
+      <div class="souls-title">Index of Souls</div>
+      <div class="souls-count" id="souls-count"></div>
+    </div>
+    <input class="souls-search" id="souls-search" type="text" placeholder="Search the Index — name, race, or what is known…" oninput="filterSouls()">
+    <div class="soul-form">
+      <h4>Record a Soul</h4>
+      <input class="fi" id="soul-name" type="text" placeholder="Name…" autocomplete="off">
+      <div class="soul-form-row">
+        <input class="fi" id="soul-race" type="text" placeholder="Race (if known)…" autocomplete="off">
+        <input class="fi" id="soul-status" type="text" placeholder="Standing (e.g. watched, dangerous)…" autocomplete="off">
+      </div>
+      <textarea class="fi-wide" id="soul-known" placeholder="What is known…"></textarea>
+      <button class="btn-forge" onclick="recordSoul()">✦ Enter into the Index ✦</button>
+      <div class="auth-err" id="soul-err"></div>
+    </div>
+    <div class="soul-list" id="soul-list"></div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: SOUL DETAIL ══ -->
+<section id="screen-soul" class="screen with-topbar">
+  <div class="soul-detail">
+    <button class="back-btn" onclick="goSouls()">← Index of Souls</button>
+    <div class="sd-name" id="sd-name"></div>
+    <div class="sd-tags" id="sd-tags"></div>
+    <div class="sd-known" id="sd-known"></div>
+    <div class="sd-foot" id="sd-foot"></div>
   </div>
 </section>
 
@@ -728,8 +841,11 @@ async function init() {
 
   var params = new URLSearchParams(window.location.search);
   var wid = params.get('work');
+  var sid = params.get('soul');
   if (wid) { await openWorkById(wid); }
-  else { goLibrary(); }
+  else if (sid) { await openSoul(sid); }
+  else if (params.has('souls')) { goSouls(); }
+  else { goHall(); }
 }
 
 /* ── Screen routing ── */
@@ -750,17 +866,23 @@ function updateTopbar() {
   var authBtn   = document.getElementById('tb-auth-btn');
   var logoutBtn = document.getElementById('tb-logout-btn');
   var adminBtn  = document.getElementById('tb-admin-btn');
+  var hallBtn   = document.getElementById('tb-hall-btn');
+  var stacksBtn = document.getElementById('tb-stacks-btn');
   var createBar = document.getElementById('lib-create-bar');
   if (SESSION.codename) {
     scribeEl.textContent = SESSION.codename;
     authBtn.style.display   = 'none';
     logoutBtn.style.display = '';
+    if (hallBtn)   hallBtn.style.display   = '';
+    if (stacksBtn) stacksBtn.style.display = '';
     if (adminBtn) adminBtn.style.display = SESSION.is_admin ? '' : 'none';
     if (createBar) createBar.style.display = 'flex';
   } else {
     scribeEl.textContent = '';
     authBtn.style.display   = '';
     logoutBtn.style.display = 'none';
+    if (hallBtn)   hallBtn.style.display   = 'none';
+    if (stacksBtn) stacksBtn.style.display = 'none';
     if (adminBtn) adminBtn.style.display = 'none';
     if (createBar) createBar.style.display = 'none';
   }
@@ -776,6 +898,128 @@ function goCreate(type) {
   showScreen('create');
 }
 
+/* ── The Hall ── */
+function goHall() { showScreen('hall'); loadHall(); history.replaceState({},'',' /'); }
+
+function setHallLine(n) {
+  var hr = new Date().getHours();
+  var tod = hr < 5 ? 'The night is deep.' : hr < 12 ? 'The morning lamps burn low.' : hr < 18 ? 'The day wanes.' : 'The lamps are lit.';
+  document.getElementById('hall-line').textContent = tod + ' ' + n + (n === 1 ? ' is' : ' are') + ' sworn to the House.';
+}
+
+async function loadHall() {
+  var grid = document.getElementById('hall-grid');
+  try {
+    var d = await api('GET', '/api/hall');
+    setHallLine((d.sworn || []).length);
+    grid.innerHTML = hallCards(d);
+  } catch(e) {
+    grid.innerHTML = '<div class="hcard forthcoming"><div class="hcard-body"><span class="hcard-soon">The Hall could not be opened.</span></div></div>';
+  }
+}
+
+function cardHead(h, count) {
+  return '<div class="hcard-head"><span class="hcard-h">'+h+'</span><span class="hcard-count">'+esc(count||'')+'</span></div>';
+}
+function cardFoot(text, onclick) {
+  if (!text) return '<div class="hcard-foot"></div>';
+  return '<div class="hcard-foot"><span class="hcard-link" onclick="'+onclick+'">'+text+'</span></div>';
+}
+function hallRow(t, s) { return '<div class="hrow"><div class="hrow-t">'+esc(t)+'</div><div class="hrow-s">'+esc(s||'')+'</div></div>'; }
+function hallEmpty(t) { return '<div class="hrow"><div class="hrow-s">'+esc(t)+'</div></div>'; }
+
+function hallCards(d) {
+  var souls = d.souls || [], tomes = d.tomes || [], sworn = d.sworn || [];
+
+  var soulRows = souls.length
+    ? souls.map(function(s){ return hallRow(s.name, [s.race, s.status].filter(Boolean).join(' · ')); }).join('')
+    : hallEmpty('No souls recorded yet.');
+  var cSouls = '<div class="hcard crimson">' + cardHead('Index of Souls', (d.soul_count||0)+' recorded')
+    + '<div class="hcard-body">'+soulRows+'</div>' + cardFoot('View entire index ›','goSouls()') + '</div>';
+
+  var tomeRows = tomes.length
+    ? tomes.map(function(w){ return hallRow(w.title, (w.scribe_name||'') + (w.entry_count ? ' · '+w.entry_count+' leaves' : '')); }).join('')
+    : hallEmpty('No tomes bound yet.');
+  var cStacks = '<div class="hcard">' + cardHead('The Stacks · Tomes', 'lately bound')
+    + '<div class="hcard-body">'+tomeRows+'</div>' + cardFoot('Enter the stacks ›','goLibrary()') + '</div>';
+
+  var swornRows = sworn.slice(0,4)
+    .map(function(s){ return hallRow(s.codename, (s.is_admin ? 'Curator' : 'Scribe') + (s.filed ? ' · '+s.filed+' filed' : '')); }).join('');
+  var cSworn = '<div class="hcard">' + cardHead('The Sworn', sworn.length+' of the House')
+    + '<div class="hcard-body">'+swornRows+'</div>' + cardFoot('The full roster ›','toast(\'The roster opens soon.\')') + '</div>';
+
+  var cBoard = '<div class="hcard crimson forthcoming">' + cardHead('Notice Board · Writs','soon')
+    + '<div class="hcard-body"><span class="hcard-soon">The board is being raised.<br>Writs of enquiry will be posted here.</span></div>' + cardFoot('','') + '</div>';
+
+  var cPet = '<div class="hcard forthcoming">' + cardHead('Petitions','soon')
+    + '<div class="hcard-body"><span class="hcard-soon">A place to ask the Archivist<br>what the House knows.</span></div>' + cardFoot('','') + '</div>';
+
+  return cSouls + cStacks + cBoard + cPet + cSworn;
+}
+
+/* ── Index of Souls ── */
+var SOULS_CACHE = [];
+function goSouls() { showScreen('souls'); loadSouls(); history.replaceState({},'','/?souls'); }
+
+async function loadSouls() {
+  try {
+    var d = await api('GET', '/api/souls');
+    SOULS_CACHE = d.souls || [];
+    document.getElementById('souls-count').textContent = (d.count||0) + ' recorded';
+    renderSouls(SOULS_CACHE);
+  } catch(e) { toast(e.message); }
+}
+
+function renderSouls(list) {
+  var el = document.getElementById('soul-list');
+  if (!list.length) { el.innerHTML = '<div class="hrow-s" style="padding:1rem .2rem">No souls match your search.</div>'; return; }
+  el.innerHTML = list.map(function(s){
+    return '<div class="soul-row" onclick="openSoul(\''+s.id+'\')">'
+      + '<div><div class="soul-row-name">'+esc(s.name)+'</div><div class="soul-row-sub">'+esc(s.status||'—')+'</div></div>'
+      + '<div class="soul-row-race">'+esc(s.race||'')+'</div></div>';
+  }).join('');
+}
+
+function filterSouls() {
+  var q = document.getElementById('souls-search').value.trim().toLowerCase();
+  if (!q) { renderSouls(SOULS_CACHE); return; }
+  renderSouls(SOULS_CACHE.filter(function(s){
+    return (s.name+' '+(s.race||'')+' '+(s.status||'')+' '+(s.known||'')).toLowerCase().indexOf(q) >= 0;
+  }));
+}
+
+async function recordSoul() {
+  var name = document.getElementById('soul-name').value.trim();
+  document.getElementById('soul-err').textContent = '';
+  if (!name) { document.getElementById('soul-err').textContent = 'A name is required.'; return; }
+  try {
+    await api('POST', '/api/souls', {
+      name: name,
+      race:   document.getElementById('soul-race').value.trim(),
+      status: document.getElementById('soul-status').value.trim(),
+      known:  document.getElementById('soul-known').value.trim()
+    });
+    ['soul-name','soul-race','soul-status','soul-known'].forEach(function(id){ document.getElementById(id).value=''; });
+    toast('Recorded into the Index.');
+    loadSouls();
+  } catch(e) { document.getElementById('soul-err').textContent = e.message; }
+}
+
+async function openSoul(id) {
+  try {
+    var s = await api('GET', '/api/souls/'+id);
+    document.getElementById('sd-name').textContent = s.name;
+    var tags = '';
+    if (s.race)   tags += '<span class="sd-tag">'+esc(s.race)+'</span>';
+    if (s.status) tags += '<span class="sd-tag status">'+esc(s.status)+'</span>';
+    document.getElementById('sd-tags').innerHTML = tags;
+    document.getElementById('sd-known').innerHTML = s.known ? t2h(s.known) : '<p style="color:var(--text-ghost);font-style:italic">Nothing further is recorded.</p>';
+    document.getElementById('sd-foot').textContent = 'Recorded by ' + (s.recorder || 'the House') + '.';
+    showScreen('soul');
+    history.replaceState({},'','/?soul='+id);
+  } catch(e) { toast(e.message); }
+}
+
 /* ── Auth ── */
 async function doLogin() {
   var codename   = document.getElementById('login-name').value.trim();
@@ -786,7 +1030,7 @@ async function doLogin() {
     SESSION.codename = res.codename;
     SESSION.is_admin = !!res.is_admin;
     try { var me = await api('GET','/api/auth/me'); SESSION.id = me.id; } catch(e2){}
-    goLibrary();
+    goHall();
   } catch(e) {
     document.getElementById('auth-err').textContent = e.message;
   }
