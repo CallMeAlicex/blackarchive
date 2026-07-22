@@ -7,7 +7,7 @@ const bcrypt       = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const path         = require('path');
 
-const { initDb, scribes, works, entries, holdings, souls, saveEntriesForWork } = require('./db');
+const { initDb, scribes, works, entries, holdings, souls, posts, saveEntriesForWork } = require('./db');
 const { ensureReportCatchment } = require('./scripts/report-catchment');
 const { ensurePrincesTextbook } = require('./scripts/princes-textbook');
 const { ensureSoulsSeed } = require('./scripts/souls-seed');
@@ -98,8 +98,63 @@ app.get('/api/hall', requireAuth, (req, res) => {
     const sworn = scribes.all.all().map(s => ({
       codename: s.codename, is_admin: !!s.is_admin, filed: s.authored_count || 0,
     }));
-    res.json({ souls: recentSouls, soul_count: soulCount, tomes, sworn, is_admin: isAdmin(req) });
+    const notices = posts.recent.all('notice', 3);
+    res.json({ souls: recentSouls, soul_count: soulCount, tomes, sworn, notices, is_admin: isAdmin(req) });
   } catch (err) { console.error(err); res.status(500).json({ error: 'The Hall could not be opened.' }); }
+});
+
+// ── THE BOARDS (Notice Board = in character, Antechamber = out of character) ──
+const BOARDS = ['notice', 'antechamber'];
+const NOTICE_KINDS = ['seek', 'watch', 'verify', 'notice'];
+
+app.get('/api/board/:board', requireAuth, (req, res) => {
+  try {
+    const board = req.params.board;
+    if (!BOARDS.includes(board)) return res.status(404).json({ error: 'There is no such board.' });
+    const threads = posts.threads.all(board).map(t => ({ ...t, replies: posts.repliesFor.all(t.id) }));
+    res.json({ board, threads });
+  } catch (err) { console.error(err); res.status(500).json({ error: 'The board could not be read.' }); }
+});
+
+app.post('/api/board/:board', requireAuth, (req, res) => {
+  try {
+    const board = req.params.board;
+    if (!BOARDS.includes(board)) return res.status(404).json({ error: 'There is no such board.' });
+    const title = sanitize(req.body.title, 200);
+    const body  = sanitize(req.body.body, 8000);
+    if (!title) return res.status(400).json({ error: 'A heading is required.' });
+    if (!body)  return res.status(400).json({ error: 'Write something beneath the heading.' });
+    let kind = sanitize(req.body.kind, 20).toLowerCase();
+    if (board !== 'notice' || !NOTICE_KINDS.includes(kind)) kind = null;
+    const id = uuidv4();
+    posts.create.run({ id, board, scribe_id: req.session.scribe.id, kind, title, body });
+    res.status(201).json(posts.findById.get(id));
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Could not post that.' }); }
+});
+
+app.post('/api/board/:board/reply', requireAuth, (req, res) => {
+  try {
+    const board = req.params.board;
+    if (!BOARDS.includes(board)) return res.status(404).json({ error: 'There is no such board.' });
+    const parent = posts.findById.get(sanitize(req.body.parent_id, 60));
+    if (!parent || parent.parent_id) return res.status(404).json({ error: 'No such thread.' });
+    const body = sanitize(req.body.body, 8000);
+    if (!body) return res.status(400).json({ error: 'An empty reply says nothing.' });
+    const id = uuidv4();
+    posts.create.run({ id, board: parent.board, scribe_id: req.session.scribe.id, parent_id: parent.id, body });
+    res.status(201).json(posts.findById.get(id));
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Could not add that reply.' }); }
+});
+
+app.delete('/api/board/post/:id', requireAuth, (req, res) => {
+  try {
+    const post = posts.findById.get(req.params.id);
+    if (!post) return res.status(404).json({ error: 'Already gone.' });
+    if (post.scribe_id !== req.session.scribe.id && !isAdmin(req))
+      return res.status(403).json({ error: 'This is not yours to strike out.' });
+    posts.delete.run(post.id);
+    res.json({ ok: true });
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Could not remove that.' }); }
 });
 
 // ── INDEX OF SOULS ──────────────────────────────────────────

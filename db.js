@@ -93,6 +93,21 @@ const SCHEMA = `
     created_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
   );
 
+  -- The social boards: 'notice' (in-character) and 'antechamber' (out of character).
+  -- A row with parent_id IS NULL is a thread; otherwise it is a reply to that thread.
+  CREATE TABLE IF NOT EXISTS posts (
+    id          TEXT PRIMARY KEY,
+    board       TEXT NOT NULL,
+    scribe_id   TEXT NOT NULL,
+    parent_id   TEXT,
+    kind        TEXT,
+    title       TEXT,
+    body        TEXT NOT NULL DEFAULT '',
+    created_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_posts_board ON posts(board, created_at);
+  CREATE INDEX IF NOT EXISTS idx_posts_parent ON posts(parent_id);
   CREATE INDEX IF NOT EXISTS idx_works_scribe ON works(scribe_id);
   CREATE INDEX IF NOT EXISTS idx_entries_work ON entries(work_id, position);
   CREATE INDEX IF NOT EXISTS idx_holdings_scribe ON holdings(scribe_id);
@@ -268,4 +283,38 @@ async function initDb() {
   return db;
 }
 
-module.exports = { initDb, db: () => db, scribes, works, entries, holdings, souls, saveEntriesForWork };
+// ── The boards (Notice Board + Antechamber) ─────────────────
+const posts = {
+  create: { run: (p) => { run(
+    `INSERT INTO posts (id,board,scribe_id,parent_id,kind,title,body) VALUES (?,?,?,?,?,?,?)`,
+    [p.id, p.board, p.scribe_id, p.parent_id || null, p.kind || null, p.title || '', p.body || '']); } },
+
+  findById: { get: (id) => get(`SELECT * FROM posts WHERE id=?`, [id]) },
+
+  // Top-level threads on a board, newest first.
+  threads: { all: (board) => all(`
+    SELECT p.*, s.codename as scribe_name,
+           (SELECT COUNT(*) FROM posts r WHERE r.parent_id=p.id) as reply_count
+    FROM posts p JOIN scribes s ON s.id=p.scribe_id
+    WHERE p.board=? AND p.parent_id IS NULL
+    ORDER BY p.created_at DESC
+  `, [board]) },
+
+  repliesFor: { all: (id) => all(`
+    SELECT p.*, s.codename as scribe_name
+    FROM posts p JOIN scribes s ON s.id=p.scribe_id
+    WHERE p.parent_id=? ORDER BY p.created_at ASC
+  `, [id]) },
+
+  recent: { all: (board, n) => all(`
+    SELECT p.*, s.codename as scribe_name
+    FROM posts p JOIN scribes s ON s.id=p.scribe_id
+    WHERE p.board=? AND p.parent_id IS NULL
+    ORDER BY p.created_at DESC LIMIT ?
+  `, [board, n]) },
+
+  // Removing a thread takes its replies with it.
+  delete: { run: (id) => { run(`DELETE FROM posts WHERE id=? OR parent_id=?`, [id, id]); } },
+};
+
+module.exports = { initDb, db: () => db, scribes, works, entries, holdings, souls, posts, saveEntriesForWork };

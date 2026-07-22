@@ -553,6 +553,52 @@ a{color:inherit;text-decoration:none}
 .hall-foot-note{font-family:var(--ff-serif);font-style:italic;font-size:.66rem;color:var(--text-ghost)}
 .hall-ooc{font-family:var(--ff-caps);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:#7a8a9a;border:1px dashed rgba(120,140,160,.3);padding:.35rem .7rem;cursor:pointer}
 
+/* ── The Boards (Notice Board / Antechamber) ── */
+.board-wrap{max-width:860px;margin:0 auto;padding:1.3rem 1.2rem 3rem}
+.board-tabs{display:flex;gap:.5rem;margin:1rem 0 1rem;flex-wrap:wrap}
+.board-tab{font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.5rem .9rem;border:1px solid var(--silver-border);color:var(--text-dim)}
+.board-tab.active{color:var(--crimson-hi);border-color:var(--crimson-dim);background:var(--crimson-glow)}
+.board-tab.ooc.active{color:#8fa6bb;border-color:rgba(120,140,160,.45);background:rgba(120,140,160,.1)}
+.board-intro{font-family:var(--ff-serif);font-style:italic;font-size:.72rem;color:var(--text-ghost);margin-bottom:1.1rem;line-height:1.65}
+.compose{border:1px solid var(--silver-border);background:var(--surface);padding:.9rem;margin-bottom:1.4rem}
+.kind-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem}
+.kind-btn{font-family:var(--ff-caps);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:.3rem .62rem;border:1px solid var(--silver-border);color:var(--text-ghost)}
+.kind-btn.on{color:#0a0a14;background:var(--gold);border-color:var(--gold)}
+.thread{border:1px solid var(--silver-border);background:var(--surface);margin-bottom:1rem}
+.thread-head{padding:.75rem .9rem;border-bottom:1px solid var(--silver-border)}
+.thread-kind{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;padding:.15rem .45rem;color:#0a0a14;background:var(--gold);margin-right:.5rem}
+.thread-kind.watch{background:#6a7a8a}
+.thread-kind.verify{background:#5a2028;color:var(--parch)}
+.thread-kind.notice{background:var(--silver-dim)}
+.thread-title{font-family:var(--ff-caps);font-weight:600;font-size:.88rem;color:var(--silver)}
+.thread-meta{font-family:var(--ff-serif);font-size:.62rem;color:var(--text-ghost);font-style:italic;margin-top:.3rem}
+.thread-body{padding:.85rem .9rem;font-family:var(--ff-serif);font-size:.78rem;line-height:1.7;color:var(--text)}
+.thread-body .hd{clear:both;font-family:var(--ff-caps);font-weight:600;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--crimson-hi);margin:1em 0 .45em;padding-bottom:.22em;border-bottom:1px solid var(--crimson-dim)}
+.thread-body .br{text-align:center;color:var(--crimson);opacity:.5;letter-spacing:.5em;margin:.8em 0;text-indent:.5em}
+.thread-body .li{margin-left:.75em;font-style:italic}
+.thread-body .li::before{content:'— ';color:var(--crimson);opacity:.6}
+.thread-body p{margin-bottom:.5em}
+.replies{border-top:1px solid var(--silver-border);background:rgba(0,0,0,.25)}
+.reply{padding:.7rem .9rem;border-bottom:1px solid rgba(190,190,210,.07)}
+.reply-meta{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.reply-body{font-family:var(--ff-serif);font-size:.75rem;line-height:1.65;color:var(--text-dim)}
+.reply-body p{margin-bottom:.4em}
+.reply-box{padding:.7rem .9rem;display:flex;gap:.5rem;align-items:flex-start}
+.post-del{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:#8a4a4a;float:right}
+.board-empty{text-align:center;padding:2.2rem 1rem;font-family:var(--ff-serif);font-style:italic;color:var(--text-ghost);font-size:.76rem;border:1px solid var(--silver-border)}
+
+/* ── Scribe's marks (formatting tools) ── */
+.tools{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center;margin-bottom:.45rem}
+.tool-btn{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;padding:.28rem .58rem;border:1px solid var(--silver-border);color:var(--text-dim)}
+.tool-btn:hover{color:var(--silver);border-color:var(--silver-border-hi)}
+.tool-btn.on{color:var(--crimson-hi);border-color:var(--crimson-dim);background:var(--crimson-glow)}
+.tool-help{font-family:var(--ff-serif);font-size:.66rem;color:var(--text-ghost);line-height:1.8;border-left:2px solid var(--crimson-dim);padding:.55rem .75rem;margin:.1rem 0 .6rem;display:none}
+.tool-help.on{display:block}
+.tool-help code{font-family:ui-monospace,Consolas,monospace;color:var(--gold);font-size:.94em}
+.prev-pane{display:none;border:1px solid var(--silver-border);background:#0b0b14;padding:.9rem 1rem;margin-top:.55rem}
+.prev-pane.on{display:block}
+.prev-label{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-ghost);margin-bottom:.55rem}
+
 /* ── Index of Souls ── */
 .souls-wrap{max-width:820px;margin:0 auto;padding:1.4rem 1.2rem 3rem}
 .souls-top{display:flex;align-items:center;gap:1rem;margin-bottom:.4rem}
@@ -660,7 +706,7 @@ a{color:inherit;text-decoration:none}
   <div class="hall-grid" id="hall-grid"></div>
   <div class="hall-foot">
     <span class="hall-foot-note">Every leaf you file, the House remembers.</span>
-    <span class="hall-ooc" onclick="toast('The Antechamber is being prepared.')">The Antechamber · out of character</span>
+    <span class="hall-ooc" onclick="goBoard('antechamber')">The Antechamber · out of character</span>
   </div>
 </section>
 
@@ -696,6 +742,27 @@ a{color:inherit;text-decoration:none}
     <div class="sd-tags" id="sd-tags"></div>
     <div class="sd-known" id="sd-known"></div>
     <div class="sd-foot" id="sd-foot"></div>
+  </div>
+</section>
+
+<!-- ══ SCREEN: BOARDS (Notice Board / Antechamber) ══ -->
+<section id="screen-board" class="screen with-topbar">
+  <div class="board-wrap">
+    <button class="back-btn" onclick="goHall()">← The Hall</button>
+    <div class="board-tabs">
+      <button class="board-tab" id="bt-notice" onclick="goBoard('notice')">⸸ &nbsp;The Notice Board</button>
+      <button class="board-tab ooc" id="bt-antechamber" onclick="goBoard('antechamber')">The Antechamber · OOC</button>
+    </div>
+    <div class="board-intro" id="board-intro"></div>
+    <div class="compose">
+      <div class="kind-row" id="kind-row"></div>
+      <input class="fi-wide" id="post-title" type="text" placeholder="Heading…" style="margin-bottom:.6rem">
+      <div id="post-tools"></div>
+      <textarea class="fi-wide" id="post-body" rows="5" placeholder="Write it out…" oninput="refreshPreview('post-body')"></textarea>
+      <div id="post-prev"></div>
+      <button class="btn-forge" id="post-btn" style="margin-top:.8rem" onclick="submitPost()">✦ &nbsp;Post to the Board&nbsp; ✦</button>
+    </div>
+    <div id="board-list"></div>
   </div>
 </section>
 
@@ -767,7 +834,11 @@ a{color:inherit;text-decoration:none}
         <div class="fg"><label class="fl">Date / Occasion</label><input class="fi-wide" id="p-date" type="text" placeholder="28th of Second Seed…"></div>
         <div class="fg"><label class="fl">To (recipient)</label><input class="fi-wide" id="p-to" type="text" placeholder="Addressed to…"></div>
       </div>
-      <div class="fg"><label class="fl">Body</label><textarea class="fi-wide" id="p-body" rows="11" placeholder="Write the full text here…"></textarea></div>
+      <div class="fg"><label class="fl">Body</label>
+        <div id="p-body-tools"></div>
+        <textarea class="fi-wide" id="p-body" rows="11" placeholder="Write the full text here…" oninput="refreshPreview('p-body')"></textarea>
+        <div id="p-body-prev"></div>
+      </div>
       <div class="fg"><label class="fl">Closing / Seal</label><input class="fi-wide" id="p-seal" type="text" placeholder="In the name of…"></div>
     </div>
     <hr class="gr">
@@ -948,13 +1019,172 @@ function hallCards(d) {
   var cSworn = '<div class="hcard">' + cardHead('The Sworn', sworn.length+' of the House')
     + '<div class="hcard-body">'+swornRows+'</div>' + cardFoot('The full roster ›','toast(\'The roster opens soon.\')') + '</div>';
 
-  var cBoard = '<div class="hcard crimson forthcoming">' + cardHead('Notice Board · Writs','soon')
-    + '<div class="hcard-body"><span class="hcard-soon">The board is being raised.<br>Writs of enquiry will be posted here.</span></div>' + cardFoot('','') + '</div>';
+  var notices = d.notices || [];
+  var noticeRows = notices.length
+    ? notices.map(function(p){
+        return hallRow((p.kind ? p.kind.toUpperCase()+' · ' : '') + p.title, p.scribe_name || '');
+      }).join('')
+    : hallEmpty('The board is bare. Post the first writ.');
+  var cBoard = '<div class="hcard crimson">' + cardHead('Notice Board · Writs', notices.length ? 'posted' : 'bare')
+    + '<div class="hcard-body">'+noticeRows+'</div>' + cardFoot('See all writs ›',"goBoard('notice')") + '</div>';
 
   var cPet = '<div class="hcard forthcoming">' + cardHead('Petitions','soon')
     + '<div class="hcard-body"><span class="hcard-soon">A place to ask the Archivist<br>what the House knows.</span></div>' + cardFoot('','') + '</div>';
 
   return cSouls + cStacks + cBoard + cPet + cSworn;
+}
+
+/* ── The Boards ── */
+var BOARD = 'notice', POST_KIND = 'seek';
+var BOARD_META = {
+  notice: {
+    intro: 'The Notice Board of House Mournstar. Writs of enquiry, warnings, and calls to muster — posted in character, and answered the same way.',
+    kinds: true, ph: 'Set down the writ plainly. What must be sought, watched, or verified…'
+  },
+  antechamber: {
+    intro: 'The Antechamber. The one room where the House speaks out of character — scheduling, welcomes, questions, plain talk. Everything past this door stays in character.',
+    kinds: false, ph: 'Speak freely. This room is out of character…'
+  }
+};
+
+function goBoard(board) {
+  BOARD = (board === 'antechamber') ? 'antechamber' : 'notice';
+  showScreen('board');
+  document.getElementById('bt-notice').classList.toggle('active', BOARD === 'notice');
+  document.getElementById('bt-antechamber').classList.toggle('active', BOARD === 'antechamber');
+  var m = BOARD_META[BOARD];
+  document.getElementById('board-intro').textContent = m.intro;
+  document.getElementById('post-body').placeholder = m.ph;
+  document.getElementById('post-tools').innerHTML = bodyTools('post-body');
+  document.getElementById('post-prev').innerHTML = bodyPreview('post-body');
+  renderKinds();
+  loadBoard();
+  history.replaceState({},'','/?board='+BOARD);
+}
+
+function renderKinds() {
+  var row = document.getElementById('kind-row');
+  if (!BOARD_META[BOARD].kinds) { row.innerHTML = ''; return; }
+  var kinds = [['seek','Seek'],['watch','Watch'],['verify','Verify'],['notice','Notice']];
+  row.innerHTML = kinds.map(function(k){
+    return '<button class="kind-btn'+(POST_KIND===k[0]?' on':'')+'" onclick="setKind(\''+k[0]+'\')">'+k[1]+'</button>';
+  }).join('');
+}
+function setKind(k) { POST_KIND = k; renderKinds(); }
+
+async function loadBoard() {
+  var el = document.getElementById('board-list');
+  try {
+    var d = await api('GET', '/api/board/'+BOARD);
+    var th = d.threads || [];
+    el.innerHTML = th.length ? th.map(threadHtml).join('')
+      : '<div class="board-empty">'+(BOARD==='notice'
+          ? 'The board is bare. Post the first writ of enquiry.'
+          : 'No one has spoken here yet.')+'</div>';
+  } catch(e) { el.innerHTML = '<div class="board-empty">The board could not be read.</div>'; }
+}
+
+function whenStamp(ts) {
+  try { return new Date(ts*1000).toLocaleDateString(undefined,{month:'short',day:'numeric'}); }
+  catch(e) { return ''; }
+}
+
+function threadHtml(t) {
+  var canStrike = (t.scribe_name === SESSION.codename) || SESSION.is_admin;
+  var kind = t.kind ? '<span class="thread-kind '+esc(t.kind)+'">'+esc(t.kind)+'</span>' : '';
+  var replies = (t.replies||[]).map(function(r){
+    return '<div class="reply"><div class="reply-meta">'+esc(r.scribe_name)+' &middot; '+whenStamp(r.created_at)+'</div>'
+      +'<div class="reply-body">'+t2h(r.body)+'</div></div>';
+  }).join('');
+  return '<div class="thread">'
+    +'<div class="thread-head">'
+      +(canStrike?'<button class="post-del" onclick="deletePost(\''+t.id+'\')">Strike out</button>':'')
+      +kind+'<span class="thread-title">'+esc(t.title)+'</span>'
+      +'<div class="thread-meta">'+esc(t.scribe_name)+' &middot; '+whenStamp(t.created_at)
+        +(t.reply_count?' &middot; '+t.reply_count+' repl'+(t.reply_count===1?'y':'ies'):'')+'</div>'
+    +'</div>'
+    +'<div class="thread-body">'+t2h(t.body)+'</div>'
+    +(replies?'<div class="replies">'+replies+'</div>':'')
+    +'<div class="reply-box">'
+      +'<textarea class="fi-wide" id="rb-'+t.id+'" rows="2" placeholder="Add your hand…"></textarea>'
+      +'<button class="back-btn" style="white-space:nowrap" onclick="submitReply(\''+t.id+'\')">Reply</button>'
+    +'</div>'
+  +'</div>';
+}
+
+async function submitPost() {
+  var title = document.getElementById('post-title').value.trim();
+  var body  = document.getElementById('post-body').value.trim();
+  if (!title || !body) { toast('A heading and a body are both needed.'); return; }
+  var btn = document.getElementById('post-btn'); btn.disabled = true;
+  try {
+    await api('POST', '/api/board/'+BOARD, { title: title, body: body, kind: BOARD_META[BOARD].kinds ? POST_KIND : null });
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-body').value  = '';
+    refreshPreview('post-body');
+    toast(BOARD==='notice' ? 'Pinned to the Notice Board.' : 'Posted in the Antechamber.');
+    loadBoard();
+  } catch(e) { toast(e.message); }
+  btn.disabled = false;
+}
+
+async function submitReply(id) {
+  var ta = document.getElementById('rb-'+id);
+  var body = (ta && ta.value || '').trim();
+  if (!body) { toast('An empty reply says nothing.'); return; }
+  try { await api('POST','/api/board/'+BOARD+'/reply',{ parent_id:id, body:body }); loadBoard(); }
+  catch(e) { toast(e.message); }
+}
+
+async function deletePost(id) {
+  try { await api('DELETE','/api/board/post/'+id); toast('Struck from the board.'); loadBoard(); }
+  catch(e) { toast(e.message); }
+}
+
+/* ── Scribe's marks: formatting tools for any body textarea ── */
+function bodyTools(taId) {
+  return '<div class="tools">'
+    +'<button class="tool-btn" onclick="insertMark(\''+taId+'\',\'h\')">&sect; Section</button>'
+    +'<button class="tool-btn" onclick="insertMark(\''+taId+'\',\'br\')">&#10023; Break</button>'
+    +'<button class="tool-btn" onclick="insertMark(\''+taId+'\',\'li\')">&bull; List</button>'
+    +'<button class="tool-btn" onclick="toggleHelp(\''+taId+'\')">? Marks</button>'
+    +'<button class="tool-btn" id="pvb-'+taId+'" onclick="togglePreview(\''+taId+'\')">Preview</button>'
+    +'</div>'
+    +'<div class="tool-help" id="help-'+taId+'">'
+      +'A <b>blank line</b> starts a new paragraph. The first letter of an entry is set as a large capital for you.<br>'
+      +'<code>## The Sphere</code> &nbsp;a section heading<br>'
+      +'<code>---</code> &nbsp;an ornamental break<br>'
+      +'<code>- a line</code> &nbsp;a list item'
+    +'</div>';
+}
+function bodyPreview(taId) {
+  return '<div class="prev-pane" id="pv-'+taId+'"><div class="prev-label">As it will be set</div>'
+    +'<div class="fp-body" id="prev-'+taId+'"></div></div>';
+}
+function insertMark(taId, kind) {
+  var ta = document.getElementById(taId); if (!ta) return;
+  var snip = kind==='h' ? '\n\n## Heading\n\n' : (kind==='br' ? '\n\n---\n\n' : '\n- item');
+  var s = ta.selectionStart||0, e = ta.selectionEnd||0, v = ta.value;
+  ta.value = v.slice(0,s) + snip + v.slice(e);
+  var pos = s + snip.length;
+  ta.focus(); try { ta.setSelectionRange(pos,pos); } catch(err) {}
+  refreshPreview(taId);
+}
+function toggleHelp(taId) {
+  var el = document.getElementById('help-'+taId); if (el) el.classList.toggle('on');
+}
+function togglePreview(taId) {
+  var pane = document.getElementById('pv-'+taId), btn = document.getElementById('pvb-'+taId);
+  if (!pane) return;
+  pane.classList.toggle('on');
+  if (btn) btn.classList.toggle('on');
+  refreshPreview(taId);
+}
+function refreshPreview(taId) {
+  var pane = document.getElementById('pv-'+taId);
+  if (!pane || !pane.classList.contains('on')) return;
+  var ta = document.getElementById(taId), out = document.getElementById('prev-'+taId);
+  if (ta && out) out.innerHTML = t2h(ta.value) || '<p style="opacity:.45">Nothing written yet.</p>';
 }
 
 /* ── Index of Souls ── */
@@ -1299,6 +1529,12 @@ function setCreateType(type) {
   document.getElementById('c-sub-label').textContent       = type==='book' ? 'Subtitle' : 'Context';
   document.getElementById('forge-btn').textContent         = type==='book'
     ? '✦ Seal & Archive this Tome ✦' : '✦ Seal & Archive this Parchment ✦';
+  // Give the parchment body the same scribe's marks the tome entries get.
+  var pt = document.getElementById('p-body-tools');
+  if (pt && !pt.innerHTML) {
+    pt.innerHTML = bodyTools('p-body');
+    document.getElementById('p-body-prev').innerHTML = bodyPreview('p-body');
+  }
 }
 
 function resetForm() {
@@ -1325,7 +1561,9 @@ function addEntry() {
     +'<div><label class="fl">Date</label><input class="fi-wide" id="'+id+'-date" type="text" placeholder="28th of Second Seed…" oninput="updateEcPreview(\''+id+'\')"></div>'
     +'<div><label class="fl">Entry Title</label><input class="fi-wide" id="'+id+'-title" type="text" placeholder="The Returning…" oninput="updateEcPreview(\''+id+'\')"></div>'
     +'</div>'
-    +'<div><label class="fl">Body</label><textarea class="fi-wide" id="'+id+'-body" rows="7" placeholder="Write the entry body here…"></textarea></div>'
+    +'<div><label class="fl">Body</label>'+bodyTools(id+'-body')
+    +'<textarea class="fi-wide" id="'+id+'-body" rows="7" placeholder="Write the entry body here…" oninput="refreshPreview(\''+id+'-body\')"></textarea>'
+    +bodyPreview(id+'-body')+'</div>'
     +'<button class="ec-del" onclick="removeEntry(\''+id+'\')">&#10005; Remove entry</button>'
     +'</div>';
   document.getElementById('entries-list').appendChild(el);
@@ -1650,15 +1888,10 @@ function esc(s){
   if(!s) return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+// Render body text exactly as the reader sets it — headings, breaks, lists and all.
 function t2h(text){
   if(!text) return '';
-  return text.split(/\n\n+/).map(function(para){
-    var p=para.trim(); if(!p) return '';
-    if(/^[-*] /m.test(p)){
-      return p.split('\n').filter(function(l){return l.trim();}).map(function(l){return '<div class="li">'+esc(l.replace(/^[-*]\s*/,''))+'</div>';}).join('');
-    }
-    return '<p>'+esc(p).replace(/\n/g,'<br>')+'</p>';
-  }).join('');
+  return blocksToHtml(makeBlocks(text));
 }
 function toast(msg){
   var el=document.getElementById('toast');
