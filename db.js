@@ -65,14 +65,17 @@ const SCHEMA = `
   );
 
   CREATE TABLE IF NOT EXISTS souls (
-    id          TEXT PRIMARY KEY,
-    name        TEXT NOT NULL,
-    race        TEXT,
-    status      TEXT,
-    known       TEXT NOT NULL DEFAULT '',
-    created_by  TEXT,
-    created_at  INTEGER NOT NULL DEFAULT (strftime('%s','now')),
-    updated_at  INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+    id            TEXT PRIMARY KEY,
+    name          TEXT NOT NULL,
+    race          TEXT,
+    status        TEXT,
+    hold          TEXT,
+    organizations TEXT,
+    profession    TEXT,
+    known         TEXT NOT NULL DEFAULT '',
+    created_by    TEXT,
+    created_at    INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+    updated_at    INTEGER NOT NULL DEFAULT (strftime('%s','now'))
   );
 
   -- Cross-references: which souls a work (report/catchment) names.
@@ -128,6 +131,12 @@ function migrate() {
     // Grandfather every pre-existing work into the Master Archive (one-time, on first add of the column).
     db.run(`UPDATE works SET archived=1`);
   }
+  // Souls gained structured fields (hold / organizations / profession) after
+  // the table first shipped — add them to any pre-existing database.
+  const socols = all(`PRAGMA table_info(souls)`).map(c => c.name);
+  ['hold', 'organizations', 'profession'].forEach((col) => {
+    if (!socols.includes(col)) db.run(`ALTER TABLE souls ADD COLUMN ${col} TEXT`);
+  });
 }
 
 // ── Helper: run a statement ─────────────────────────────────
@@ -242,10 +251,10 @@ const works = {
 
 // The Index of Souls — House Mournstar's record of the people of Skyrim.
 const souls = {
-  create: { run: (p) => { run(`INSERT INTO souls (id,name,race,status,known,created_by) VALUES (?,?,?,?,?,?)`,
-    [p.id, p.name, p.race||'', p.status||'', p.known||'', p.created_by||null]); } },
-  update: { run: (p) => { run(`UPDATE souls SET name=?,race=?,status=?,known=?,updated_at=strftime('%s','now') WHERE id=?`,
-    [p.name, p.race||'', p.status||'', p.known||'', p.id]); } },
+  create: { run: (p) => { run(`INSERT INTO souls (id,name,race,status,hold,organizations,profession,known,created_by) VALUES (?,?,?,?,?,?,?,?,?)`,
+    [p.id, p.name, p.race||'', p.status||'', p.hold||'', p.organizations||'', p.profession||'', p.known||'', p.created_by||null]); } },
+  update: { run: (p) => { run(`UPDATE souls SET name=?,race=?,status=?,hold=?,organizations=?,profession=?,known=?,updated_at=strftime('%s','now') WHERE id=?`,
+    [p.name, p.race||'', p.status||'', p.hold||'', p.organizations||'', p.profession||'', p.known||'', p.id]); } },
   findById:   { get: (id)   => get(`SELECT s.*, sc.codename as recorder FROM souls s LEFT JOIN scribes sc ON sc.id=s.created_by WHERE s.id=?`, [id]) },
   findByName: { get: (name) => get(`SELECT * FROM souls WHERE lower(name)=lower(?)`, [name]) },
   recent:     { all: (n)    => all(`SELECT * FROM souls ORDER BY updated_at DESC LIMIT ?`, [n||3]) },

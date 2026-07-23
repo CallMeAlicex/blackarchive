@@ -622,8 +622,23 @@ a{color:inherit;text-decoration:none}
 .sd-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0 1rem}
 .sd-tag{font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;padding:.2rem .6rem;border:1px solid var(--silver-border);color:var(--silver-dim)}
 .sd-tag.status{border-color:var(--crimson-dim);color:var(--crimson-hi)}
+.sd-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.1rem 1.4rem;margin:0 0 1.4rem;border:1px solid var(--silver-border);border-left:2px solid var(--crimson-dim);background:rgba(20,20,40,.25);padding:.85rem 1rem}
+.sd-fact{padding:.28rem 0}
+.sd-fact-k{font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:.85}
+.sd-fact-v{font-family:var(--ff-serif);font-size:.86rem;color:var(--text);margin-top:.12rem}
+.sd-known-label{font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--crimson-hi);margin:0 0 .5rem;padding-bottom:.25rem;border-bottom:1px solid var(--crimson-dim)}
 .sd-known{font-family:var(--ff-serif);font-size:.92rem;line-height:1.75;color:var(--text)}
+.sd-known .hd{clear:both;font-family:var(--ff-caps);font-weight:600;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--crimson-hi);margin:1em 0 .45em;padding-bottom:.22em;border-bottom:1px solid var(--crimson-dim)}
+.sd-known .br{text-align:center;color:var(--crimson);opacity:.5;letter-spacing:.5em;margin:.8em 0;text-indent:.5em}
+.sd-known .li{margin-left:.75em;font-style:italic}
+.sd-known .li::before{content:'— ';color:var(--crimson);opacity:.6}
+.sd-known p{margin-bottom:.5em}
 .sd-foot{margin-top:1.4rem;font-family:var(--ff-serif);font-style:italic;font-size:.66rem;color:var(--text-ghost)}
+.sd-amend{margin-top:1rem;font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;padding:.5rem .9rem;border:1px solid var(--silver-border);color:var(--text-dim)}
+.sd-amend:hover{color:var(--crimson-hi);border-color:var(--crimson-dim)}
+.sd-edit-actions{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-top:.3rem}
+.soul-form-row.three{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:560px){.soul-form-row.three{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -726,7 +741,14 @@ a{color:inherit;text-decoration:none}
         <input class="fi" id="soul-race" type="text" placeholder="Race (if known)…" autocomplete="off">
         <input class="fi" id="soul-status" type="text" placeholder="Standing (e.g. watched, dangerous)…" autocomplete="off">
       </div>
-      <textarea class="fi-wide" id="soul-known" placeholder="What is known…"></textarea>
+      <div class="soul-form-row three">
+        <input class="fi" id="soul-hold" type="text" placeholder="Hold…" autocomplete="off">
+        <input class="fi" id="soul-org" type="text" placeholder="Organizations…" autocomplete="off">
+        <input class="fi" id="soul-prof" type="text" placeholder="Profession…" autocomplete="off">
+      </div>
+      <div id="soul-known-tools"></div>
+      <textarea class="fi-wide" id="soul-known" placeholder="What is known…" oninput="refreshPreview('soul-known')"></textarea>
+      <div id="soul-known-prev"></div>
       <button class="btn-forge" onclick="recordSoul()">✦ Enter into the Index ✦</button>
       <div class="auth-err" id="soul-err"></div>
     </div>
@@ -738,10 +760,42 @@ a{color:inherit;text-decoration:none}
 <section id="screen-soul" class="screen with-topbar">
   <div class="soul-detail">
     <button class="back-btn" onclick="goSouls()">← Index of Souls</button>
-    <div class="sd-name" id="sd-name"></div>
-    <div class="sd-tags" id="sd-tags"></div>
-    <div class="sd-known" id="sd-known"></div>
-    <div class="sd-foot" id="sd-foot"></div>
+
+    <!-- View -->
+    <div id="sd-view">
+      <div class="sd-name" id="sd-name"></div>
+      <div class="sd-tags" id="sd-tags"></div>
+      <div class="sd-facts" id="sd-facts"></div>
+      <div class="sd-known-label">What is Known</div>
+      <div class="sd-known" id="sd-known"></div>
+      <div class="sd-foot" id="sd-foot"></div>
+      <button class="sd-amend" onclick="editSoul()">✎ &nbsp;Amend this Record</button>
+    </div>
+
+    <!-- Edit -->
+    <div id="sd-edit" style="display:none">
+      <div class="soul-form">
+        <h4>Amend the Record</h4>
+        <input class="fi" id="se-name" type="text" placeholder="Name…" autocomplete="off">
+        <div class="soul-form-row">
+          <input class="fi" id="se-race" type="text" placeholder="Race…" autocomplete="off">
+          <input class="fi" id="se-status" type="text" placeholder="Standing…" autocomplete="off">
+        </div>
+        <div class="soul-form-row three">
+          <input class="fi" id="se-hold" type="text" placeholder="Hold…" autocomplete="off">
+          <input class="fi" id="se-org" type="text" placeholder="Organizations…" autocomplete="off">
+          <input class="fi" id="se-prof" type="text" placeholder="Profession…" autocomplete="off">
+        </div>
+        <div id="se-known-tools"></div>
+        <textarea class="fi-wide" id="se-known" placeholder="What is known…" oninput="refreshPreview('se-known')"></textarea>
+        <div id="se-known-prev"></div>
+        <div class="sd-edit-actions">
+          <button class="btn-forge" onclick="saveSoul()">✦ &nbsp;Seal the Amendments&nbsp; ✦</button>
+          <button class="back-btn" onclick="openSoul(CURRENT_SOUL)">Cancel</button>
+        </div>
+        <div class="auth-err" id="se-err"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1189,7 +1243,7 @@ function refreshPreview(taId) {
 
 /* ── Index of Souls ── */
 var SOULS_CACHE = [];
-function goSouls() { showScreen('souls'); loadSouls(); history.replaceState({},'','/?souls'); }
+function goSouls() { showScreen('souls'); initSoulFormTools(); loadSouls(); history.replaceState({},'','/?souls'); }
 
 async function loadSouls() {
   try {
@@ -1218,6 +1272,15 @@ function filterSouls() {
   }));
 }
 
+// Give the record form's notes the same scribe's marks used everywhere else.
+function initSoulFormTools() {
+  var t = document.getElementById('soul-known-tools');
+  if (t && !t.innerHTML) {
+    t.innerHTML = bodyTools('soul-known');
+    document.getElementById('soul-known-prev').innerHTML = bodyPreview('soul-known');
+  }
+}
+
 async function recordSoul() {
   var name = document.getElementById('soul-name').value.trim();
   document.getElementById('soul-err').textContent = '';
@@ -1227,27 +1290,87 @@ async function recordSoul() {
       name: name,
       race:   document.getElementById('soul-race').value.trim(),
       status: document.getElementById('soul-status').value.trim(),
+      hold:          document.getElementById('soul-hold').value.trim(),
+      organizations: document.getElementById('soul-org').value.trim(),
+      profession:    document.getElementById('soul-prof').value.trim(),
       known:  document.getElementById('soul-known').value.trim()
     });
-    ['soul-name','soul-race','soul-status','soul-known'].forEach(function(id){ document.getElementById(id).value=''; });
+    ['soul-name','soul-race','soul-status','soul-hold','soul-org','soul-prof','soul-known']
+      .forEach(function(id){ document.getElementById(id).value=''; });
+    refreshPreview('soul-known');
     toast('Recorded into the Index.');
     loadSouls();
   } catch(e) { document.getElementById('soul-err').textContent = e.message; }
 }
 
+var CURRENT_SOUL = null, CURRENT_SOUL_DATA = null;
+
+function soulFactsHtml(s) {
+  var facts = [['Hold', s.hold], ['Organizations', s.organizations], ['Profession', s.profession]]
+    .filter(function(f){ return f[1]; });
+  if (!facts.length) return '';
+  return facts.map(function(f){
+    return '<div class="sd-fact"><div class="sd-fact-k">'+f[0]+'</div><div class="sd-fact-v">'+esc(f[1])+'</div></div>';
+  }).join('');
+}
+
 async function openSoul(id) {
   try {
     var s = await api('GET', '/api/souls/'+id);
+    CURRENT_SOUL = id; CURRENT_SOUL_DATA = s;
     document.getElementById('sd-name').textContent = s.name;
     var tags = '';
     if (s.race)   tags += '<span class="sd-tag">'+esc(s.race)+'</span>';
     if (s.status) tags += '<span class="sd-tag status">'+esc(s.status)+'</span>';
     document.getElementById('sd-tags').innerHTML = tags;
+    document.getElementById('sd-facts').innerHTML = soulFactsHtml(s);
+    document.getElementById('sd-facts').style.display = soulFactsHtml(s) ? 'grid' : 'none';
     document.getElementById('sd-known').innerHTML = s.known ? t2h(s.known) : '<p style="color:var(--text-ghost);font-style:italic">Nothing further is recorded.</p>';
     document.getElementById('sd-foot').textContent = 'Recorded by ' + (s.recorder || 'the House') + '.';
+    document.getElementById('sd-view').style.display = '';
+    document.getElementById('sd-edit').style.display = 'none';
     showScreen('soul');
     history.replaceState({},'','/?soul='+id);
   } catch(e) { toast(e.message); }
+}
+
+function editSoul() {
+  var s = CURRENT_SOUL_DATA; if (!s) return;
+  document.getElementById('se-err').textContent = '';
+  document.getElementById('se-name').value   = s.name || '';
+  document.getElementById('se-race').value   = s.race || '';
+  document.getElementById('se-status').value = s.status || '';
+  document.getElementById('se-hold').value   = s.hold || '';
+  document.getElementById('se-org').value    = s.organizations || '';
+  document.getElementById('se-prof').value   = s.profession || '';
+  document.getElementById('se-known').value  = s.known || '';
+  var t = document.getElementById('se-known-tools');
+  if (t && !t.innerHTML) {
+    t.innerHTML = bodyTools('se-known');
+    document.getElementById('se-known-prev').innerHTML = bodyPreview('se-known');
+  }
+  refreshPreview('se-known');
+  document.getElementById('sd-view').style.display = 'none';
+  document.getElementById('sd-edit').style.display = '';
+}
+
+async function saveSoul() {
+  var name = document.getElementById('se-name').value.trim();
+  document.getElementById('se-err').textContent = '';
+  if (!name) { document.getElementById('se-err').textContent = 'A name is required.'; return; }
+  try {
+    await api('PUT', '/api/souls/'+CURRENT_SOUL, {
+      name: name,
+      race:   document.getElementById('se-race').value.trim(),
+      status: document.getElementById('se-status').value.trim(),
+      hold:          document.getElementById('se-hold').value.trim(),
+      organizations: document.getElementById('se-org').value.trim(),
+      profession:    document.getElementById('se-prof').value.trim(),
+      known:  document.getElementById('se-known').value.trim()
+    });
+    toast('The record is amended.');
+    openSoul(CURRENT_SOUL);
+  } catch(e) { document.getElementById('se-err').textContent = e.message; }
 }
 
 /* ── Auth ── */

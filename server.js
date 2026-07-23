@@ -187,10 +187,34 @@ app.post('/api/souls', requireAuth, (req, res) => {
     souls.create.run({ id, name,
       race:   sanitize(req.body.race, 60),
       status: sanitize(req.body.status, 120),
+      hold:          sanitize(req.body.hold, 120),
+      organizations: sanitize(req.body.organizations, 300),
+      profession:    sanitize(req.body.profession, 120),
       known:  sanitize(req.body.known, 8000),
       created_by: req.session.scribe.id });
     res.status(201).json(souls.findById.get(id));
   } catch (err) { console.error(err); res.status(500).json({ error: 'Could not record this soul.' }); }
+});
+
+// The Index is a shared record — any sworn member may amend a soul.
+app.put('/api/souls/:id', requireAuth, (req, res) => {
+  try {
+    const soul = souls.findById.get(req.params.id);
+    if (!soul) return res.status(404).json({ error: 'No such soul is recorded.' });
+    const name = sanitize(req.body.name, 120);
+    if (!name) return res.status(400).json({ error: 'A name is required.' });
+    const clash = souls.findByName.get(name);
+    if (clash && clash.id !== soul.id)
+      return res.status(409).json({ error: 'Another soul already bears that name.' });
+    souls.update.run({ id: soul.id, name,
+      race:   sanitize(req.body.race, 60),
+      status: sanitize(req.body.status, 120),
+      hold:          sanitize(req.body.hold, 120),
+      organizations: sanitize(req.body.organizations, 300),
+      profession:    sanitize(req.body.profession, 120),
+      known:  sanitize(req.body.known, 8000) });
+    res.json(souls.findById.get(soul.id));
+  } catch (err) { console.error(err); res.status(500).json({ error: 'Could not amend this record.' }); }
 });
 
 // ── LIBRARY ─────────────────────────────────────────────────
